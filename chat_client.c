@@ -16,24 +16,107 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#include <ctype.h>
 
 #include "networks.h"
 #include "chat_client.h"
 
+char handle[MAX_HANDLE_LEN];
+int socketNum;
+//int seq;
+fd_set *rfds;
+
+
 
 int main(int argc, char * argv[])
 {
-	int socketNum = 0;         //socket descriptor
 
+	int socketNum = 0;         //socket descriptor, will be the socket of the server i believe
+
+	checkArgs(argc, argv);
 	/* set up the TCP Client socket  */
-	socketNum = tcpClientSetup(argv[1], argv[2], DEBUG_FLAG);
+	socketNum = tcpClientSetup(argv[2], argv[3], DEBUG_FLAG);
 	
-	sendToServer(socketNum);
+	//sendToServer(socketNum);
+	chatSession(socketNum);
 	
 	close(socketNum);
 	
 	return 0;
 }
+
+void chatSession(int socketNum) {
+
+	while (1) { //1 is possibly temporary, need to run client until the user exits the client
+		FD_ZERO(rfds);
+		FD_SET(STD_IN, rfds); //watch std in
+		FD_SET(socketNum, rfds ); //watch socket for update
+		
+		if (select(FD_SETSIZE, rfds, NULL, NULL, NULL) < 0) {
+        	perror("select call error\n");
+        	exit(-1);
+      	}	
+		
+		//server update, read from server
+		if (FD_ISSET(socketNum, rfds)) {
+
+		}
+		//keyboard update, read from keyboard
+		else if (FD_ISSET(0, rfds)) { //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		//MAYBE NOT ELSE IF, MGHT JUST BE IF
+			localInput();
+		}
+
+	}
+
+}
+
+int localInput() {
+	char textBuffer[MAXBUF];
+	int textLength;
+	char commandType;
+	
+    //while ((textBuffer[textLength] = getchar()) != '\n' && textLength < MAX_MSG_LEN){
+    //  textLength++;
+	//}
+	fgets(textBuffer, MAXBUF, stdin);
+	textBuffer[strcspn(textBuffer, "\n")] = 0;
+	printf("%s", textBuffer);
+
+	//textBufffer[textLength] = '\0'; // gets rid of the \n and ends the string
+
+	if (textBuffer[0] != '%') {
+		printf("Incorrect message formatting\n");
+		return -1;
+	}
+	
+	commandType = toupper(textBuffer[1]); //letter of the command will be here in a properly formatted message
+
+	if (commandType == 'M') { //send message
+		//message(textBuffer);
+	}
+	else if (commandType == 'B') { //block user
+		//block(textBuffer);
+	}
+	else if (commandType == 'U') { //unblock user
+		//unblock(textBuffer);
+	}
+	else if (commandType == 'L') { //list handles
+		//listHandles(textBuffer);
+	}
+	else if (commandType == 'E') { //exit
+		//exitServer(textBuffer);
+	}
+	else {
+		printf("Error: %c is an invalid command type\n", commandType);
+		return -1;
+	}
+
+	return 0;
+
+}
+
+
 
 void sendToServer(int socketNum)
 {
@@ -41,7 +124,7 @@ void sendToServer(int socketNum)
 	int sendLen = 0;        //amount of data to send
 	int sent = 0;            //actual amount of data sent/* get the data and send it   */
 			
-	printf("Enter the data to send: ");
+	printf("Enter the data to send:\n");
 	scanf("%" xstr(MAXBUF) "[^\n]%*[^\n]", sendBuf);
 	
 	sendLen = strlen(sendBuf) + 1;
@@ -61,9 +144,9 @@ void sendToServer(int socketNum)
 void checkArgs(int argc, char * argv[])
 {
 	/* check command line arguments  */
-	if (argc != 3)
+	if (argc != 4)
 	{
-		printf("usage: %s host-name port-number \n", argv[0]);
+		printf("usage: %s handle server-name server-port \n", argv[0]);
 		exit(1);
 	}
 }

@@ -32,7 +32,7 @@ cleano:
 	rm -f *.o
 
 clean:
-	rm -f myServer myClient myServer32 myClient32 *.o
+	rm -f myServer myClient myServer32 myClient32 *.o *.gch a.out 
 
 
 

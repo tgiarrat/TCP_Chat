@@ -91,7 +91,7 @@ int tcpAccept(int server_socket, int debugFlag)
 	return(client_socket);
 }
 
-int tcpClientSetup(char * serverName, char * port, int debugFlag)
+int tcpClientSetup(char * serverName, char * port, int debugFlag) 
 {
 	// This is used by the client to connect to a server using TCP
 	
@@ -99,6 +99,18 @@ int tcpClientSetup(char * serverName, char * port, int debugFlag)
 	uint8_t * ipAddress = NULL;
 	struct sockaddr_in6 server;      
 	
+	/*
+	struct sockaddr_in6 {
+               sa_family_t     sin6_family;   //AF_INET6 
+               in_port_t       sin6_port;     // port number 
+               uint32_t        sin6_flowinfo; // IPv6 flow information 
+               struct in6_addr sin6_addr;     //IPv6 address 
+               uint32_t        sin6_scope_id; //Scope ID (new in 2.4)
+           }
+
+	*/
+
+
 	// create the socket
 	if ((socket_num = socket(AF_INET6, SOCK_STREAM, 0)) < 0)
 	{
@@ -110,9 +122,11 @@ int tcpClientSetup(char * serverName, char * port, int debugFlag)
 	server.sin6_family = AF_INET6;
 	server.sin6_port = htons(atoi(port));
 	
+
 	// get the address of the server 
 	if ((ipAddress = getIPAddress6(serverName, &server)) == NULL)
 	{
+		perror("get ip call");
 		exit(-1);
 	}
 
@@ -121,7 +135,6 @@ int tcpClientSetup(char * serverName, char * port, int debugFlag)
 		perror("connect call");
 		exit(-1);
 	}
-
 	if (debugFlag)
 	{
 		printf("Connected to %s IP: %s Port Number: %d\n", serverName, getIPAddressString(ipAddress), atoi(port));

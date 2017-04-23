@@ -50,6 +50,8 @@ uint8_t * getIPAddress6(const char * hostName, struct sockaddr_in6 * aSockaddr6)
 	struct addrinfo hints;	
 	struct addrinfo *hostInfo = NULL;
 
+	
+	
 	memset(&hints,0,sizeof(hints));
 	hints.ai_flags = AI_V4MAPPED | AI_ALL;
 	hints.ai_family = AF_INET6;
@@ -67,6 +69,6 @@ uint8_t * getIPAddress6(const char * hostName, struct sockaddr_in6 * aSockaddr6)
 		returnValue = ipAddress;
 		freeaddrinfo(hostInfo);
 	}
-
+   printf("ip is: %s  (this is for testing take it out)\n", getIPAddressString(ipAddress));	
   return returnValue;    // Either Null or IP address
 }
