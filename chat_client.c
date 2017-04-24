@@ -22,8 +22,6 @@
 #include "chat_client.h"
 
 char handle[MAX_HANDLE_LEN];
-int socketNum;
-//int seq;
 
 
 
@@ -65,14 +63,14 @@ void chatSession(int socketNum) {
 		//keyboard update, read from keyboard
 		else if (FD_ISSET(0, &rfds)) { //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		//MAYBE NOT ELSE IF, MGHT JUST BE IF
-			localInput();
+			localInput(socketNum);
 		}
 
 	}
 
 }
 
-int localInput() {
+int localInput(int socketNum) {
 	char textBuffer[MAXBUF];
 	int textLength;
 	char commandType;
@@ -87,7 +85,7 @@ int localInput() {
 	commandType = toupper(textBuffer[1]); //letter of the command will be here in a properly formatted message
 
 	if (commandType == 'M') { //send message
-		message(textBuffer + COMMAND_OFFSET);
+		message(textBuffer + COMMAND_OFFSET, socketNum);
 		
 
 	}
@@ -112,7 +110,7 @@ int localInput() {
 
 }
 
-int message(char *textBuffer) {
+int message(char *textBuffer, int socketNum) {
 	char *packet; //this will be the entire packet. I knoe its a lil confusing but oh well too late
 	char *packetPtr;
 	char *arg;
@@ -120,7 +118,7 @@ int message(char *textBuffer) {
 	char *curDest;
 	struct chat_header cheader;
 	uint8_t srcLength, numDestinations;
-	int messageLength, i, destLen;
+	int messageLength, i, destLen, sent;
 	int destHandleTotal = 0;
 
 	//
@@ -170,10 +168,7 @@ int message(char *textBuffer) {
 	packetPtr += srcLength;
 	memcpy(packetPtr, &numDestinations, sizeof(uint8_t));
 	packetPtr += sizeof(uint8_t);
-	//!!!!!!!!!!!!!!!!!!
-	//NO SEGFAULT UP TO HERE CONFIRMED 
-	//!!!!!!!!!!!!!!!!!!
-
+	
 	//copy each of the destinations
 	for (i = 0; i < numDestinations; i++) {
 		curDest = *(destHandles+i);
@@ -183,63 +178,21 @@ int message(char *textBuffer) {
 		memcpy(packetPtr, curDest, destLen);
 		packetPtr += destLen;
 	}
-
 	//copy text
 	memcpy(packetPtr, arg, strlen(arg));
 	packetPtr += strlen(arg);
+	//!!!!!!!!!!!!!!!!!!
+	//NO SEGFAULT UP TO HERE CONFIRMED 
+	//!!!!!!!!!!!!!!!!!!
 
+	//send packet
 
-
-	//struct message_packet messagePacket;
-	//int i;
-	//int destHandleTotal = 0;
-	//int messageLength;
-
-	//FIRST THING TOMORROW: INSTEAD MAKE CHAT HEADER FIRST 
-	/*
-	//construct message packet
-	messagePacket.chatHeader.byteFlag = 5;
-	messagePacket.srcLen = strlen(handle);
-
-	arg = strtok(textBuffer, " "); //get a space separated token of the string 
-	messagePacket.numDestinations = atoi(arg);
-	for (i = 0; (i < messagePacket.numDestinations) && (arg != NULL); i++) {
-		arg = strtok (NULL, " "); //arg is a dest handle
-		destHandleTotal += strlen(arg);
+	sent =  send(socketNum, packet, cheader.packetLen, 0);
+	if (sent < 0)
+	{
+		perror("send call");
+		exit(-1);
 	}
-	if (i != messagePacket.numDestinations){
-		printf("Error: Incorrect number of destination handles entered\n");
-		return -1;
-	}
-	
-	arg = strtok (NULL, " "); //arg is message
-	messageLength = strlen(arg);
-	//strcpy(,arg,messageLength); //COPY THE MESSAGE
-
-
-	messagePacket.chatHeader.packetLen =
-		htons(sizeof(struct chat_header) + messagePacket.srcLen + messageLength 
-		+ messagePacket.numDestinations + 2 + destHandleTotal); 
-
-	packet = malloc(ntohs(messagePacket.chatHeader.packetLen));
-	
-	printf("\n");
-	printf("Packet Length is: %d\n", ntohs(messagePacket.chatHeader.packetLen));
-	printf("\n");
-
-	//memcpy(messagePacket.srcHandle, handle, messagePacket.srcLen); //PROBLEM HERE
-	printf("\n");
-	printf("Handle is: %s\n", handle);
-	printf("\n");
-
-
-
-	//insert data into the packet:
-	//memcpy(packetPtr, );
-	
-	*/
-	
-
 
 	return 0;
 }

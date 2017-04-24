@@ -11,8 +11,8 @@
 void chatSession(int socketNum);
 void sendToServer(int socketNum);
 void checkArgs(int argc, char * argv[]);
-int localInput(); 
-int message(char *);
+int localInput(int); 
+int message(char *, int);
 
 
 struct chat_header{
