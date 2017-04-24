@@ -124,7 +124,7 @@ int message(char *textBuffer) {
 	int i;
 
 	//construct message packet
-	messagePacker.chatHeader.
+	messagePacket.chatHeader.byteFlag = 5;
 
 
 	arg = strtok(textBuffer, " "); //get a space separated token of the string 
