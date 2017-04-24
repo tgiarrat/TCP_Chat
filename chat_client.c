@@ -129,7 +129,8 @@ int message(char *textBuffer) {
 
 	arg = strtok(textBuffer, " "); //get a space separated token of the string 
 
-	messagePacket.numDestinations = arg;
+	messagePacket.numDestinations = atoi(arg);
+	printf("%d\n", messagePacket.numDestinations);
 	
 	for (i = 0; (i < messagePacket.numDestinations) && (arg != NULL); i++) {
 		arg = strtok (NULL, " ");
