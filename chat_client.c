@@ -45,7 +45,7 @@ int main(int argc, char * argv[])
 }
 
 void chatSession(int socketNum) {
-	struct fd_set rfds;
+	fd_set rfds;
 
 	while (1) { //1 is possibly temporary, need to run client until the user exits the client
 		FD_ZERO(&rfds);
@@ -81,7 +81,7 @@ int localInput() {
 	//}
 	fgets(textBuffer, MAXBUF, stdin);
 	textBuffer[strcspn(textBuffer, "\n")] = 0;
-	printf("%s", textBuffer);
+	printf("%s last char: %c", textBuffer, textBuffer[strcspn(textBuffer, "\0")-1]);
 
 	//textBufffer[textLength] = '\0'; // gets rid of the \n and ends the string
 
