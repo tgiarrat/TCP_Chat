@@ -116,6 +116,7 @@ int message(char *textBuffer) {
 	char *packet; //this will be the entire packet. I knoe its a lil confusing but oh well too late
 	char *packetPtr;
 	char *arg;
+	char **destHandles;
 	struct chat_header cheader;
 	uint8_t srcLength, numDestinations;
 	int messageLength;
@@ -127,9 +128,13 @@ int message(char *textBuffer) {
 	srcLength = strlen(handle);
 	arg = strtok(textBuffer, " "); //get a space separated token of the string 
 	numDestinations = atoi(arg);
+	destHandles = malloc(numDestinations);
+
 
 	for (i = 0; (i < numDestinations) && (arg != NULL); i++) {
 		arg = strtok (NULL, " "); //arg is a dest handle
+		*(destHandles + i) = malloc(strlen(arg));
+		memcpy( (*(destHandles+i)) , arg, strlen(arg));
 		destHandleTotal += strlen(arg);
 	}
 	if (i != numDestinations){
@@ -150,6 +155,7 @@ int message(char *textBuffer) {
 	printf("Packet Length is: %d\n", ntohs(cheader.packetLen));
 	//memcpy(messagePacket.srcHandle, handle, messagePacket.srcLen); //PROBLEM HERE
 	printf("Handle is: %s\n", handle);
+	printf("first dest is: %s\n", *destHandles);
 	printf("\n");	
 
 	//begin making packet:
@@ -161,6 +167,10 @@ int message(char *textBuffer) {
 	packetPtr += sizeof(uint8_t);
 	memcpy(packetPtr, handle, srcLength);
 	packetPtr += srcLength;
+	//!!!!!!!!!!!!!!!!!!
+	//NO SEGFAULT UP TO HERE CONFIRMED 
+	//!!!!!!!!!!!!!!!!!!
+
 
 
 	//struct message_packet messagePacket;
