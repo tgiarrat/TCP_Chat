@@ -17,7 +17,7 @@
 #include <netinet/in.h>
 #include <netdb.h>
 #include <ctype.h>
-
+#include <stdint.h>
 #include "networks.h"
 #include "chat_client.h"
 
