@@ -122,7 +122,10 @@ int message(char *textBuffer) {
 	//PACKET LENGTH????
 
 	messagePacket.srcLen = strlen(handle);
-	messagePacket.srcHandle = handle;
+	memcpy(messagePacket.srcHandle, handle, messagePacket.srcLen);
+	printf("\n");
+	printf("Handle is: %s\n", messagePacket.srcHandle);
+	printf("\n");
 
 	arg = strtok(textBuffer, " "); //get a space separated token of the string 
 	messagePacket.numDestinations = atoi(arg);
