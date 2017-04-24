@@ -117,6 +117,7 @@ int message(char *textBuffer) {
 	char *packetPtr;
 	char *arg;
 	char **destHandles;
+	char *curDest;
 	struct chat_header cheader;
 	uint8_t srcLength, numDestinations;
 	int messageLength;
@@ -156,6 +157,7 @@ int message(char *textBuffer) {
 	//memcpy(messagePacket.srcHandle, handle, messagePacket.srcLen); //PROBLEM HERE
 	printf("Handle is: %s\n", handle);
 	printf("first dest is: %s\n", *destHandles);
+	printf("second dest is: %s\n", *(destHandles + 1));
 	printf("\n");	
 
 	//begin making packet:
@@ -170,6 +172,14 @@ int message(char *textBuffer) {
 	//!!!!!!!!!!!!!!!!!!
 	//NO SEGFAULT UP TO HERE CONFIRMED 
 	//!!!!!!!!!!!!!!!!!!
+	memcpy(packetPtr, &numDestinations, sizeof(uint8_t));
+	packetPtr += sizeof(uint8_t);
+	
+	for (i = 0; i < numDestinations; i++) {
+		curDest = *(destHandles+i);
+		memcpy(packetPtr, curDest, strlen(curDest));
+		packetPtr += strlen(curDest);
+	}
 
 
 
