@@ -169,18 +169,25 @@ int message(char *textBuffer) {
 	packetPtr += sizeof(uint8_t);
 	memcpy(packetPtr, handle, srcLength);
 	packetPtr += srcLength;
+	memcpy(packetPtr, &numDestinations, sizeof(uint8_t));
+	packetPtr += sizeof(uint8_t);
 	//!!!!!!!!!!!!!!!!!!
 	//NO SEGFAULT UP TO HERE CONFIRMED 
 	//!!!!!!!!!!!!!!!!!!
-	memcpy(packetPtr, &numDestinations, sizeof(uint8_t));
-	packetPtr += sizeof(uint8_t);
-	
+
+	//copy each of the destinations
 	for (i = 0; i < numDestinations; i++) {
 		curDest = *(destHandles+i);
+		memcpy(packetPtr, strlen(curDest), sizeof(uint8_t));
+		packetPtr += sizeof(uint8_t);
 		memcpy(packetPtr, curDest, strlen(curDest));
 		packetPtr += strlen(curDest);
 	}
 
+	//copy text
+	memcpy(packetPtr, arg, strlen(arg));
+	packetPtr += atrlen(arg);
+	
 
 
 	//struct message_packet messagePacket;
