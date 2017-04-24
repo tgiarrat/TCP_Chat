@@ -148,12 +148,19 @@ int message(char *textBuffer) {
 
 	printf("\n");
 	printf("Packet Length is: %d\n", ntohs(cheader.packetLen));
-	printf("\n");
-
 	//memcpy(messagePacket.srcHandle, handle, messagePacket.srcLen); //PROBLEM HERE
-	printf("\n");
 	printf("Handle is: %s\n", handle);
 	printf("\n");	
+
+	//begin making packet:
+	packet = malloc(ntohs(cheader.packetLen)); 
+	packetPtr = packet;
+	memcpy(packetPtr, cheader, sizeof(chat_header)); //copy chat header
+	packetPtr += sizeof(chat_header);
+	memcpy(packetPtr, srcLen, sizeof(uint8_t));
+	packetPtr += sizeof(uint8_t);
+	memcpy(packetPtr, header, srcLen);
+	packetPtr += srcLen;
 
 
 	//struct message_packet messagePacket;
