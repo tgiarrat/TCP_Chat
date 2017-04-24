@@ -24,7 +24,6 @@
 char handle[MAX_HANDLE_LEN];
 int socketNum;
 //int seq;
-fd_set *rfds;
 
 
 
@@ -46,23 +45,24 @@ int main(int argc, char * argv[])
 }
 
 void chatSession(int socketNum) {
+	struct fd_set rfds;
 
 	while (1) { //1 is possibly temporary, need to run client until the user exits the client
-		FD_ZERO(rfds);
-		FD_SET(STD_IN, rfds); //watch std in
-		FD_SET(socketNum, rfds ); //watch socket for update
+		FD_ZERO(&rfds);
+		FD_SET(STD_IN, &rfds); //watch std in
+		FD_SET(socketNum, &rfds ); //watch socket for update
 		
-		if (select(FD_SETSIZE, rfds, NULL, NULL, NULL) < 0) {
+		if (select(FD_SETSIZE, &rfds, NULL, NULL, NULL) < 0) {
         	perror("select call error\n");
         	exit(-1);
       	}	
 		
 		//server update, read from server
-		if (FD_ISSET(socketNum, rfds)) {
+		if (FD_ISSET(socketNum, &rfds)) {
 
 		}
 		//keyboard update, read from keyboard
-		else if (FD_ISSET(0, rfds)) { //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		else if (FD_ISSET(0, &rfds)) { //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		//MAYBE NOT ELSE IF, MGHT JUST BE IF
 			localInput();
 		}
