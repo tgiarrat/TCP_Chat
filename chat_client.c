@@ -155,12 +155,12 @@ int message(char *textBuffer) {
 	//begin making packet:
 	packet = malloc(ntohs(cheader.packetLen)); 
 	packetPtr = packet;
-	memcpy(packetPtr, cheader, sizeof(chat_header)); //copy chat header
-	packetPtr += sizeof(chat_header);
-	memcpy(packetPtr, srcLen, sizeof(uint8_t));
+	memcpy(packetPtr, &cheader, sizeof(struct chat_header)); //copy chat header
+	packetPtr += sizeof(struct chat_header);
+	memcpy(packetPtr, &srcLength, sizeof(uint8_t));
 	packetPtr += sizeof(uint8_t);
-	memcpy(packetPtr, header, srcLen);
-	packetPtr += srcLen;
+	memcpy(packetPtr, handle, srcLength);
+	packetPtr += srcLength;
 
 
 	//struct message_packet messagePacket;
