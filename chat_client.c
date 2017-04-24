@@ -93,7 +93,7 @@ int localInput() {
 	commandType = toupper(textBuffer[1]); //letter of the command will be here in a properly formatted message
 
 	if (commandType == 'M') { //send message
-		message(textBuffer + 3);
+		message(textBuffer + COMMAND_OFFSET);
 		
 
 	}
@@ -126,8 +126,8 @@ int message(char *textBuffer) {
 
 	
 	while (arg != NULL) {
-		printf("%s\n", arg);
 		arg = strtok (NULL, " ");
+		printf("%s\n", arg);
 	}
 	
 
