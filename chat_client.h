@@ -30,7 +30,7 @@ struct init_packet{
 
 struct message_packet{
 	struct chat_header chatHeader;
-	uint8_t handleLen;
+	uint8_t srcLen;
 	char *srcHandle;
 	uint8_t numDestinations;
 	//maybe i cant do the rest of this in a struct and ill kust need to make a biffer and memcpy

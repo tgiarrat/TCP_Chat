@@ -35,7 +35,8 @@ int main(int argc, char * argv[])
 	checkArgs(argc, argv);
 	/* set up the TCP Client socket  */
 	socketNum = tcpClientSetup(argv[2], argv[3], DEBUG_FLAG);
-	
+	strcpy(handle, argv[1]);
+
 	//sendToServer(socketNum);
 	chatSession(socketNum);
 	
@@ -76,20 +77,13 @@ int localInput() {
 	int textLength;
 	char commandType;
 	
-    //while ((textBuffer[textLength] = getchar()) != '\n' && textLength < MAX_MSG_LEN){
-    //  textLength++;
-	//}
 	fgets(textBuffer, MAXBUF, stdin);
 	textBuffer[strcspn(textBuffer, "\n")] = 0;
-	printf("%s last char: %c", textBuffer, textBuffer[strcspn(textBuffer, "\0")-1]);
-
-	//textBufffer[textLength] = '\0'; // gets rid of the \n and ends the string
-
 	if (textBuffer[0] != '%') {
 		printf("Incorrect message formatting\n");
 		return -1;
 	}
-	
+
 	commandType = toupper(textBuffer[1]); //letter of the command will be here in a properly formatted message
 
 	if (commandType == 'M') { //send message
@@ -125,16 +119,22 @@ int message(char *textBuffer) {
 
 	//construct message packet
 	messagePacket.chatHeader.byteFlag = 5;
+	//PACKET LENGTH????
 
+	messagePacket.srcLen = strlen(handle);
+	messagePacket.srcHandle = handle;
 
 	arg = strtok(textBuffer, " "); //get a space separated token of the string 
-
 	messagePacket.numDestinations = atoi(arg);
-	printf("%d\n", messagePacket.numDestinations);
 	
+
 	for (i = 0; (i < messagePacket.numDestinations) && (arg != NULL); i++) {
 		arg = strtok (NULL, " ");
 		printf("\n%s", arg);	
+	}
+	if (i != messagePacket.numDestinations){
+		printf("Error: Incorrect number of destination handles entered\n");
+		return -1;
 	}
 
 	
