@@ -120,9 +120,8 @@ int message(char *textBuffer) {
 	char *curDest;
 	struct chat_header cheader;
 	uint8_t srcLength, numDestinations;
-	int messageLength;
+	int messageLength, i, destLen;
 	int destHandleTotal = 0;
-	int i; 
 
 	//
 	cheader.byteFlag = 5;
@@ -178,16 +177,17 @@ int message(char *textBuffer) {
 	//copy each of the destinations
 	for (i = 0; i < numDestinations; i++) {
 		curDest = *(destHandles+i);
-		memcpy(packetPtr, strlen(curDest), sizeof(uint8_t));
+		destLen = strlen(curDest);
+		memcpy(packetPtr, &destLen, sizeof(uint8_t));
 		packetPtr += sizeof(uint8_t);
-		memcpy(packetPtr, curDest, strlen(curDest));
-		packetPtr += strlen(curDest);
+		memcpy(packetPtr, curDest, destLen);
+		packetPtr += destLen;
 	}
 
 	//copy text
 	memcpy(packetPtr, arg, strlen(arg));
-	packetPtr += atrlen(arg);
-	
+	packetPtr += strlen(arg);
+
 
 
 	//struct message_packet messagePacket;
