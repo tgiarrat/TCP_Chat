@@ -93,7 +93,9 @@ int localInput() {
 	commandType = toupper(textBuffer[1]); //letter of the command will be here in a properly formatted message
 
 	if (commandType == 'M') { //send message
-		//message(textBuffer);
+		message(textBuffer + 3);
+		
+
 	}
 	else if (commandType == 'B') { //block user
 		//block(textBuffer);
@@ -116,6 +118,23 @@ int localInput() {
 
 }
 
+int message(char *textBuffer) {
+	char *arg;
+
+	arg = strtok(textBuffer, " "); //get a space separated token of the string 
+	printf("args: \n%s", arg);
+
+	
+	while (arg != NULL) {
+		printf("%s\n", arg);
+		arg = strtok (NULL, " ");
+	}
+	
+
+
+	//
+	return 0;
+}
 
 
 void sendToServer(int socketNum)
