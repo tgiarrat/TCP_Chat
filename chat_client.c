@@ -114,36 +114,51 @@ int localInput() {
 
 int message(char *textBuffer) {
 	char *arg;
+	struct chat_header header;
 	struct message_packet messagePacket;
 	int i;
+	int destHandleTotal = 0;
+	int messageLength;
+
+	//FIRST THING TOMORROW: INSTEAD MAKE CHAT HEADER FIRST 
 
 	//construct message packet
 	messagePacket.chatHeader.byteFlag = 5;
-	//PACKET LENGTH????
-
 	messagePacket.srcLen = strlen(handle);
-	memcpy(messagePacket.srcHandle, handle, messagePacket.srcLen);
-	printf("\n");
-	printf("Handle is: %s\n", messagePacket.srcHandle);
-	printf("\n");
 
 	arg = strtok(textBuffer, " "); //get a space separated token of the string 
 	messagePacket.numDestinations = atoi(arg);
-	
-
 	for (i = 0; (i < messagePacket.numDestinations) && (arg != NULL); i++) {
-		arg = strtok (NULL, " ");
-		printf("\n%s", arg);	
+		arg = strtok (NULL, " "); //arg is a dest handle
+		destHandleTotal += strlen(arg);
 	}
 	if (i != messagePacket.numDestinations){
 		printf("Error: Incorrect number of destination handles entered\n");
 		return -1;
 	}
+	
+	arg = strtok (NULL, " "); //arg is message
+	messageLength = strlen(arg);
+	//strcpy(,arg,messageLength); //COPY THE MESSAGE
+
+
+	messagePacket.chatHeader.packetLen =
+		htons(sizeof(struct chat_header) + messagePacket.srcLen + messageLength 
+		+ messagePacket.numDestinations + 2 + destHandleTotal); //NEED TO GET MESSAGE ENGTH TOMORROW
+	printf("\n");
+	printf("Packet Length is: %d\n", ntohs(messagePacket.chatHeader.packetLen));
+	printf("\n");
+
 
 	
 
+	memcpy(messagePacket.srcHandle, handle, messagePacket.srcLen); //PROBLEM HERE
+	printf("\n");
+	printf("Handle is: %s\n", messagePacket.srcHandle);
+	printf("\n");
 
-	//
+
+
 	return 0;
 }
 
