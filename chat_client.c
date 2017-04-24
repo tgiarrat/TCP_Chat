@@ -120,15 +120,22 @@ int localInput() {
 
 int message(char *textBuffer) {
 	char *arg;
+	struct message_packet messagePacket;
+	int i;
+
+	//construct message packet
+	messagePacker.chatHeader.
+
 
 	arg = strtok(textBuffer, " "); //get a space separated token of the string 
-	printf("args: \n%s", arg);
 
+	messagePacket.numDestinations = arg;
 	
-	while (arg != NULL) {
+	for (i = 0; (i < messagePacket.numDestinations) && (arg != NULL); i++) {
 		arg = strtok (NULL, " ");
-		printf("%s\n", arg);
+		printf("\n%s", arg);	
 	}
+
 	
 
 
