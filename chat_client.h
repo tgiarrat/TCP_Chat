@@ -14,6 +14,11 @@ int localInput();
 int message(char *);
 
 
+struct chat_header{
+	uint16_t packetLen;
+	uint8_t byteFlag;
+}__attribute__((packed));
+
 struct init_packet{
 	struct chat_header chatHeader;
 	uint8_t handleLen;
@@ -21,10 +26,6 @@ struct init_packet{
 }__attribute__((packed));
 
 
-struct chat_header{
-	uint16_t packetLen;
-	uint8_t byteFlag;
-}__attribute__((packed));
 
 struct message_packet{
 	struct chat_header chatHeader;
