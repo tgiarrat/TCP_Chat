@@ -113,6 +113,8 @@ int localInput() {
 }
 
 int message(char *textBuffer) {
+	char *packet; //this will be the entire packet. I knoe its a lil confusing but oh well too late
+	char *packetPtr;
 	char *arg;
 	struct chat_header header;
 	struct message_packet messagePacket;
@@ -144,19 +146,26 @@ int message(char *textBuffer) {
 
 	messagePacket.chatHeader.packetLen =
 		htons(sizeof(struct chat_header) + messagePacket.srcLen + messageLength 
-		+ messagePacket.numDestinations + 2 + destHandleTotal); //NEED TO GET MESSAGE ENGTH TOMORROW
+		+ messagePacket.numDestinations + 2 + destHandleTotal); 
+
+	packet = malloc(ntohs(messagePacket.chatHeader.packetLen));
+	
 	printf("\n");
 	printf("Packet Length is: %d\n", ntohs(messagePacket.chatHeader.packetLen));
 	printf("\n");
 
+	//memcpy(messagePacket.srcHandle, handle, messagePacket.srcLen); //PROBLEM HERE
+	printf("\n");
+	printf("Handle is: %s\n", handle);
+	printf("\n");
 
+
+
+	//insert data into the packet:
+	//memcpy(packetPtr, );
 	
 
-	memcpy(messagePacket.srcHandle, handle, messagePacket.srcLen); //PROBLEM HERE
-	printf("\n");
-	printf("Handle is: %s\n", messagePacket.srcHandle);
-	printf("\n");
-
+	
 
 
 	return 0;
