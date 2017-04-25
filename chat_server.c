@@ -162,7 +162,7 @@ int sendValidHandle(int serverSocket){
 	cheader.packetLen = htons(sizeof(struct chat_header));
 	cheader.byteFlag = 2;
 	memcpy(packet, &cheader, ntohs(cheader.packetLen));
-	sent =  send(serverSocket, &cheader, ntohs(cheader.packetLen), 0);
+	sent =  send(serverSocket, packet, ntohs(cheader.packetLen), 0);
 	if (sent < 0) {
 		perror("flag = 2 send call error");
 		exit(-1);
