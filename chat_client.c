@@ -154,6 +154,7 @@ int sendInitialPacket(int socketNum){
 	}
 	else {
 		printf("uh oh... flag != 2 or 3\n");
+		printf("flag is %d\n", flag);
 	}
 
 
