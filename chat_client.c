@@ -143,6 +143,7 @@ int sendInitialPacket(int socketNum){
 		perror("sent 0 bytes instead of initial header packet");
 		exit(-1);
 	}
+	printf("Recieveing packet response after sending intitial packet...\n");
 	recieved = recv(socketNum, incomingBuffer, MAXBUF, 0);
 	if (recieved < 0) {
 		perror("Initial packet recieved no response from the server");
