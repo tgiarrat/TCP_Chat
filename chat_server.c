@@ -55,6 +55,11 @@ int chatSession(int serverSocket, int portNumber) {
 	int maxSocket = serverSocket;
 
 
+//////////////////////////////////////////
+	int count = 0;
+///////////////////////////////////////////
+
+
 	while (1) {
 		FD_ZERO(&rfds);
 		FD_SET(serverSocket, &rfds ); //watch socket for update
@@ -86,8 +91,15 @@ int chatSession(int serverSocket, int portNumber) {
 				printf("\nafter advancing\n");
 			}
 			
+///////////////////////////////////////////////////////////
+			
+			curNode = headClientNode;
+			while(curNode != NULL) {
+				printf("count = %d\n", count++);
+				curNode = curNode->next; 
+			}
 
-
+/////////////////////////////////////////////////////////
 			///////
 
 
@@ -133,6 +145,8 @@ struct clientNode * newClientConnection(int serverSocket,struct clientNode *head
 	struct clientNode *nodePtr = NULL;
 	char buf[MAXBUF];
 	struct chat_header cheader;
+
+	
 
 
 	if ((clientSocket = accept(serverSocket,(struct sockaddr*) 0, (socklen_t *) 0)) < 0) {
