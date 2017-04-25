@@ -101,13 +101,14 @@ int clientActivity(int clientSocket) {
 	struct chat_header cheader;
 
 	if ((recieved = recv(clientSocket, buf, MAXBUF, 0)) < 0) {
-      perror("Error recieveing incoming client packet \n");
-      exit(-1);
-   }
-   if (recieved == 0) {
+    	perror("Error recieveing incoming client packet \n");
+    	exit(-1);
+  	}
+	if (recieved == 0) {
 	   perror("Error: Read incoming client packet as zero bytes \n");
 	   exit(-1);
-   }
+   	}
+	printf("I GET TO CLIENT ACTIVITY AT LEAST \n");
 
 	return 0; 
 }
