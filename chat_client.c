@@ -139,9 +139,17 @@ int sendInitialPacket(int socketNum){
 		perror("flag = 1 send call");
 		exit(-1);
 	}
+	if (sent == 0) {
+		perror("sent 0 bytes instead of initial header packet");
+		exit(-1);
+	}
 	recieved = recv(socketNum, incomingBuffer, MAXBUF, 0);
 	if (recieved < 0) {
 		perror("Initial packet recieved no response from the server");
+		exit(-1);
+	}
+	if (recieved == 0) {
+		perror("Recieved zero bytes in response to empty initial packet");
 		exit(-1);
 	}
 
