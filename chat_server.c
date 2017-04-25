@@ -77,6 +77,7 @@ int chatSession(int serverSocket, int portNumber) {
 
 		//new connection to server socket 
 		if (FD_ISSET(serverSocket, &rfds)) {
+			printf("\nA new client is about to attempt connection\n");
 			curNode = newClientConnection(serverSocket, headClientNode);
 			printf("\nBefore if\n");
 			if (curNode != NULL) {
