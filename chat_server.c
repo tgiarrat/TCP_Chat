@@ -138,10 +138,11 @@ struct clientNode * newClientConnection(int serverSocket,struct clientNode *head
 		perror("accept call error");
 		exit(-1);
 	}
+	printf("\n accept() call done\n");
 	nodePtr = malloc(sizeof(struct clientNode));	
 	nodePtr->next = NULL;	
 	nodePtr->socket =  clientSocket;
-
+	printf("\n node allocated\n");
 	//recieve the clients initial packet containing handle and handle length
 	if ((messageLen = recv(clientSocket, buf, MAXBUF, 0)) < 0)
 	{
@@ -152,10 +153,13 @@ struct clientNode * newClientConnection(int serverSocket,struct clientNode *head
 		perror("Zero bytes received for initial packet");
 		exit(-1);
 	}
-
+	printf("\n message recieved\n");
 	memcpy(&cheader, buf, sizeof(struct chat_header));
+	printf("\n cpy1\n");
 	memcpy(&handleLength, buf + sizeof(struct chat_header), sizeof(uint8_t));
+	printf("\n cpy2\n");
 	memcpy(nodePtr->handle, buf + sizeof(struct chat_header) + sizeof(uint8_t), handleLength); 
+	printf("\n cpy3\n");
 
 
 	printf("\nnodePtr has been created with handle %s and socket %d\n", nodePtr->handle, clientSocket);
