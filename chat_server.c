@@ -50,7 +50,7 @@ int chatSession(int serverSocket, int portNumber) {
 	fd_set rfds;
 	struct clientNode *headClientNode = NULL;
 	struct clientNode *curNode;
-	struct clientNode *nodePtr;
+	struct clientNode *newNode;
 	int clientSocket;
 	int maxSocket = serverSocket;
 
@@ -77,18 +77,18 @@ int chatSession(int serverSocket, int portNumber) {
 
 		//new connection to server socket 
 		if (FD_ISSET(serverSocket, &rfds)) {
-			curNode = newClientConnection(serverSocket, headClientNode);
+			newNode = newClientConnection(serverSocket, headClientNode);
 			//checkHandle(curNode, head); //dont forget to free the node that was created if the handle already exists
 						
 		}
 		
 		//check for incoming client activity
-		nodePtr = headClientNode;
-		while(nodePtr != NULL) {
-			if (FD_ISSET(nodePtr->socket, &rfds)) {
-				clientActivity(nodePtr->socket);
+		curNode = headClientNode;
+		while(curNode != NULL) {
+			if (FD_ISSET(curNode->socket, &rfds)) {
+				clientActivity(curNode->socket);
          	}
-			nodePtr = nodePtr->next;
+			curNode = curNode->next;
 		}
 
 	}
@@ -99,7 +99,7 @@ int clientActivity(int clientSocket) {
 	char buf[MAXBUF];
 	int recieved;
 	struct chat_header cheader;
-
+	printf("I GET TO CLIENT ACTIVITY AT LEAST \n");
 	if ((recieved = recv(clientSocket, buf, MAXBUF, 0)) < 0) {
     	perror("Error recieveing incoming client packet \n");
     	exit(-1);
