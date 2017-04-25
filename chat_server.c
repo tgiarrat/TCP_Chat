@@ -77,9 +77,9 @@ int chatSession(int serverSocket, int portNumber) {
 
 		//new connection to server socket 
 		if (FD_ISSET(serverSocket, &rfds)) {
-			curNode->next = newClientConnection(serverSocket, headClientNode);
+			curNode = newClientConnection(serverSocket, headClientNode);
 			printf("\nBefore if\n");
-			if (curNode->next != NULL) {
+			if (curNode != NULL) {
 				printf("\njust entered\n");
 				curNode = curNode->next;
 				printf("\nafter advancing\n");
