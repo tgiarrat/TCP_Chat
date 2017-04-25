@@ -115,6 +115,7 @@ int sendInitialPacket(int socketNum){
 	int packetLength, handleLen, sent, recieved;
 	struct chat_header cheader;
 	char incomingBuffer[MAXBUF];
+	uint8_t flag;
 
 	packetLength = sizeof(struct chat_header) + 1 + strlen(handle);
 	printf("\nInitial packet size is: %d\n", packetLength);
@@ -143,16 +144,23 @@ int sendInitialPacket(int socketNum){
 		exit(-1);
 	}
 
-	sendInitReply(recieved);
+	memcpy(&flag, incomingBuffer + sizeof(uint16_t), sizeof(uint8_t)); //gets the flag from the incoming buffer
 
+	if (flag == 3) {
+		printf("WOW we got here, congrats. Flag = 3\n");
+	}
+	else if (flag ==2) {
+		printf("WOW we got here, congrats. Flag = 2\n");
+	}
+	else {
+		printf("uh oh... flag != 2 or 3\n");
+	}
 
 
 	return 0;
 }
 
-int sendInitReply(int recieved){
-	return 0;
-}
+
 
 int message(char *textBuffer, int socketNum) {
 	char *packet; //this will be the entire packet. I knoe its a lil confusing but oh well too late

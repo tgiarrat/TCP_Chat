@@ -14,4 +14,4 @@ void checkArgs(int argc, char * argv[]);
 int localInput(int); 
 int message(char *, int);
 int sendInitialPacket(int socketNum);
-int sendInitReply(int);
+

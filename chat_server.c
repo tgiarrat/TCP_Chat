@@ -76,14 +76,16 @@ int chatSession(int serverSocket, int portNumber) {
 
 		//new connection to server socket 
 		if (FD_ISSET(serverSocket, &rfds)) {
-			curNode = newClientConnection(serverSocket);			
+			curNode = newClientConnection(serverSocket, headClientNode);
+			//checkHandle(curNode, head); //dont forget to free the node that was created if the handle already exists
+						
 		}
 		//elseif...
 	}
 	freeClientList(headClientNode);
 } 
 
-struct clientNode * newClientConnection(int serverSocket) {
+struct clientNode * newClientConnection(int serverSocket,struct clientNode *head) {
 	int clientSocket, messageLen;
 	int handleLength, handle[MAX_HANDLE_LEN];
 	struct clientNode *newNode = NULL;
@@ -110,29 +112,81 @@ struct clientNode * newClientConnection(int serverSocket) {
 	memcpy(&handleLength, buf + sizeof(struct chat_header), sizeof(uint8_t));
 	memcpy(newNode->handle, buf + sizeof(struct chat_header) + sizeof(uint8_t), handleLength); 
 
+
 	printf("\nNewNode has been created with handle %s and socket %d\n", newNode->handle, clientSocket);
+
+	
+	if (checkHandle(newNode, head) == 0) {
+		//handdle is valid
+		sendHandleExistsError(serverSocket);
+	}
+	else {
+		//handle is invalid
+		sendValidHandle(serverSocket);
+	}
 
 	return newNode; 
 }
+
+int sendHandleExistsError(int serverSocket){
+	//send flag =3;
+	int sent;
+	struct chat_header cheader;
+	//char *packet = malloc(sizeof(struct chat_header));
+
+	cheader.packetLen = htons(sizeof(struct chat_header));
+	cheader.byteFlag = 3;
+
+	sent =  send(serverSocket, &cheader, ntohs(cheader.packetLen), 0);
+	if (sent < 0) {
+		perror("flag = 3 send call error");
+		exit(-1);
+	}
+
+	//free(packet);
+	return 0;
+}
+
+int sendValidHandle(int serverSocket){
+	//send flag =2;
+	int sent;
+	struct chat_header cheader;
+	//char *packet = malloc(sizeof(struct chat_header));
+
+	cheader.packetLen = htons(sizeof(struct chat_header));
+	cheader.byteFlag = 2;
+
+	sent =  send(serverSocket, &cheader, ntohs(cheader.packetLen), 0);
+	if (sent < 0) {
+		perror("flag = 2 send call error");
+		exit(-1);
+	}
+
+
+	//free(packet);
+	return 0;
+}
+
+
+int checkHandle(struct clientNode *newNode, struct clientNode *head) {
+	//check if handle already exists
+	struct clientNode *curNode = head;
+
+	while(curNode != NULL) {
+		if (strcmp(curNode->handle, newNode->handle) == 0){//if the handles are equal send packet with flag ==3
+			return 1;
+		}
+		curNode = curNode->next;
+	}
+	return 0;
+}
+
+
 
 int freeClientList(struct clientNode *head){
 	return 0;
 }
 
-void recvFromClient(int clientSocket)
-{
-	char buf[MAXBUF];
-	int messageLen = 0;
-	
-	//now get the data from the client_socket
-	if ((messageLen = recv(clientSocket, buf, MAXBUF, 0)) < 0)
-	{
-		perror("recv call");
-		exit(-1);
-	}
-
-	printf("Message received, length: %d Data: %s\n", messageLen, buf);
-}
 
 int checkArgs(int argc, char *argv[])
 {
