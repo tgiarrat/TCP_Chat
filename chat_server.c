@@ -158,6 +158,7 @@ struct clientNode * newClientConnection(int serverSocket,struct clientNode *head
 	printf("\n cpy1\n");
 	memcpy(&handleLength, buf + sizeof(struct chat_header), sizeof(uint8_t));
 	printf("\n cpy2\n");
+	nodePtr->handle = malloc(handleLength);
 	memcpy(nodePtr->handle, buf + sizeof(struct chat_header) + sizeof(uint8_t), handleLength); 
 	printf("\n cpy3\n");
 
