@@ -19,3 +19,4 @@ int freeClientList(struct clientNode *head);
 int checkHandle(struct clientNode *newNode, struct clientNode *head);
 int sendHandleExistsError(int serverSocket);
 int sendValidHandle(int socketServer);
+int clientActivity(int clientSocket) ;

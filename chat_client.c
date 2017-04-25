@@ -149,7 +149,7 @@ int sendInitialPacket(int socketNum){
 		exit(-1);
 	}
 	if (recieved == 0) {
-		perror("Recieved zero bytes in response to empty initial packet");
+		perror("Recieved zero bytes in response to initial packet");
 		exit(-1);
 	}
 
