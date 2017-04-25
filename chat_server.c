@@ -144,6 +144,10 @@ int sendHandleExistsError(int serverSocket){
 		perror("flag = 3 send call error");
 		exit(-1);
 	}
+	if (sent == 0) {
+		perror("Error: sent zero bytes in response to initial packet");
+		exit(-1);
+	}
 
 	//free(packet);
 	return 0;
@@ -153,19 +157,22 @@ int sendValidHandle(int serverSocket){
 	//send flag =2;
 	int sent;
 	struct chat_header cheader;
-	//char *packet = malloc(sizeof(struct chat_header));
+	char *packet = malloc(sizeof(struct chat_header));
 
 	cheader.packetLen = htons(sizeof(struct chat_header));
 	cheader.byteFlag = 2;
-
+	memcpy(packet, &cheader, ntohs(cheader.packetLen));
 	sent =  send(serverSocket, &cheader, ntohs(cheader.packetLen), 0);
 	if (sent < 0) {
 		perror("flag = 2 send call error");
 		exit(-1);
 	}
+	if (sent == 0) {
+		perror("Error: sent zero bytes in response to initial packet");
+		exit(-1);
+	}
 
-
-	//free(packet);
+	free(packet);
 	return 0;
 }
 
