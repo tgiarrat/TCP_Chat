@@ -77,7 +77,16 @@ int chatSession(int serverSocket, int portNumber) {
 
 		//new connection to server socket 
 		if (FD_ISSET(serverSocket, &rfds)) {
-			curNode = newClientConnection(serverSocket, headClientNode);
+			curNode->next = newClientConnection(serverSocket, headClientNode);
+			if (curNode->next != NULL) {
+				curNode = curNode->next;
+			}
+			
+
+
+			///////
+
+
 			//checkHandle(curNode, head); //dont forget to free the node that was created if the handle already exists
 						
 		}
