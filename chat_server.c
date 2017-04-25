@@ -81,7 +81,7 @@ int chatSession(int serverSocket, int portNumber) {
 			//checkHandle(curNode, head); //dont forget to free the node that was created if the handle already exists
 						
 		}
-		
+		/*
 		//check for incoming client activity
 		nodePtr = headClientNode;
 		while(nodePtr != NULL) {
@@ -90,7 +90,7 @@ int chatSession(int serverSocket, int portNumber) {
          	}
 			nodePtr = nodePtr->next;
 		}
-
+		*/
 	}
 	freeClientList(headClientNode);
 } 
@@ -147,17 +147,17 @@ struct clientNode * newClientConnection(int serverSocket,struct clientNode *head
 
 	printf("\nnodePtr has been created with handle %s and socket %d\n", nodePtr->handle, clientSocket);
 
-	/*
+	
 	if (checkHandle(nodePtr, head) == 1) {
 		//handdle is valid
 		printf("Handle is INVALID (exists), sending error packet\n");
-		sendHandleExistsError(serverSocket);
+		sendHandleExistsError(clientSocket);
 	}
 	else {
 		//handle is invalid
 		printf("Handle is VALID, sending packet\n");
-		sendValidHandle(serverSocket);
-	}*/
+		sendValidHandle(clientSocket);
+	}
 
 	return nodePtr; 
 }
