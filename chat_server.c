@@ -212,8 +212,8 @@ int sendValidHandle(int serverSocket){
 		perror("Error: sent zero bytes in response to initial packet");
 		exit(-1);
 	}
-	printf("\nVALID HANDLE HAS BEEN SENT\n");
 	free(packet);
+	printf("\nVALID HANDLE HAS BEEN SENT\n");
 	return 0;
 }
 
