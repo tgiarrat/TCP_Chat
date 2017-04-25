@@ -9,6 +9,12 @@
 
 #define BACKLOG 10
 
+struct chat_header{
+	uint16_t packetLen;
+	uint8_t byteFlag;
+}__attribute__((packed));
+
+
 // for the server side
 int tcpServerSetup(int portNumber);
 int tcpAccept(int server_socket, int debugFlag);

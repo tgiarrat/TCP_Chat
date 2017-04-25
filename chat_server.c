@@ -33,16 +33,89 @@ int main(int argc, char *argv[])
 	//create the server socket
 	serverSocket = tcpServerSetup(portNumber);
 
+	chatSession(serverSocket, portNumber);
 	// wait for client to connect
-	clientSocket = tcpAccept(serverSocket, DEBUG_FLAG);
-	
-	recvFromClient(clientSocket);
+	//clientSocket = tcpAccept(serverSocket, DEBUG_FLAG);
+	//recvFromClient(clientSocket);
 	
 	/* close the sockets */
 	close(clientSocket);
 	close(serverSocket);
 
 	
+	return 0;
+}
+
+int chatSession(int serverSocket, int portNumber) {
+	fd_set rfds;
+	struct clientNode *headClientNode = NULL;
+	struct clientNode *curNode;
+	int clientSocket;
+	int maxSocket = serverSocket;
+
+
+	while (1) {
+		FD_ZERO(&rfds);
+		FD_SET(serverSocket, &rfds ); //watch socket for update
+		
+		//go through list of connected clients and watch each of the sockets
+		curNode = headClientNode; 
+		while(curNode != NULL) {
+			FD_SET(curNode->socket, &rfds);
+			if (maxSocket < curNode->socket){
+				maxSocket = curNode->socket;
+			}
+			curNode = curNode->next;
+		}
+
+
+		if (select(maxSocket + 1, &rfds,NULL,NULL,NULL) < 0  ){
+			perror("server select call error");
+			exit(-1);
+		}
+
+		//new connection to server socket 
+		if (FD_ISSET(serverSocket, &rfds)) {
+			curNode = newClientConnection(serverSocket);			
+		}
+		//elseif...
+	}
+	freeClientList(headClientNode);
+} 
+
+struct clientNode * newClientConnection(int serverSocket) {
+	int clientSocket, messageLen;
+	int handleLength, handle[MAX_HANDLE_LEN];
+	struct clientNode *newNode = NULL;
+	char buf[MAXBUF];
+	struct chat_header cheader;
+
+
+	if ((clientSocket = accept(serverSocket,(struct sockaddr*) 0, (socklen_t *) 0)) < 0) {
+		perror("accept call error");
+		exit(-1);
+	}
+	newNode = malloc(sizeof(struct clientNode));	
+	newNode->next = NULL;	
+	newNode->socket =  clientSocket;
+
+	//recieve the clients initial packet containing handle and handle length
+	if ((messageLen = recv(clientSocket, buf, MAXBUF, 0)) < 0)
+	{
+		perror("Initial Client Recieve Call Error");
+		exit(-1);
+	}
+
+	memcpy(&cheader, buf, sizeof(struct chat_header));
+	memcpy(&handleLength, buf + sizeof(struct chat_header), sizeof(uint8_t));
+	memcpy(newNode->handle, buf + sizeof(struct chat_header) + sizeof(uint8_t), handleLength); 
+
+	printf("\nNewNode has been created with handle %s and socket %d\n", newNode->handle, clientSocket);
+
+	return newNode; 
+}
+
+int freeClientList(struct clientNode *head){
 	return 0;
 }
 

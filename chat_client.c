@@ -23,11 +23,8 @@
 
 char handle[MAX_HANDLE_LEN];
 
-
-
 int main(int argc, char * argv[])
 {
-
 	int socketNum = 0;         //socket descriptor, will be the socket of the server i believe
 
 	checkArgs(argc, argv);
@@ -45,6 +42,8 @@ int main(int argc, char * argv[])
 
 void chatSession(int socketNum) {
 	fd_set rfds;
+
+	sendInitialPacket(socketNum);
 
 	while (1) { //1 is possibly temporary, need to run client until the user exits the client
 		FD_ZERO(&rfds);
@@ -110,6 +109,51 @@ int localInput(int socketNum) {
 
 }
 
+int sendInitialPacket(int socketNum){
+	char *packet;
+	char *packetPtr;
+	int packetLength, handleLen, sent, recieved;
+	struct chat_header cheader;
+	char incomingBuffer[MAXBUF];
+
+	packetLength = sizeof(struct chat_header) + 1 + strlen(handle);
+	printf("\nInitial packet size is: %d\n", packetLength);
+	packet = malloc(packetLength);
+	packetPtr = packet;
+
+	cheader.packetLen = htons(packetLength);
+	cheader.byteFlag = 1;
+	memcpy(packetPtr, &cheader, sizeof(struct chat_header));
+	packetPtr += sizeof(struct chat_header);
+	handleLen = strlen(handle);
+	memcpy(packetPtr, &handleLen, sizeof(uint8_t)); //copy handle length
+	packetPtr+= sizeof(uint8_t);
+	memcpy(packetPtr, handle, handleLen); //copy handle
+
+	//send packet
+	sent =  send(socketNum, packet, packetLength, 0);
+	if (sent < 0)
+	{
+		perror("flag = 1 send call");
+		exit(-1);
+	}
+	recieved = recv(socketNum, incomingBuffer, MAXBUF, 0);
+	if (recieved < 0) {
+		perror("Initial packet recieved no response from the server");
+		exit(-1);
+	}
+
+	sendInitReply(recieved);
+
+
+
+	return 0;
+}
+
+int sendInitReply(int recieved){
+	return 0;
+}
+
 int message(char *textBuffer, int socketNum) {
 	char *packet; //this will be the entire packet. I knoe its a lil confusing but oh well too late
 	char *packetPtr;
@@ -139,11 +183,8 @@ int message(char *textBuffer, int socketNum) {
 		printf("Error: Incorrect number of destination handles entered\n");
 		return -1;
 	}
-
 	arg = strtok (NULL, " "); //arg is message
 	messageLength = strlen(arg);
-	//strcpy(,arg,messageLength); //COPY THE MESSAGE
-
 
 	cheader.packetLen =
 		htons(sizeof(struct chat_header) + srcLength + messageLength 
@@ -168,7 +209,6 @@ int message(char *textBuffer, int socketNum) {
 	packetPtr += srcLength;
 	memcpy(packetPtr, &numDestinations, sizeof(uint8_t));
 	packetPtr += sizeof(uint8_t);
-	
 	//copy each of the destinations
 	for (i = 0; i < numDestinations; i++) {
 		curDest = *(destHandles+i);
@@ -181,12 +221,9 @@ int message(char *textBuffer, int socketNum) {
 	//copy text
 	memcpy(packetPtr, arg, strlen(arg));
 	packetPtr += strlen(arg);
-	//!!!!!!!!!!!!!!!!!!
-	//NO SEGFAULT UP TO HERE CONFIRMED 
-	//!!!!!!!!!!!!!!!!!!
+	//packetComplete
 
 	//send packet
-
 	sent =  send(socketNum, packet, cheader.packetLen, 0);
 	if (sent < 0)
 	{
@@ -194,6 +231,8 @@ int message(char *textBuffer, int socketNum) {
 		exit(-1);
 	}
 
+	//!!!!!
+	//free 
 	return 0;
 }
 
