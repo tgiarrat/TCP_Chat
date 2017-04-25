@@ -116,12 +116,14 @@ struct clientNode * newClientConnection(int serverSocket,struct clientNode *head
 	printf("\nNewNode has been created with handle %s and socket %d\n", newNode->handle, clientSocket);
 
 	
-	if (checkHandle(newNode, head) == 0) {
+	if (checkHandle(newNode, head) == 1) {
 		//handdle is valid
+		printf("Handle is INVALID (exists), sending error packet\n");
 		sendHandleExistsError(serverSocket);
 	}
 	else {
 		//handle is invalid
+		printf("Handle is VALID, sending packet\n");
 		sendValidHandle(serverSocket);
 	}
 

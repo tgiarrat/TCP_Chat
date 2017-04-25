@@ -132,6 +132,7 @@ int sendInitialPacket(int socketNum){
 	memcpy(packetPtr, handle, handleLen); //copy handle
 
 	//send packet
+	printf("Sending Initial packet...\n");
 	sent =  send(socketNum, packet, packetLength, 0);
 	if (sent < 0)
 	{
@@ -154,7 +155,7 @@ int sendInitialPacket(int socketNum){
 	}
 	else {
 		printf("uh oh... flag != 2 or 3\n");
-		printf("flag is %d\n", flag);
+		printf("flag is %d, recieved %d\n", flag, recieved);
 	}
 
 
@@ -233,7 +234,7 @@ int message(char *textBuffer, int socketNum) {
 	//packetComplete
 
 	//send packet
-	sent =  send(socketNum, packet, cheader.packetLen, 0);
+	sent =  send(socketNum, packet, htons(cheader.packetLen), 0);
 	if (sent < 0)
 	{
 		perror("send call");
