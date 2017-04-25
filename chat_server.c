@@ -214,6 +214,8 @@ int checkHandle(struct clientNode *nodePtr, struct clientNode *head) {
 	struct clientNode *curNode = head;
 
 	while(curNode != NULL) {
+		printf("\nCurNode handle is: %s\n", curNode->handle);
+		printf("\nnodePtr handle is: %s\n", nodePtr->handle);
 		if (strcmp(curNode->handle, nodePtr->handle) == 0 && curNode != nodePtr){
 
 			return 1;
