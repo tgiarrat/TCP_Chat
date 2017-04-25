@@ -128,7 +128,8 @@ int clientActivity(int clientSocket) {
 
 struct clientNode * newClientConnection(int serverSocket,struct clientNode *head) {
 	int clientSocket, messageLen;
-	int handleLength, handle[MAX_HANDLE_LEN];
+	int handle[MAX_HANDLE_LEN];
+	uint8_t handleLength;
 	struct clientNode *nodePtr = NULL;
 	char buf[MAXBUF];
 	struct chat_header cheader;
