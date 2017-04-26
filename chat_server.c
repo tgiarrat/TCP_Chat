@@ -85,8 +85,7 @@ int chatSession(int serverSocket, int portNumber) {
 		//now check for client activity by looping through the set of sockets
 		for (clientSocket = 0; clientSocket <= maxSocket; clientSocket++) {
 			if(FD_ISSET(clientSocket, &rfds)) {
-				perror("Client acivity!\n");
-				exit(-1);
+				//check flags
 			}
 		}
 

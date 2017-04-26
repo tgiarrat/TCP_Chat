@@ -110,7 +110,8 @@ int localInput(int socketNum) {
 }
 
 int sendInitialPacket(int socketNum){
-	char *packet;
+	//char *packet;
+	char packet[MAX_PACKET_SIZE];
 	char *packetPtr;
 	int packetLength, handleLen, sent, recieved;
 	struct chat_header cheader;
@@ -119,7 +120,7 @@ int sendInitialPacket(int socketNum){
 
 	packetLength = sizeof(struct chat_header) + 1 + strlen(handle);
 	printf("\nInitial packet size is: %d\n", packetLength);
-	packet = malloc(packetLength);
+	//packet = malloc(packetLength);
 	packetPtr = packet;
 
 	cheader.packetLen = htons(packetLength);
@@ -174,7 +175,7 @@ int sendInitialPacket(int socketNum){
 
 
 int message(char *textBuffer, int socketNum) {
-	char *packet; //this will be the entire packet. I knoe its a lil confusing but oh well too late
+	char packet[MAX_PACKET_SIZE]; //this will be the entire packet. I knoe its a lil confusing but oh well too late
 	char *packetPtr;
 	char *arg;
 	char **destHandles;
@@ -218,7 +219,7 @@ int message(char *textBuffer, int socketNum) {
 	printf("\n");	
 
 	//begin making packet:
-	packet = malloc(ntohs(cheader.packetLen)); 
+	//packet = malloc(ntohs(cheader.packetLen)); 
 	packetPtr = packet;
 	memcpy(packetPtr, &cheader, sizeof(struct chat_header)); //copy chat header
 	packetPtr += sizeof(struct chat_header);
