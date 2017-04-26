@@ -195,8 +195,11 @@ int newClientConnection(int serverSocket,struct clientNode *head, struct clientN
 		memcpy(curNode->handle, buf + sizeof(struct chat_header) + sizeof(uint8_t), handleLength); 
 		curNode->next = NULL;
 		printf("\ncur node handle is: %s     socket is %d\n", curNode->handle, curNode->socket);
-		curNode = curNode->next; 
 
+		if (head == NULL) {
+			head = curNode;
+		}
+		curNode = curNode->next; 
 	}
 	return 0;
 }
