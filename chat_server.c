@@ -86,9 +86,7 @@ int chatSession(int serverSocket, int portNumber) {
 			printf("\nA new client is about to attempt connection\n");
 			newClientConnection(serverSocket, headClientNode, curNode);
 			printf("\nnew client connection over\n");
-			//pridebugntf("\nNode name is %s\n", node.handle);
-			//memcpy(curNode->handle, node.handle, strlen(node.handle));
-			//curNode->socket = node.socket
+
 
 			//printf("\nBefore if\n");
 			//if (curNode->next != NULL) {
@@ -114,16 +112,7 @@ int chatSession(int serverSocket, int portNumber) {
 			//checkHandle(curNode, head); //dont forget to free the node that was created if the handle already exists
 						
 		}
-		/*
-		//check for incoming client activity
-		nodePtr = headClientNode;
-		while(nodePtr != NULL) {
-			if (FD_ISSET(nodePtr->socket, &rfds)) {
-				clientActivity(nodePtr->socket);
-         	}
-			nodePtr = nodePtr->next;
-		}
-		*/
+
 	}
 	freeClientList(headClientNode);
 } 
@@ -192,18 +181,19 @@ int newClientConnection(int serverSocket,struct clientNode *head, struct clientN
 		printf("Handle is VALID, sending packet\n");
 		sendValidHandle(clientSocket);
 
-
+		if (head == NULL) {
+			printf("\nfirst connection\n");
+			curNode = head;
+			printf("\nhead set?\n");
+		}
 		curNode = (struct clientNode *)malloc(sizeof(struct clientNode));
 		curNode->socket = clientSocket;
 		memcpy(curNode->handle, buf + sizeof(struct chat_header) + sizeof(uint8_t), handleLength); 
 		curNode->next = NULL;
 		printf("\ncur node handle is: %s     socket is %d\n", curNode->handle, curNode->socket);
+		printf("\nhead node handle is: %s     socket is %d\n", head->handle, head->socket);
 
-		if (head == NULL) {
-			printf("\nfirst connection\n");
-			head = curNode;
-			printf("\nhead set?\n");
-		}
+		
 		curNode = curNode->next; 
 	}
 	return 0;
