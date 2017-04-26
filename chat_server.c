@@ -78,7 +78,7 @@ int chatSession(int serverSocket, int portNumber) {
 		//new connection to server socket 
 		if (FD_ISSET(serverSocket, &rfds)) {
 			printf("\nA new client is about to attempt connection\n");
-			newClientConnection(serverSocket, headClientNode);
+			newClientConnection(serverSocket, &headClientNode);
 			printf("\nnew client connection over\n");
 
 			//printf("\nBefore if\n");
@@ -124,7 +124,7 @@ int clientActivity(int clientSocket) {
 
 
 
-int newClientConnection(int serverSocket,struct clientNode *head ){
+int newClientConnection(int serverSocket,struct clientNode **head ){
 	int clientSocket, messageLen;
 	char handle[MAX_HANDLE_LEN];
 	uint8_t handleLength;
@@ -156,7 +156,7 @@ int newClientConnection(int serverSocket,struct clientNode *head ){
 	memcpy(handle, buf + sizeof(struct chat_header) + sizeof(uint8_t), handleLength); 
 	
 
-	if (checkHandle(handle, head) == 1) {
+	if (checkHandle(handle, *head) == 1) {
 		//handdle is invalid
 		printf("Handle is INVALID (exists), sending error packet\n");
 		sendHandleExistsError(clientSocket);
@@ -170,7 +170,7 @@ int newClientConnection(int serverSocket,struct clientNode *head ){
 	return 0;
 }
 
-int addClient(struct clientNode *head, char *handle, int handleLen, int clientSocket) {
+int addClient(struct clientNode **head, char *handle, int handleLen, int clientSocket) {
 	struct clientNode *newClient = (struct clientNode *) malloc(sizeof(struct clientNode)); 
 	struct clientNode *curNode; 
 	
@@ -178,13 +178,13 @@ int addClient(struct clientNode *head, char *handle, int handleLen, int clientSo
 	memcpy(newClient->handle, handle, handleLen);
 	newClient->next = NULL;
 
-	if (head == NULL) {
+	if (*head == NULL) {
 		printf("\nSetting head\n");
-		head = newClient; 
+		*head = newClient; 
 	}
 	else {
 		//iterate to the end of the list
-		curNode = head;
+		curNode = *head;
 		while (curNode->next != NULL) {
 				curNode = curNode->next;
 		}

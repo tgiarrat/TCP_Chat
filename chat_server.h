@@ -12,8 +12,8 @@ struct clientNode{
 }__attribute__((packed));
 
 //struct clientNode * newClientConnection(int serverSocket, struct clientNode *) ;
-int addClient(struct clientNode *head, char *handle, int handleLen, int clientSocket);
-int newClientConnection(int serverSocket, struct clientNode *) ;
+int addClient(struct clientNode **head, char *handle, int handleLen, int clientSocket);
+int newClientConnection(int serverSocket, struct clientNode **) ;
 
 void recvFromClient(int clientSocket);
 int checkArgs(int argc, char *argv[]);
