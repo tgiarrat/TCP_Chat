@@ -143,7 +143,7 @@ int clientActivity(int clientSocket) {
 	return 0; 
 }
 
-struct clientNode*  newClientConnection(int serverSocket,struct clientNode *head, struct clientNode *toAdd) {
+struct clientNode * newClientConnection(int serverSocket,struct clientNode *head, struct clientNode *toAdd) {
 	int clientSocket, messageLen;
 	int handle[MAX_HANDLE_LEN];
 	uint8_t handleLength;
@@ -180,7 +180,7 @@ struct clientNode*  newClientConnection(int serverSocket,struct clientNode *head
 	printf("\n cpy3");
 
 
-	printf("\nnodePtr has been created with handle %s and socket %d", nodePtr.handle, clientSocket);
+	printf("\nnodePtr has been created with handle %s and socket %d", nodePtr->handle, clientSocket);
 
 	
 	if (checkHandle(nodePtr, head) == 1) {
