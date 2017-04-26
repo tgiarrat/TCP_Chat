@@ -201,8 +201,9 @@ int newClientConnection(int serverSocket,struct clientNode *head, struct clientN
 
 	}
 
-	printf("Node to add has handle %s\n", nodePtr->handle);
-	return nodePtr; 
+	//printf("Node to add has handle %s\n", nodePtr->handle);
+	//return nodePtr; 
+	return 0;
 }
 
 /*
