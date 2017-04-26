@@ -11,12 +11,14 @@ struct clientNode{
     struct clientNode *next;
 }__attribute__((packed));
 
-struct clientNode * newClientConnection(int serverSocket, struct clientNode *) ;
+//struct clientNode * newClientConnection(int serverSocket, struct clientNode *) ;
+int newClientConnection(int serverSocket, struct clientNode *, struct clientNode *curNode) ;
+
 void recvFromClient(int clientSocket);
 int checkArgs(int argc, char *argv[]);
 int chatSession(int serverSocket, int portNumber);
 int freeClientList(struct clientNode *head);
-int checkHandle(struct clientNode *newNode, struct clientNode *head);
+int checkHandle(char *handle, struct clientNode *head);
 int sendHandleExistsError(int serverSocket);
 int sendValidHandle(int socketServer);
 int clientActivity(int clientSocket) ;
