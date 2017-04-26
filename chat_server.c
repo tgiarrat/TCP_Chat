@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
 int chatSession(int serverSocket, int portNumber) {
 	fd_set rfds;
 	struct clientNode *curNode= NULL;
-	struct clientNode *headClientNode = curNode;
+	struct clientNode *headClientNode = curNode
 	struct clientNode node;
 	int clientSocket;
 	int maxSocket = serverSocket;
@@ -190,7 +190,10 @@ int newClientConnection(int serverSocket,struct clientNode *head, struct clientN
 		//handle is invalid
 		printf("Handle is VALID, sending packet\n");
 		sendValidHandle(clientSocket);
-		curNode = malloc(sizeof(struct clientNode));
+		addClient();
+
+
+		curNode = (struct *clientNode)malloc(sizeof(struct clientNode));
 		curNode->socket = clientSocket;
 		memcpy(curNode->handle, buf + sizeof(struct chat_header) + sizeof(uint8_t), handleLength); 
 		curNode->next = NULL;
