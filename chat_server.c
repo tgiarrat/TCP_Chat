@@ -50,7 +50,6 @@ int chatSession(int serverSocket, int portNumber) {
 	fd_set rfds;
 	struct clientNode *curNode= NULL;
 	struct clientNode *headClientNode = curNode;
-	struct clientNode node;
 	int clientSocket;
 	int maxSocket = serverSocket;
 
@@ -68,9 +67,7 @@ int chatSession(int serverSocket, int portNumber) {
 			
 				curNode = curNode->next;
 		}
-
-
-		if (select(maxSocket + 1, &rfds,NULL,NULL,NULL) < 0  ){
+		if (select(FD_SETSIZE, &rfds,NULL,NULL,NULL) < 0  ){
 			perror("server select call error");
 			exit(-1);
 		}
@@ -85,9 +82,7 @@ int chatSession(int serverSocket, int portNumber) {
 				curNode = curNode->next; 
 			}*/
 		}
-		else if (1) {
-
-		}
+		//now check for client activity by looping through the set of sockets
 
 	}
 	freeClientList(headClientNode);
@@ -132,7 +127,6 @@ int newClientConnection(int serverSocket,struct clientNode **head ){
 		exit(-1);
 	}
 
-	//memcpy(&cheader, buf, sizeof(struct chat_header));
 	memcpy(&handleLength, buf + sizeof(struct chat_header), sizeof(uint8_t));
 	memcpy(handle, buf + sizeof(struct chat_header) + sizeof(uint8_t), handleLength); 
 	handle[handleLength] = '\0';
