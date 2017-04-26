@@ -304,8 +304,9 @@ int checkHandle(char *handle, struct clientNode *head) {
 	struct clientNode *curNode = head;
 
 	while(curNode != NULL) {
-		printf("\nCurNode handle is: %s\n", curNode->handle);
+		printf("\nCurNode handle is: %s handle is %s\n", curNode->handle, handle);
 		if (strcmp(curNode->handle, handle) == 0){
+			printf("\ngot here at least\n");
 			return 1;
 		}
 		curNode = curNode->next;
