@@ -89,10 +89,10 @@ int chatSession(int serverSocket, int portNumber) {
 			//}
 			
 ///////////////////////////////////////////////////////////
-			printf("\n head node handle is: %s     socket is %d\n", headClientNode->handle, headClientNode->socket);
 			printf("\nPRINT CLIENT LIST\n");
 			curNode = headClientNode;
-			while(curNode != NULL) {				
+			while(curNode != NULL) {
+				printf("element: %s\n", curNode->handle);				
 				curNode = curNode->next; 
 			}
 /////////////////////////////////////////////////////////	
@@ -220,7 +220,6 @@ int sendValidHandle(int serverSocket){
 	//send flag =2;
 	int sent;
 	struct chat_header cheader;
-	//char *packet = malloc(sizeof(struct chat_header));
 	char packet[MAX_PACKET_SIZE];
 
 	cheader.packetLen = htons(sizeof(struct chat_header));
