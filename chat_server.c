@@ -78,7 +78,7 @@ int chatSession(int serverSocket, int portNumber) {
 		//new connection to server socket 
 		if (FD_ISSET(serverSocket, &rfds)) {
 			printf("\nA new client is about to attempt connection\n");
-			newClientConnection(serverSocket, headClientNode, curNode);
+			newClientConnection(serverSocket, headClientNode);
 			printf("\nnew client connection over\n");
 
 			//printf("\nBefore if\n");
@@ -124,7 +124,7 @@ int clientActivity(int clientSocket) {
 
 
 
-struct clientNode newClientConnection(int serverSocket,struct clientNode *head, struct clientNode *curNode) {
+int newClientConnection(int serverSocket,struct clientNode *head ){
 	int clientSocket, messageLen;
 	char handle[MAX_HANDLE_LEN];
 	uint8_t handleLength;
@@ -160,31 +160,14 @@ struct clientNode newClientConnection(int serverSocket,struct clientNode *head, 
 		//handdle is invalid
 		printf("Handle is INVALID (exists), sending error packet\n");
 		sendHandleExistsError(clientSocket);
-		return NULL;
 	}
 	else {
 		//handle is valid
 		printf("Handle is VALID, sending packet\n");
 		sendValidHandle(clientSocket);
 		addClient(head, handle, handleLength, clientSocket);
-		/*
-		curNode = (struct clientNode *)malloc(sizeof(struct clientNode));
-		if (head == NULL) {
-			printf("\nfirst connection\n");
-			curNode = head;
-			printf("\nhead set?\n");
-		}
-		curNode->socket = clientSocket;
-		memcpy(curNode->handle, buf + sizeof(struct chat_header) + sizeof(uint8_t), handleLength); 
-		curNode->next = NULL;
-		printf("\ncur node handle is: %s     socket is %d\n", curNode->handle, curNode->socket);
-		printf("\nhead node handle is: %s     socket is %d\n", head->handle, head->socket);
-
-		
-		curNode = curNode->next; 
-		*/
 	}
-	return NULL;
+	return 0;
 }
 
 int addClient(struct clientNode *head, char *handle, int handleLen, int clientSocket) {
@@ -192,7 +175,7 @@ int addClient(struct clientNode *head, char *handle, int handleLen, int clientSo
 	struct clientNode *curNode; 
 	
 	newClient->socket = clientSocket;
-	memcpy(newClient->handle, handle, handleLeng);
+	memcpy(newClient->handle, handle, handleLen);
 	newClient->next = NULL;
 
 	if (head == NULL) {
