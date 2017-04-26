@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
 int chatSession(int serverSocket, int portNumber) {
 	fd_set rfds;
 	struct clientNode *curNode= NULL;
-	struct clientNode *headClientNode = curNode
+	struct clientNode *headClientNode = curNode;
 	struct clientNode node;
 	int clientSocket;
 	int maxSocket = serverSocket;
