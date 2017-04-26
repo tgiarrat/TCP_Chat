@@ -71,7 +71,8 @@ int chatSession(int serverSocket, int portNumber) {
 			if (maxSocket < curNode->socket){
 				maxSocket = curNode->socket;
 			}
-			curNode = curNode->next;
+			
+				curNode = curNode->next;
 		}
 
 
@@ -83,7 +84,7 @@ int chatSession(int serverSocket, int portNumber) {
 		//new connection to server socket 
 		if (FD_ISSET(serverSocket, &rfds)) {
 			printf("\nA new client is about to attempt connection\n");
-			curNode->next = newClientConnection(serverSocket, headClientNode);
+			curNode->next = *(newClientConnection(serverSocket, headClientNode));
 			//printf("\nNode name is %s\n", node.handle);
 			//memcpy(curNode->handle, node.handle, strlen(node.handle));
 			//curNode->socket = node.socket
