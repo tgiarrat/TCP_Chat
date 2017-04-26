@@ -181,12 +181,13 @@ int newClientConnection(int serverSocket,struct clientNode *head, struct clientN
 		printf("Handle is VALID, sending packet\n");
 		sendValidHandle(clientSocket);
 
+		
+		curNode = (struct clientNode *)malloc(sizeof(struct clientNode));
 		if (head == NULL) {
 			printf("\nfirst connection\n");
 			curNode = head;
 			printf("\nhead set?\n");
 		}
-		curNode = (struct clientNode *)malloc(sizeof(struct clientNode));
 		curNode->socket = clientSocket;
 		memcpy(curNode->handle, buf + sizeof(struct chat_header) + sizeof(uint8_t), handleLength); 
 		curNode->next = NULL;
