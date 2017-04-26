@@ -190,7 +190,6 @@ int newClientConnection(int serverSocket,struct clientNode *head, struct clientN
 		//handle is invalid
 		printf("Handle is VALID, sending packet\n");
 		sendValidHandle(clientSocket);
-		addClient();
 
 
 		curNode = (struct clientNode *)malloc(sizeof(struct clientNode));
