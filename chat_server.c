@@ -135,8 +135,6 @@ int newClientConnection(int serverSocket,struct clientNode **head ){
 		perror("accept call error");
 		exit(-1);
 	}
-	printf("\n accept() call done\n");
-
 	//recieve the clients initial packet containing handle and handle length
 	if ((messageLen = recv(clientSocket, buf, MAXBUF, 0)) < 0)
 	{
@@ -148,7 +146,6 @@ int newClientConnection(int serverSocket,struct clientNode **head ){
 		exit(-1);
 	}
 
-	printf("\n message recieved");
 	memcpy(&cheader, buf, sizeof(struct chat_header));
 	printf("\n cpy1, header flag = %d", cheader.byteFlag);
 	memcpy(&handleLength, buf + sizeof(struct chat_header), sizeof(uint8_t));
@@ -179,7 +176,7 @@ int addClient(struct clientNode **head, char *handle, int handleLen, int clientS
 	newClient->next = NULL;
 
 	if (*head == NULL) {
-		printf("\nSetting head\n");
+		printf("Setting head\n");
 		*head = newClient; 
 	}
 	else {
@@ -195,62 +192,7 @@ int addClient(struct clientNode **head, char *handle, int handleLen, int clientS
 
 }
 
-/*
-int newClientConnection(int serverSocket,struct clientNode *head, struct clientNode *curNode) {
-	int clientSocket, messageLen;
-	int handle[MAX_HANDLE_LEN];
-	uint8_t handleLength;
-	struct clientNode nodePtr;
-	char buf[MAXBUF];
-	struct chat_header cheader;
 
-	
-	if ((clientSocket = accept(serverSocket,(struct sockaddr*) 0, (socklen_t *) 0)) < 0) {
-		perror("accept call error");
-		exit(-1);
-	}
-	printf("\n accept() call done\n");
-	//nodePtr = malloc(sizeof(struct clientNode));	
-	nodePtr.next = NULL;	
-	nodePtr.socket =  clientSocket;
-	printf("\n node allocated");
-	//recieve the clients initial packet containing handle and handle length
-	if ((messageLen = recv(clientSocket, buf, MAXBUF, 0)) < 0)
-	{
-		perror("Initial Client Recieve Call Error");
-		exit(-1);
-	}
-	if (messageLen == 0) {
-		perror("Zero bytes received for initial packet");
-		exit(-1);
-	}
-	printf("\n message recieved");
-	memcpy(&cheader, buf, sizeof(struct chat_header));
-	printf("\n cpy1, header flag = %d", cheader.byteFlag);
-	memcpy(&handleLength, buf + sizeof(struct chat_header), sizeof(uint8_t));
-	printf("\n cpy2 handle len: %d", handleLength);
-	memcpy(nodePtr.handle, buf + sizeof(struct chat_header) + sizeof(uint8_t), handleLength); 
-	printf("\n cpy3");
-
-
-	printf("\nnodePtr has been created with handle %s and socket %d", nodePtr.handle, clientSocket);
-
-	
-	if (checkHandle(nodePtr, head) == 1) {
-		//handdle is valid
-		printf("Handle is INVALID (exists), sending error packet\n");
-		sendHandleExistsError(clientSocket);
-	}
-	else {
-		//handle is invalid
-		printf("Handle is VALID, sending packet\n");
-		sendValidHandle(clientSocket);
-	}
-
-	printf("Node to add has handle %s\n", nodePtr->handle);
-	return nodePtr; 
-}
-*/
 int sendHandleExistsError(int serverSocket){
 	//send flag =3;
 	int sent;
@@ -278,7 +220,8 @@ int sendValidHandle(int serverSocket){
 	//send flag =2;
 	int sent;
 	struct chat_header cheader;
-	char *packet = malloc(sizeof(struct chat_header));
+	//char *packet = malloc(sizeof(struct chat_header));
+	char packet[MAX_PACKET_SIZE];
 
 	cheader.packetLen = htons(sizeof(struct chat_header));
 	cheader.byteFlag = 2;
@@ -315,21 +258,7 @@ int checkHandle(char *handle, struct clientNode *head) {
 }
 
 
-/*int checkHandle(char *handle, struct clientNode *head) {
-	//check if handle already exists
-	struct clientNode *curNode = head;
 
-	while(curNode != NULL) {
-		printf("\nCurNode handle is: %s\n", curNode->handle);
-		printf("\nnodePtr handle is: %s\n", nodePtr->handle);
-		if (strcmp(curNode->handle, nodePtr->handle) == 0 && curNode != nodePtr){
-
-			return 1;
-		}
-		curNode = curNode->next;
-	}
-	return 0;
-}*/
 
 
 

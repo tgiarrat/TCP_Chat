@@ -8,6 +8,7 @@
 #define __NETWORKS_H__
 
 #define BACKLOG 10
+#define MAX_PACKET_SIZE 1003
 
 struct chat_header{
 	uint16_t packetLen;
