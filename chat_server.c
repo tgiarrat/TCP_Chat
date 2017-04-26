@@ -197,7 +197,8 @@ int sendHandleExistsError(int serverSocket){
 	//send flag =3;
 	int sent;
 	struct chat_header cheader;
-	char *packet = malloc(sizeof(struct chat_header));
+	//char *packet = malloc(sizeof(struct chat_header));
+	char packet[MAX_PACKET_SIZE];
 
 	cheader.packetLen = htons(sizeof(struct chat_header));
 	cheader.byteFlag = 3;
@@ -212,7 +213,6 @@ int sendHandleExistsError(int serverSocket){
 		exit(-1);
 	}
 
-	free(packet);
 	return 0;
 }
 
@@ -235,7 +235,6 @@ int sendValidHandle(int serverSocket){
 		perror("Error: sent zero bytes in response to initial packet");
 		exit(-1);
 	}
-	free(packet);
 	printf("\nVALID HANDLE HAS BEEN SENT\n");
 	return 0;
 }
