@@ -97,7 +97,6 @@ int clientActivity(int clientSocket) {
 	char buf[MAXBUF];
 	int recieved;
 	struct chat_header cheader;
-	printf("I GET TO CLIENT ACTIVITY AT LEAST \n");
 	if ((recieved = recv(clientSocket, buf, MAXBUF, 0)) < 0) {
     	perror("Error recieveing incoming client packet \n");
     	exit(-1);
@@ -110,10 +109,6 @@ int clientActivity(int clientSocket) {
 
 	return 0; 
 }
-
-
-
-
 
 int newClientConnection(int serverSocket,struct clientNode **head ){
 	int clientSocket, messageLen;
@@ -137,10 +132,8 @@ int newClientConnection(int serverSocket,struct clientNode **head ){
 		exit(-1);
 	}
 
-	memcpy(&cheader, buf, sizeof(struct chat_header));
-	printf("\n cpy1, header flag = %d", cheader.byteFlag);
+	//memcpy(&cheader, buf, sizeof(struct chat_header));
 	memcpy(&handleLength, buf + sizeof(struct chat_header), sizeof(uint8_t));
-	printf("\n cpy2 handle len: %d", handleLength);
 	memcpy(handle, buf + sizeof(struct chat_header) + sizeof(uint8_t), handleLength); 
 	handle[handleLength] = '\0';
 
@@ -167,7 +160,6 @@ int addClient(struct clientNode **head, char *handle, int handleLen, int clientS
 	newClient->next = NULL;
 
 	if (*head == NULL) {
-		printf("Setting head\n");
 		*head = newClient; 
 	}
 	else {
@@ -179,16 +171,12 @@ int addClient(struct clientNode **head, char *handle, int handleLen, int clientS
 		curNode->next = newClient;
 	}
 	return 0;
-	
-
 }
-
 
 int sendHandleExistsError(int serverSocket){
 	//send flag =3;
 	int sent;
 	struct chat_header cheader;
-	//char *packet = malloc(sizeof(struct chat_header));
 	char packet[MAX_PACKET_SIZE];
 
 	cheader.packetLen = htons(sizeof(struct chat_header));
@@ -225,31 +213,21 @@ int sendValidHandle(int serverSocket){
 		perror("Error: sent zero bytes in response to initial packet");
 		exit(-1);
 	}
-	printf("\nVALID HANDLE HAS BEEN SENT\n");
 	return 0;
 }
-
-
 
 int checkHandle(char *handle, struct clientNode *head) {
 	//check if handle already exists
 	struct clientNode *curNode = head;
 
 	while(curNode != NULL) {
-		printf("\nCurNode handle is: %s handle is %s\n", curNode->handle, handle);
 		if (strcmp(curNode->handle, handle) == 0){
-			printf("\ngot here at least\n");
 			return 1;
 		}
 		curNode = curNode->next;
 	}
 	return 0;
 }
-
-
-
-
-
 
 int freeClientList(struct clientNode *head){
 	struct clientNode *curNode = head;
@@ -261,7 +239,6 @@ int freeClientList(struct clientNode *head){
 	}
 	return 0;
 }
-
 
 int checkArgs(int argc, char *argv[])
 {
