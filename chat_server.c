@@ -77,25 +77,16 @@ int chatSession(int serverSocket, int portNumber) {
 
 		//new connection to server socket 
 		if (FD_ISSET(serverSocket, &rfds)) {
-			printf("\nA new client is about to attempt connection\n");
 			newClientConnection(serverSocket, &headClientNode);
-			printf("\nnew client connection over\n");
-
-			//printf("\nBefore if\n");
-			//if (curNode->next != NULL) {
-			//	printf("\njust entered\n");
-			//	curNode = curNode->next;
-			//	printf("\nafter advancing\n");
-			//}
-			
-///////////////////////////////////////////////////////////
-			printf("\nPRINT CLIENT LIST\n");
+			/*printf("\nPRINT CLIENT LIST\n");
 			curNode = headClientNode;
 			while(curNode != NULL) {
 				printf("element: %s\n", curNode->handle);				
 				curNode = curNode->next; 
-			}
-/////////////////////////////////////////////////////////	
+			}*/
+		}
+		else if (1) {
+
 		}
 
 	}
@@ -261,6 +252,13 @@ int checkHandle(char *handle, struct clientNode *head) {
 
 
 int freeClientList(struct clientNode *head){
+	struct clientNode *curNode = head;
+
+	while (head != NULL) {
+		curNode = head;
+		head = head->next;
+		free(curNode);
+	}
 	return 0;
 }
 
