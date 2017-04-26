@@ -92,10 +92,11 @@ int chatSession(int serverSocket, int portNumber) {
 			}
 			
 ///////////////////////////////////////////////////////////
-			
+			printf("\nPRINT CLIENT LIST\n");
 			curNode = headClientNode;
 			while(curNode != NULL) {
-				printf("count = %d\n", count++);
+				printf("count = %d  handle = %s\n", count++, curNode->handle);
+				
 				curNode = curNode->next; 
 			}
 
