@@ -85,6 +85,7 @@ int chatSession(int serverSocket, int portNumber) {
 		if (FD_ISSET(serverSocket, &rfds)) {
 			printf("\nA new client is about to attempt connection\n");
 			newClientConnection(serverSocket, headClientNode, curNode);
+			printf("\nnew client connection over\n");
 			//pridebugntf("\nNode name is %s\n", node.handle);
 			//memcpy(curNode->handle, node.handle, strlen(node.handle));
 			//curNode->socket = node.socket
