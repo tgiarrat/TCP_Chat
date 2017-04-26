@@ -316,7 +316,6 @@ int checkHandle(char *handle, struct clientNode *head) {
 
 	while(curNode != NULL) {
 		printf("\nCurNode handle is: %s\n", curNode->handle);
-		printf("\nnodePtr handle is: %s\n", nodePtr->handle);
 		if (strcmp(curNode->handle, handle) == 0){
 			return 1;
 		}
