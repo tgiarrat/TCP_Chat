@@ -97,6 +97,7 @@ int chatSession(int serverSocket, int portNumber) {
 			//}
 			
 ///////////////////////////////////////////////////////////
+			printf("\n head node handle is: %s     socket is %d\n", headClientNode->handle, headClientNode->socket);
 			printf("\nPRINT CLIENT LIST\n");
 			curNode = headClientNode;
 			while(curNode != NULL) {
@@ -155,14 +156,12 @@ int newClientConnection(int serverSocket,struct clientNode *head, struct clientN
 	char buf[MAXBUF];
 	struct chat_header cheader;
 
-	
 	if ((clientSocket = accept(serverSocket,(struct sockaddr*) 0, (socklen_t *) 0)) < 0) {
 		perror("accept call error");
 		exit(-1);
 	}
 	printf("\n accept() call done\n");
 
-	printf("\n node allocated");
 	//recieve the clients initial packet containing handle and handle length
 	if ((messageLen = recv(clientSocket, buf, MAXBUF, 0)) < 0)
 	{
@@ -173,18 +172,15 @@ int newClientConnection(int serverSocket,struct clientNode *head, struct clientN
 		perror("Zero bytes received for initial packet");
 		exit(-1);
 	}
+
 	printf("\n message recieved");
 	memcpy(&cheader, buf, sizeof(struct chat_header));
 	printf("\n cpy1, header flag = %d", cheader.byteFlag);
 	memcpy(&handleLength, buf + sizeof(struct chat_header), sizeof(uint8_t));
 	printf("\n cpy2 handle len: %d", handleLength);
 	memcpy(handle, buf + sizeof(struct chat_header) + sizeof(uint8_t), handleLength); 
-	//printf("\n cpy3");
 
 
-	//printf("\nnodePtr has been created with handle %s and socket %d", nodePtr.handle, clientSocket);
-
-	
 	if (checkHandle(handle, head) == 1) {
 		//handdle is valid
 		printf("Handle is INVALID (exists), sending error packet\n");
@@ -202,9 +198,6 @@ int newClientConnection(int serverSocket,struct clientNode *head, struct clientN
 		curNode = curNode->next; 
 
 	}
-
-	//printf("Node to add has handle %s\n", nodePtr->handle);
-	//return nodePtr; 
 	return 0;
 }
 
