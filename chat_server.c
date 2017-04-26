@@ -199,6 +199,7 @@ int newClientConnection(int serverSocket,struct clientNode *head, struct clientN
 		if (head == NULL) {
 			printf("\nfirst connection\n");
 			head = curNode;
+			printf("\nhead set?\n");
 		}
 		curNode = curNode->next; 
 	}
