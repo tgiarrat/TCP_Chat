@@ -150,7 +150,7 @@ int clientActivity(int clientSocket) {
 
 int newClientConnection(int serverSocket,struct clientNode *head, struct clientNode *curNode) {
 	int clientSocket, messageLen;
-	int handle[MAX_HANDLE_LEN];
+	char handle[MAX_HANDLE_LEN];
 	uint8_t handleLength;
 	char buf[MAXBUF];
 	struct chat_header cheader;
