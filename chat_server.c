@@ -195,10 +195,10 @@ int newClientConnection(int serverSocket,struct clientNode *head, struct clientN
 		printf("Handle is VALID, sending packet\n");
 		sendValidHandle(clientSocket);
 		curNode = malloc(sizeof(struct clientNode));
-		printf("\nHERE\n");
 		curNode->socket = clientSocket;
 		memcpy(curNode->handle, buf + sizeof(struct chat_header) + sizeof(uint8_t), handleLength); 
 		curNode->next = NULL;
+		printf("\ncur node handle is: \n", curNode->handle);
 		curNode = curNode->next; 
 
 	}
