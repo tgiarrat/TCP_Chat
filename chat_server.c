@@ -193,7 +193,7 @@ int newClientConnection(int serverSocket,struct clientNode *head, struct clientN
 		addClient();
 
 
-		curNode = (struct *clientNode)malloc(sizeof(struct clientNode));
+		curNode = (struct clientNode *)malloc(sizeof(struct clientNode));
 		curNode->socket = clientSocket;
 		memcpy(curNode->handle, buf + sizeof(struct chat_header) + sizeof(uint8_t), handleLength); 
 		curNode->next = NULL;
