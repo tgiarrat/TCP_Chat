@@ -51,7 +51,7 @@ int chatSession(int serverSocket, int portNumber) {
 	struct clientNode *curNode= NULL;
 	struct clientNode *headClientNode = curNode;
 	int clientSocket;
-	int maxSocket = serverSocket;
+	int maxSocket = serverSocket; //need this because we are going to loop throug hte set of sockets used and we need to know where to stop looking 
 
 	while (1) {
 		FD_ZERO(&rfds);
@@ -67,7 +67,7 @@ int chatSession(int serverSocket, int portNumber) {
 			
 				curNode = curNode->next;
 		}
-		if (select(FD_SETSIZE, &rfds,NULL,NULL,NULL) < 0  ){
+		if (select(maxSocket + 1 , &rfds,NULL,NULL,NULL) < 0  ){
 			perror("server select call error");
 			exit(-1);
 		}
@@ -83,6 +83,12 @@ int chatSession(int serverSocket, int portNumber) {
 			}*/
 		}
 		//now check for client activity by looping through the set of sockets
+		for (clientSocket = 0; clientSocket <= maxSocket; clientSocket++) {
+			if(FD_ISSET(clientSocket, &rfds)) {
+				perror("Client acivity!\n");
+				exit(-1);
+			}
+		}
 
 	}
 	freeClientList(headClientNode);
