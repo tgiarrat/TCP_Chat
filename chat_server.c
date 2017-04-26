@@ -154,7 +154,7 @@ int newClientConnection(int serverSocket,struct clientNode **head ){
 	memcpy(&handleLength, buf + sizeof(struct chat_header), sizeof(uint8_t));
 	printf("\n cpy2 handle len: %d", handleLength);
 	memcpy(handle, buf + sizeof(struct chat_header) + sizeof(uint8_t), handleLength); 
-	
+	handle[handleLength] = '\0';
 
 	if (checkHandle(handle, *head) == 1) {
 		//handdle is invalid
