@@ -196,7 +196,7 @@ struct clientNode  newClientConnection(int serverSocket,struct clientNode *head,
 		sendValidHandle(clientSocket);
 	}
 
-	printf("Node to add has handle %s\n", node.handle);
+	printf("Node to add has handle %s\n", nodePtr.handle);
 	toAdd = malloc(sizeof(struct clientNode));
 	memcpy(toAdd, &nodePtr, sizeof(struct clientNode));
 	return nodePtr; 
