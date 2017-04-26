@@ -143,7 +143,7 @@ int clientActivity(int clientSocket) {
 	return 0; 
 }
 
-struct clientNode * newClientConnection(int serverSocket,struct clientNode *head, struct clientNode *toAdd) {
+struct clientNode * newClientConnection(int serverSocket,struct clientNode *head) {
 	int clientSocket, messageLen;
 	int handle[MAX_HANDLE_LEN];
 	uint8_t handleLength;
