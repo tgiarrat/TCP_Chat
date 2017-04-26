@@ -89,12 +89,12 @@ int chatSession(int serverSocket, int portNumber) {
 			//memcpy(curNode->handle, node.handle, strlen(node.handle));
 			//curNode->socket = node.socket
 
-			printf("\nBefore if\n");
-			if (curNode->next != NULL) {
-				printf("\njust entered\n");
-				curNode = curNode->next;
-				printf("\nafter advancing\n");
-			}
+			//printf("\nBefore if\n");
+			//if (curNode->next != NULL) {
+			//	printf("\njust entered\n");
+			//	curNode = curNode->next;
+			//	printf("\nafter advancing\n");
+			//}
 			
 ///////////////////////////////////////////////////////////
 			printf("\nPRINT CLIENT LIST\n");
