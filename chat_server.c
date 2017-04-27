@@ -84,7 +84,7 @@ int chatSession(int serverSocket, int portNumber) {
 		while(curNode != NULL) {
 			//check if curNode's socket is set
 			if (FD_ISSET(curNode->socket, &rfds)) {
-				clientActivity();
+				clientActivity(curNode->socket);
 			}
 			curNode = curNode->next;
 		}
