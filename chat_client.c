@@ -201,7 +201,7 @@ int message(char *textBuffer, int socketNum) {
 		printf("Error: Incorrect number of destination handles entered\n");
 		return -1;
 	}
-	arg = strtok (NULL, '\n'); //arg is message
+	arg = strtok (NULL, "\n"); //arg is message
 	messageLength = strlen(arg) + 1;  // plus one is for the null terminating character at the end
 	printf("text is %s", arg);
 	
