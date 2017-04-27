@@ -188,9 +188,10 @@ int message(char *textBuffer, int socketNum) {
 	srcLength = strlen(handle);
 	
 	arg = strtok(textBuffer, " "); //get a space separated token of the string 
-	if (isdigit(arg[0])) {
+	if (isdigit(textBuffer[0])) {
 		printf("FIRST ARG IS A DIGIT \n");
 		numDestinations = atoi(arg);
+		arg = strtok(NULL, " ");
 	}
 	else {
 		printf("FIRST ARG IS NOT A DIGIT\n");
@@ -201,11 +202,14 @@ int message(char *textBuffer, int socketNum) {
 
 	
 
-	for (i = 0; (i < numDestinations) && (arg != NULL); i++) {
-		arg = strtok (NULL, " "); //arg is a dest handle
+	for (i = 0; (i < numDestinations); i++) {
+
 		*(destHandles + i) = malloc(strlen(arg));
 		memcpy( (*(destHandles+i)) , arg, strlen(arg));
 		destHandleTotal += strlen(arg);
+		if (i != numDestinations - 1) { //odnt get the next token
+			arg = strtok(NULL, " ");
+		}
 	}
 	if (i != numDestinations){
 		printf("Error: Incorrect number of destination handles entered\n");
