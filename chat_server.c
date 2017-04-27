@@ -34,9 +34,6 @@ int main(int argc, char *argv[])
 	serverSocket = tcpServerSetup(portNumber);
 
 	chatSession(serverSocket, portNumber);
-	// wait for client to connect
-	//clientSocket = tcpAccept(serverSocket, DEBUG_FLAG);
-	//recvFromClient(clientSocket);
 	
 	/* close the sockets */
 	close(clientSocket);
@@ -86,17 +83,19 @@ int chatSession(int serverSocket, int portNumber) {
 		for (clientSocket = 0; clientSocket <= maxSocket; clientSocket++) {
 			if(FD_ISSET(clientSocket, &rfds)) {
 				//check flags
+				clientActivity(clientSocket);
 			}
 		}
-
 	}
 	freeClientList(headClientNode);
 } 
 
 int clientActivity(int clientSocket) {
 	char buf[MAXBUF];
-	int recieved;
+	int recieved, packetLength;
+	uint8_t byteFlag;
 	struct chat_header cheader;
+
 	if ((recieved = recv(clientSocket, buf, MAXBUF, 0)) < 0) {
     	perror("Error recieveing incoming client packet \n");
     	exit(-1);
@@ -106,6 +105,29 @@ int clientActivity(int clientSocket) {
 	   exit(-1);
    	}
 	printf("I GET TO CLIENT ACTIVITY AT LEAST \n");
+	
+	memcpy(&cheader, buf, sizeof(struct chat_header)); //gets the header from the recieved packet
+	byteFlag = cheader.byteFlag; 
+	packetLength = ntohs(cheader.packetLen);
+
+	printf("Packet length recieved from client activity is %d and byte flag is: %d\n", packetLength, byteFlag);
+
+	if (byteFlag == 1) { //initial packet, not sure if i need to even check this here
+		//do i need to do this really?
+	}
+	else if (byteFlag == 5 ) { //message flag 
+
+	}
+	else if (byteFlag == 8) { //client exiting flag
+
+	}
+	else if (byteFlag == 10) { //list handle flag
+
+	}
+	else {
+		perror("Incomming byte flag is invalid");
+		exit(-1);
+	}
 
 	return 0; 
 }

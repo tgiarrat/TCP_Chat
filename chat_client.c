@@ -84,6 +84,9 @@ int localInput(int socketNum) {
 	commandType = toupper(textBuffer[1]); //letter of the command will be here in a properly formatted message
 
 	if (commandType == 'M') { //send message
+		if (strlen(textBuffer) > MAX_MSG_LEN) {
+			perror("message entered is greater than 1000 characters");
+		}
 		message(textBuffer + COMMAND_OFFSET, socketNum);
 		
 
@@ -158,21 +161,17 @@ int sendInitialPacket(int socketNum){
 	memcpy(&flag, incomingBuffer + sizeof(uint16_t), sizeof(uint8_t)); //gets the flag from the incoming buffer
 
 	if (flag == 3) {
-		printf("WOW we got here, congrats. Flag = 3\n");
+		printf("Invalid Handle Flag = 3\n");
 	}
 	else if (flag ==2) {
-		printf("WOW we got here, congrats. Flag = 2\n");
+		printf("Valid handle Flag = 2\n");
 	}
 	else {
 		printf("uh oh... flag != 2 or 3\n");
 		printf("flag is %d, recieved %d\n", flag, recieved);
 	}
-
-
 	return 0;
 }
-
-
 
 int message(char *textBuffer, int socketNum) {
 	char packet[MAX_PACKET_SIZE]; //this will be the entire packet. I knoe its a lil confusing but oh well too late
@@ -185,7 +184,6 @@ int message(char *textBuffer, int socketNum) {
 	int messageLength, i, destLen, sent;
 	int destHandleTotal = 0;
 
-	//
 	cheader.byteFlag = 5;
 	srcLength = strlen(handle);
 	arg = strtok(textBuffer, " "); //get a space separated token of the string 
@@ -204,7 +202,9 @@ int message(char *textBuffer, int socketNum) {
 		return -1;
 	}
 	arg = strtok (NULL, " "); //arg is message
-	messageLength = strlen(arg);
+	messageLength = strlen(arg) + 1;  // plus one is for the null terminating character at the end
+
+	
 
 	cheader.packetLen =
 		htons(sizeof(struct chat_header) + srcLength + messageLength 
@@ -212,14 +212,12 @@ int message(char *textBuffer, int socketNum) {
 
 	printf("\n");
 	printf("Packet Length is: %d\n", ntohs(cheader.packetLen));
-	//memcpy(messagePacket.srcHandle, handle, messagePacket.srcLen); //PROBLEM HERE
 	printf("Handle is: %s\n", handle);
 	printf("first dest is: %s\n", *destHandles);
 	printf("second dest is: %s\n", *(destHandles + 1));
 	printf("\n");	
 
 	//begin making packet:
-	//packet = malloc(ntohs(cheader.packetLen)); 
 	packetPtr = packet;
 	memcpy(packetPtr, &cheader, sizeof(struct chat_header)); //copy chat header
 	packetPtr += sizeof(struct chat_header);
@@ -239,8 +237,8 @@ int message(char *textBuffer, int socketNum) {
 		packetPtr += destLen;
 	}
 	//copy text
-	memcpy(packetPtr, arg, strlen(arg));
-	packetPtr += strlen(arg);
+	memcpy(packetPtr, arg, messageLength);
+	packetPtr += messageLength;
 	//packetComplete
 
 	//send packet
@@ -254,30 +252,6 @@ int message(char *textBuffer, int socketNum) {
 	//!!!!!
 	//free 
 	return 0;
-}
-
-
-void sendToServer(int socketNum)
-{
-	char sendBuf[MAXBUF];   //data buffer
-	int sendLen = 0;        //amount of data to send
-	int sent = 0;            //actual amount of data sent/* get the data and send it   */
-			
-	printf("Enter the data to send:\n");
-	scanf("%" xstr(MAXBUF) "[^\n]%*[^\n]", sendBuf);
-	
-	sendLen = strlen(sendBuf) + 1;
-	printf("read: %s len: %d\n", sendBuf, sendLen);
-		
-	sent =  send(socketNum, sendBuf, sendLen, 0);
-	if (sent < 0)
-	{
-		perror("send call");
-		exit(-1);
-	}
-
-	printf("String sent: %s \n", sendBuf);
-	printf("Amount of data sent is: %d\n", sent);
 }
 
 void checkArgs(int argc, char * argv[])
