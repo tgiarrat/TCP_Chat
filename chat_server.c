@@ -80,12 +80,20 @@ int chatSession(int serverSocket, int portNumber) {
 			}*/
 		}
 		//now check for client activity by looping through the set of sockets
-		for (clientSocket = 0; clientSocket <= maxSocket; clientSocket++) {
+		curNode = headClientNode;
+		while(curNode != NULL) {
+			//check if curNode's socket is set
+			if (FD_ISSET(curNode.socket, &rfds)) {
+				clientActivity();
+			}
+		}
+		
+		/*for (INSTEAD LOOP THTOUGH LINKED LISTS OF CLIENTS clientSocket = 0; clientSocket <= maxSocket; clientSocket++) {
 			if(FD_ISSET(clientSocket, &rfds)) {
 				//check flags
 				clientActivity(clientSocket);
 			}
-		}
+		}*/
 	}
 	freeClientList(headClientNode);
 } 
@@ -105,7 +113,7 @@ int clientActivity(int clientSocket) {
 	   exit(-1);
    	}
 	printf("I GET TO CLIENT ACTIVITY AT LEAST \n");
-	
+	exit(-1);
 	memcpy(&cheader, buf, sizeof(struct chat_header)); //gets the header from the recieved packet
 	byteFlag = cheader.byteFlag; 
 	packetLength = ntohs(cheader.packetLen);

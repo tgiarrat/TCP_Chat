@@ -205,7 +205,6 @@ int message(char *textBuffer, int socketNum) {
 	messageLength = strlen(arg) + 1;  // plus one is for the null terminating character at the end
 
 	
-
 	cheader.packetLen =
 		htons(sizeof(struct chat_header) + srcLength + messageLength 
 		+ numDestinations + 2 + destHandleTotal);
