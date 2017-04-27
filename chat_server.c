@@ -83,9 +83,10 @@ int chatSession(int serverSocket, int portNumber) {
 		curNode = headClientNode;
 		while(curNode != NULL) {
 			//check if curNode's socket is set
-			if (FD_ISSET(curNode.socket, &rfds)) {
+			if (FD_ISSET(curNode->socket, &rfds)) {
 				clientActivity();
 			}
+			curNode = curNode->next;
 		}
 		
 		/*for (INSTEAD LOOP THTOUGH LINKED LISTS OF CLIENTS clientSocket = 0; clientSocket <= maxSocket; clientSocket++) {
