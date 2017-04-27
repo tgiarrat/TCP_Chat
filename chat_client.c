@@ -180,16 +180,26 @@ int message(char *textBuffer, int socketNum) {
 	char **destHandles;
 	char *curDest;
 	struct chat_header cheader;
-	uint8_t srcLength, numDestinations;
+	uint8_t srcLength, numDestinations ;
 	int messageLength, i, destLen, sent;
 	int destHandleTotal = 0;
 
 	cheader.byteFlag = 5;
 	srcLength = strlen(handle);
+	
 	arg = strtok(textBuffer, " "); //get a space separated token of the string 
-	numDestinations = atoi(arg);
+	if (isdigit(arg[0])) {
+		printf("FIRST ARG IS A DIGIT \n");
+		numDestinations = atoi(arg);
+	}
+	else {
+		printf("FIRST ARG IS NOT A DIGIT\n");
+		numDestinations = 1;
+	}
+
 	destHandles = malloc(numDestinations);
 
+	
 
 	for (i = 0; (i < numDestinations) && (arg != NULL); i++) {
 		arg = strtok (NULL, " "); //arg is a dest handle
@@ -208,12 +218,14 @@ int message(char *textBuffer, int socketNum) {
 	cheader.packetLen =
 		htons(sizeof(struct chat_header) + srcLength + messageLength 
 		+ numDestinations + 2 + destHandleTotal);
-
 	printf("\n");
+	printf("-----------PRINTING THE PACKET INFO---------------------\n");
+	printf("text is %s\n", arg);
 	printf("Packet Length is: %d\n", ntohs(cheader.packetLen));
 	printf("Handle is: %s\n", handle);
 	printf("first dest is: %s\n", *destHandles);
 	printf("second dest is: %s\n", *(destHandles + 1));	
+	printf("\n");
 
 	//begin making packet:
 	packetPtr = packet;
