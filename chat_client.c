@@ -184,30 +184,22 @@ int message(char *textBuffer, int socketNum) {
 	int messageLength, i, destLen, sent;
 	int destHandleTotal = 0;
 
-	cheader.byteFlag = 5;
-	srcLength = strlen(handle);
-	
+	//Get destination handles:
 	arg = strtok(textBuffer, " "); //get a space separated token of the string 
 	if (isdigit(textBuffer[0])) {
-		printf("FIRST ARG IS A DIGIT \n");
 		numDestinations = atoi(arg);
 		arg = strtok(NULL, " ");
 	}
 	else {
-		printf("FIRST ARG IS NOT A DIGIT\n");
 		numDestinations = 1;
 	}
-
 	destHandles = malloc(numDestinations);
-
-	
-
 	for (i = 0; (i < numDestinations); i++) {
 
 		*(destHandles + i) = malloc(strlen(arg));
 		memcpy( (*(destHandles+i)) , arg, strlen(arg));
 		destHandleTotal += strlen(arg);
-		if (i != numDestinations - 1) { //odnt get the next token
+		if (i != numDestinations - 1) { //dont get the next token
 			arg = strtok(NULL, " ");
 		}
 	}
@@ -215,10 +207,11 @@ int message(char *textBuffer, int socketNum) {
 		printf("Error: Incorrect number of destination handles entered\n");
 		return -1;
 	}
+
 	arg = strtok (NULL, "\n"); //arg is message
-	messageLength = strlen(arg) + 1;  // plus one is for the null terminating character at the end
-	printf("text is %s", arg);
-	
+	messageLength = strlen(arg) + 1;  // plus one is for the null terminating character at the end	
+	cheader.byteFlag = 5;
+	srcLength = strlen(handle);
 	cheader.packetLen =
 		htons(sizeof(struct chat_header) + srcLength + messageLength 
 		+ numDestinations + 2 + destHandleTotal);
