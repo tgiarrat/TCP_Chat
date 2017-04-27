@@ -201,9 +201,9 @@ int message(char *textBuffer, int socketNum) {
 		printf("Error: Incorrect number of destination handles entered\n");
 		return -1;
 	}
-	arg = strtok (NULL, " "); //arg is message
+	arg = strtok (NULL, '\n'); //arg is message
 	messageLength = strlen(arg) + 1;  // plus one is for the null terminating character at the end
-
+	printf("text is %s", arg);
 	
 	cheader.packetLen =
 		htons(sizeof(struct chat_header) + srcLength + messageLength 
@@ -213,8 +213,7 @@ int message(char *textBuffer, int socketNum) {
 	printf("Packet Length is: %d\n", ntohs(cheader.packetLen));
 	printf("Handle is: %s\n", handle);
 	printf("first dest is: %s\n", *destHandles);
-	printf("second dest is: %s\n", *(destHandles + 1));
-	printf("\n");	
+	printf("second dest is: %s\n", *(destHandles + 1));	
 
 	//begin making packet:
 	packetPtr = packet;
@@ -239,6 +238,7 @@ int message(char *textBuffer, int socketNum) {
 	memcpy(packetPtr, arg, messageLength);
 	packetPtr += messageLength;
 	//packetComplete
+
 
 	//send packet
 	sent =  send(socketNum, packet, htons(cheader.packetLen), 0);
