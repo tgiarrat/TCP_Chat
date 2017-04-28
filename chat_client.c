@@ -137,7 +137,7 @@ int printMessageText(char *packet) {
 	//messageLen = cheader.packetLen - offset;
 	//printf("offset is: %d\n", offset);
 	//printf("Here is the message : %s\n", packet + offset);
-	printf("%s\n");
+	printf("%s\n", packet + offset);
 	return 0;
 }
 
