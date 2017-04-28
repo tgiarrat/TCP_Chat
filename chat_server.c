@@ -134,6 +134,7 @@ int messageRecieved(char *recieved, struct chat_header cheader) {
 	uint8_t srcHandleLength, numDestinations;
 	int offset = sizeof(struct chat_header);
 	int i;
+	int curHandleLen;
 
 	//first we need to check if there are multiple destination handles:
 	//memcpy(&srcHandleLength, recieved + offset, sizeof(uint8_t)); //gets the src handle length so that I can get num destinations
@@ -142,7 +143,7 @@ int messageRecieved(char *recieved, struct chat_header cheader) {
 	numDestinations = recieved[offset++];
 
 	for (i = 0; i < numDestinations; i++) {
-		curHandleLen = recieved + offset++;
+		curHandleLen = *(recieved + offset++);
 		printf("cur handle len is %d\n", curHandleLen);
 		memcpy(curHandle, recieved + offset, curHandleLen); //gets the dest name
 		curHandle[curHandleLen] = '\0';
