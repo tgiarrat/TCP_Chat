@@ -138,7 +138,7 @@ int messageRecieved(char *recieved, struct chat_header cheader) {
 	srcHandleLength = recieved[offset];
 	offset += srcHandleLength + 1;
 	numDestinations = recieved[offset];
-
+	printf("%d\n",numDestinations );
 
 	
 	return 0;
