@@ -1,7 +1,7 @@
 
 #define COMMAND_OFFSET 3
 #define MAX_MSG_LEN 1000 //1000 cahracter max message
-#define MAX_HANDLE_LEN 250
+#define MAX_HANDLE_LEN 251
 #define STD_IN 0
 #define MAXBUF 1024
 #define DEBUG_FLAG 1

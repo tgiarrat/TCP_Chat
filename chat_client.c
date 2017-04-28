@@ -96,9 +96,16 @@ int serverActivity(int socketNum) {
 	if (byteFlag == 5) {
 		messageRecieved(buf + sizeof(struct chat_header), cheader);
 	}
-	else if (byteFlag == 8) {
-
+	else if (byteFlag == 7) {
+		//error: destination handle does not exist
+		invalidDestRecieved(buf + sizeof(struct chat_header), cheader); 
+		
+)
 	}
+	return 0;
+}
+
+int invalidDestrecieved(char *packet, struct chat_header cheader){
 	return 0;
 }
 
