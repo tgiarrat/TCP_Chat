@@ -129,20 +129,47 @@ int clientActivity(int clientSocket) {
 }
 
 int messageRecieved(char *recieved, struct chat_header cheader) {
-	//char packet[MAX_PACKET_SIZE];
+	char packet[MAX_PACKET_SIZE];
+	char curHandle[MAX_HANDLE_LEN];
 	uint8_t srcHandleLength, numDestinations;
 	int offset = sizeof(struct chat_header);
+	int i;
 
 	//first we need to check if there are multiple destination handles:
 	//memcpy(&srcHandleLength, recieved + offset, sizeof(uint8_t)); //gets the src handle length so that I can get num destinations
 	srcHandleLength = recieved[offset];
 	offset += srcHandleLength + 1;
-	numDestinations = recieved[offset];
-	printf("%d\n",numDestinations );
+	numDestinations = recieved[offset++];
 
-	
+	for (i = 0; i < numDestinations; i++) {
+		curHandleLen = recieved + offset++;
+		printf("cur handle len is %d\n", curHandleLen);
+		memcpy(curHandle, recieved + offset, curHandleLen); //gets the dest name
+		curHandle[curHandleLen] = '\0';
+		printf("cur handle is: %s\n", curHandle);
+	}
+
+
 	return 0;
 }
+/*
+int breakMessagePacket(char *recieved, int numDestinations, int offest) {
+	char packet[MAX_PACKET_SIZE];
+	char *ptr;
+	char curHandle[MAX_HANDLE_LEN];
+	uint8_t curHandleLen;
+	int i;
+	printf("Just to be sure, offset is -- %d --", offset);
+
+	ptr = offset; 
+	memcpy(packet, recieved, offset); //this will be the same for all packets
+	for (i = 0; i < numDestinations; i++) {
+		curHandleLen = recieved + offset++;
+		printf("cur handle len is %d\n", curHandleLen);
+		memcpy(packet);
+
+	}
+}*/
 
 int newClientConnection(int serverSocket,struct clientNode **head ){
 	int clientSocket, messageLen;
