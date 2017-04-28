@@ -12,6 +12,7 @@ int freeDestHandles(char **destHandles, int numDestinations);
 void chatSession(int socketNum);
 void sendToServer(int socketNum);
 void checkArgs(int argc, char * argv[]);
+int serverActivity(int socketNum);
 int localInput(int); 
 int message(char *, int);
 int sendInitialPacket(int socketNum);

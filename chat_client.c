@@ -57,16 +57,39 @@ void chatSession(int socketNum) {
 		
 		//server update, read from server
 		if (FD_ISSET(socketNum, &rfds)) {
-
+			serverActivity(socketNum);
 		}
 		//keyboard update, read from keyboard
-		else if (FD_ISSET(0, &rfds)) { //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		//MAYBE NOT ELSE IF, MGHT JUST BE IF
+		if (FD_ISSET(0, &rfds)) { 
 			localInput(socketNum);
 		}
 
 	}
 
+}
+
+int serverActivity(int socketNum) {
+	char buf[MAXBUF];
+	int recieved, packetLength;
+	uint8_t byteFlag;
+	struct chat_header cheader;
+
+	if ((recieved = recv(socketNum, buf, MAXBUF, 0)) < 0) {
+    	perror("Error recieveing incoming client packet \n");
+    	exit(-1);
+  	}
+	if (recieved == 0) {
+	   perror("Error: Read incoming server packet as zero bytes \n");
+	   exit(-1);
+   	}
+
+	memcpy(&cheader, buf, sizeof(struct chat_header)); //gets the header from the recieved packet  
+	byteFlag = cheader.byteFlag; 
+	packetLength = ntohs(cheader.packetLen);
+
+	printf("Packet length recieved from client activity is %d and byte flag is: %d\n", packetLength, byteFlag);
+
+	return 0;
 }
 
 int localInput(int socketNum) {

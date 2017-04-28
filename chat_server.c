@@ -92,7 +92,7 @@ int chatSession(int serverSocket, int portNumber) {
 } 
 
 int clientActivity(int clientSocket, struct clientNode *head) {
-	char buf[MAXBUF];
+	char buf[MAX_PACKET_SIZE];
 	int recieved, packetLength;
 	uint8_t byteFlag;
 	struct chat_header cheader;
@@ -156,6 +156,7 @@ int messageRecieved(char *recieved, struct chat_header cheader, struct clientNod
 		}
 		else {
 			printf("Socket found is %d\n", curSocket);
+			sendPacket(curSocket, recieved, cheader);
 		}
 
 	}
@@ -164,13 +165,25 @@ int messageRecieved(char *recieved, struct chat_header cheader, struct clientNod
 	return 0;
 }
 
+int sendPacket(int socket, char *packet, struct chat_header cheader) {
+	int sent;
+	//send packet:
+	sent =  send(socket, packet, htons(cheader.packetLen), 0);
+	if (sent < 0)
+	{
+		perror("send call");
+		exit(-1);
+	}
+	return 0;
+}
+
 int getSocket(char *handle, struct clientNode *head) {
 	struct clientNode *curNode = head;
 
 	while (curNode != NULL) {
 		if (strcmp(handle, curNode->handle) == 0) {
-			printf("Dest handle found!\n");
-			return curNode->socket;
+			//found the dest handle in our list
+			return curNode->socket; 
 		}
 		curNode = curNode->next; 
 	}
