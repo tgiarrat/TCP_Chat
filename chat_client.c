@@ -45,7 +45,7 @@ void chatSession(int socketNum) {
 
 	sendInitialPacket(socketNum);
 	printf("$: ");
-	fflush(stdin);
+	fflush(stdout);
 	while (1) { //1 is possibly temporary, need to run client until the user exits the client
 		FD_ZERO(&rfds);
 		FD_SET(STD_IN, &rfds); //watch std in
