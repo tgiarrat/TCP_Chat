@@ -45,6 +45,7 @@ void chatSession(int socketNum) {
 
 	sendInitialPacket(socketNum);
 	printf("$: ");
+	fflush(stdin);
 	while (1) { //1 is possibly temporary, need to run client until the user exits the client
 		FD_ZERO(&rfds);
 		FD_SET(STD_IN, &rfds); //watch std in
@@ -218,7 +219,7 @@ int sendInitialPacket(int socketNum){
 		perror("sent 0 bytes instead of initial header packet");
 		exit(-1);
 	}
-	printf("Recieveing packet response after sending intitial packet...\n");
+	//printf("Recieveing packet response after sending intitial packet...\n");
 	recieved = recv(socketNum, incomingBuffer, MAXBUF, 0);
 	if (recieved < 0) {
 		perror("Initial packet recieved no response from the server");
