@@ -217,7 +217,7 @@ int message(char *textBuffer, int socketNum) {
 		+ numDestinations + 2 + destHandleTotal);
 	printf("\n");
 	printf("-----------PRINTING THE PACKET INFO---------------------\n");
-	printf("text is %s\n", arg);
+	printf("text is: %s\n", arg);
 	printf("Packet Length is: %d\n", ntohs(cheader.packetLen));
 	printf("Handle is: %s\n", handle);
 	printf("first dest is: %s\n", *destHandles);
@@ -268,6 +268,7 @@ int freeDestHandles(char **destHandles, int numDestinations) {
 		free(destHandles[i]);
 	}
 	free(destHandles);
+	return 0;
 }
 
 

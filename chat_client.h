@@ -8,6 +8,7 @@
 #define xstr(a) str(a)
 #define str(a) #a
 
+int freeDestHandles(char **destHandles, int numDestinations);
 void chatSession(int socketNum);
 void sendToServer(int socketNum);
 void checkArgs(int argc, char * argv[]);

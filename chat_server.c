@@ -61,7 +61,6 @@ int chatSession(int serverSocket, int portNumber) {
 			if (maxSocket < curNode->socket){
 				maxSocket = curNode->socket;
 			}
-			
 				curNode = curNode->next;
 		}
 		if (select(maxSocket + 1 , &rfds,NULL,NULL,NULL) < 0  ){
@@ -88,13 +87,6 @@ int chatSession(int serverSocket, int portNumber) {
 			}
 			curNode = curNode->next;
 		}
-		
-		/*for (INSTEAD LOOP THTOUGH LINKED LISTS OF CLIENTS clientSocket = 0; clientSocket <= maxSocket; clientSocket++) {
-			if(FD_ISSET(clientSocket, &rfds)) {
-				//check flags
-				clientActivity(clientSocket);
-			}
-		}*/
 	}
 	freeClientList(headClientNode);
 } 
@@ -114,18 +106,14 @@ int clientActivity(int clientSocket) {
 	   exit(-1);
    	}
 	printf("I GET TO CLIENT ACTIVITY AT LEAST \n");
-	exit(-1);
 	memcpy(&cheader, buf, sizeof(struct chat_header)); //gets the header from the recieved packet
 	byteFlag = cheader.byteFlag; 
 	packetLength = ntohs(cheader.packetLen);
 
 	printf("Packet length recieved from client activity is %d and byte flag is: %d\n", packetLength, byteFlag);
 
-	if (byteFlag == 1) { //initial packet, not sure if i need to even check this here
-		//do i need to do this really?
-	}
-	else if (byteFlag == 5 ) { //message flag 
-
+	if (byteFlag == 5 ) { //message flag
+		messageRecieved(buf, cheader);
 	}
 	else if (byteFlag == 8) { //client exiting flag
 
@@ -139,6 +127,12 @@ int clientActivity(int clientSocket) {
 	}
 
 	return 0; 
+}
+
+int messageRecieved(char *packet, struct chat_header cheader) {
+	
+	
+	return 0;
 }
 
 int newClientConnection(int serverSocket,struct clientNode **head ){
