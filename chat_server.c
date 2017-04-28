@@ -136,7 +136,7 @@ int messageRecieved(char *recieved, struct chat_header cheader) {
 	//first we need to check if there are multiple destination handles:
 	memcpy(&srcHandleLength, recieved + offset, sizeof(uint8_t)); //gets the src handle length so that I can get num destinations
 	offset += srcHandleLength + 1;
-	numDestinations = recieved[pffset];
+	numDestinations = recieved[offset];
 	printf("Num dest is: %d\n", numDestinations);
 
 
