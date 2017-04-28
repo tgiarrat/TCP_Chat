@@ -130,14 +130,14 @@ int clientActivity(int clientSocket) {
 
 int messageRecieved(char *recieved, struct chat_header cheader) {
 	//char packet[MAX_PACKET_SIZE];
-	uint8_t srcHandleLength;
+	uint8_t srcHandleLength, numDestinations;
 	int offset = sizeof(struct chat_header);
 
 	//first we need to check if there are multiple destination handles:
 	memcpy(&srcHandleLength, recieved + offset, sizeof(uint8_t)); //gets the src handle length so that I can get num destinations
 	offset += srcHandleLength + 1;
-
-	printf("Dest handle offset is %d\n", offset);
+	numDestinations = recieved[pffset];
+	printf("Num dest is: %d\n", numDestinations);
 
 
 	
