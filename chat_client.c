@@ -59,8 +59,7 @@ void chatSession(int socketNum) {
 		//server update, read from server
 		if (FD_ISSET(socketNum, &rfds)) {
 			serverActivity(socketNum);
-			printf("$: ");
-			fflush(stdout);
+
 		}
 		//keyboard update, read from keyboard
 		if (FD_ISSET(0, &rfds)) { 
