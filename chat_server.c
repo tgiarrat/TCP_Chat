@@ -146,6 +146,7 @@ int messageRecieved(char *recieved, struct chat_header cheader) {
 		curHandleLen = *(recieved + offset++);
 		printf("cur handle len is %d\n", curHandleLen);
 		memcpy(curHandle, recieved + offset, curHandleLen); //gets the dest name
+		offset += curHandleLen;
 		curHandle[curHandleLen] = '\0';
 		printf("cur handle is: %s\n", curHandle);
 	}
