@@ -125,12 +125,21 @@ int clientActivity(int clientSocket) {
 		perror("Incomming byte flag is invalid");
 		exit(-1);
 	}
-
 	return 0; 
 }
 
-int messageRecieved(char *packet, struct chat_header cheader) {
-	
+int messageRecieved(char *recieved, struct chat_header cheader) {
+	//char packet[MAX_PACKET_SIZE];
+	uint8_t srcHandleLength;
+	int offset = sizeof(struct chat_header);
+
+	//first we need to check if there are multiple destination handles:
+	memcpy(&srcHandleLength, recieved + offset, sizeof(uint8_t)); //gets the src handle length so that I can get num destinations
+	offset += srcHandleLength + 1;
+
+	printf("Dest handle offset is %d\n", offset);
+
+
 	
 	return 0;
 }

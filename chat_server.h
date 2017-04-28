@@ -11,7 +11,7 @@ struct clientNode{
     struct clientNode *next;
 }__attribute__((packed));
 
-int messageRecieved(char *packet, struct chat_header cheader);
+int messageRecieved(char *recieved, struct chat_header cheader);
 int addClient(struct clientNode **head, char *handle, int handleLen, int clientSocket);
 int newClientConnection(int serverSocket, struct clientNode **) ;
 void recvFromClient(int clientSocket);
