@@ -130,8 +130,8 @@ int printMessageText(char *packet) {
 	}
 	//offset should now be pointing to the start of the message
 	//messageLen = cheader.packetLen - offset;
-	printf("Message Length is: %d\n", messageLen);
-	printf("%s\n", packet + offset);
+	//printf("Message Length is: %d\n", messageLen);
+	printf("Here is the message : %s\n", packet + offset);
 
 	return 0;
 }
