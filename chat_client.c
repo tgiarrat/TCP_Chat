@@ -107,7 +107,10 @@ int messageRecieved(char *packet, struct chat_header cheader) {
 
 	srcHandleLen = packet[offset++];
 	memcpy(srcHandle, (packet + offset), srcHandleLen);
+	srcHandle[srcHandleLen] = '\0';
 	offset += srcHandleLen;
+	
+	printf("%s");
 	printMessageText(packet+offset);
 
 	printf("Sending client handle length: %d    Sending Client handle: %s\n ", srcHandleLen, handle); 
@@ -123,15 +126,15 @@ int printMessageText(char *packet) {
 	uint8_t curHandleLen;
 
 	numDest = *(packet + offset++);
-	printf("offset is: %d   num dest is:  %d\n", offset, numDest);
+	//printf("offset is: %d   num dest is:  %d\n", offset, numDest);
 	for (i = 0; i < numDest; i++) {
 		curHandleLen = *(packet + offset++);
-		printf("Cur handle length is %d\n", curHandleLen);
+		//printf("Cur handle length is %d\n", curHandleLen);
 		offset+= curHandleLen;
 	}
 	//offset should now be pointing to the start of the message
 	//messageLen = cheader.packetLen - offset;
-	printf("offset is: %d\n", offset);
+	//printf("offset is: %d\n", offset);
 	printf("Here is the message : %s\n", packet + offset);
 
 	return 0;
