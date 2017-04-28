@@ -44,7 +44,7 @@ void chatSession(int socketNum) {
 	fd_set rfds;
 
 	sendInitialPacket(socketNum);
-
+	printf("$: ");
 	while (1) { //1 is possibly temporary, need to run client until the user exits the client
 		FD_ZERO(&rfds);
 		FD_SET(STD_IN, &rfds); //watch std in
@@ -87,7 +87,7 @@ int serverActivity(int socketNum) {
 	byteFlag = cheader.byteFlag; 
 	packetLength = ntohs(cheader.packetLen);
 
-	printf("Packet length recieved from server activity is %d and byte flag is: %d\n", packetLength, byteFlag);
+	//printf("Packet length recieved from server activity is %d and byte flag is: %d\n", packetLength, byteFlag);
 
 	if (byteFlag == 5) {
 		messageRecieved(buf + sizeof(struct chat_header), cheader);
@@ -95,7 +95,7 @@ int serverActivity(int socketNum) {
 	else if (byteFlag == 8) {
 
 	}
-
+	printf("$: ");
 	return 0;
 }
 
@@ -110,10 +110,10 @@ int messageRecieved(char *packet, struct chat_header cheader) {
 	srcHandle[srcHandleLen] = '\0';
 	offset += srcHandleLen;
 	
-	printf("%s");
+	printf("\n%s: ", srcHandle);
 	printMessageText(packet+offset);
 
-	printf("Sending client handle length: %d    Sending Client handle: %s\n ", srcHandleLen, handle); 
+	//printf("Sending client handle length: %d    Sending Client handle: %s\n ", srcHandleLen, handle); 
 	return 0;
 
 
@@ -135,8 +135,8 @@ int printMessageText(char *packet) {
 	//offset should now be pointing to the start of the message
 	//messageLen = cheader.packetLen - offset;
 	//printf("offset is: %d\n", offset);
-	printf("Here is the message : %s\n", packet + offset);
-
+	//printf("Here is the message : %s\n", packet + offset);
+	printf("%s\n");
 	return 0;
 }
 
@@ -193,7 +193,7 @@ int sendInitialPacket(int socketNum){
 	uint8_t flag;
 
 	packetLength = sizeof(struct chat_header) + 1 + strlen(handle);
-	printf("\nInitial packet size is: %d\n", packetLength);
+	//printf("\nInitial packet size is: %d\n", packetLength);
 	//packet = malloc(packetLength);
 	packetPtr = packet;
 
@@ -207,7 +207,7 @@ int sendInitialPacket(int socketNum){
 	memcpy(packetPtr, handle, handleLen); //copy handle
 
 	//send packet
-	printf("Sending Initial packet...\n");
+	//printf("Sending Initial packet...\n");
 	sent =  send(socketNum, packet, packetLength, 0);
 	if (sent < 0)
 	{
@@ -232,14 +232,15 @@ int sendInitialPacket(int socketNum){
 	memcpy(&flag, incomingBuffer + sizeof(uint16_t), sizeof(uint8_t)); //gets the flag from the incoming buffer
 
 	if (flag == 3) {
-		printf("Invalid Handle Flag = 3\n");
+		perror("Invalid Handle Flag = 3\n");
+		exit(-1);
 	}
 	else if (flag ==2) {
-		printf("Valid handle Flag = 2\n");
+		//printf("Valid handle Flag = 2\n");
 	}
 	else {
-		printf("uh oh... flag != 2 or 3\n");
-		printf("flag is %d, recieved %d\n", flag, recieved);
+		perror("uh oh... flag != 2 or 3\n");
+		exit(-1);
 	}
 	return 0;
 }
@@ -286,14 +287,14 @@ int message(char *textBuffer, int socketNum) {
 	cheader.packetLen =
 		htons(sizeof(struct chat_header) + srcLength + messageLength 
 		+ numDestinations + 2 + destHandleTotal);
-	printf("\n");
+	/*printf("\n");
 	printf("-----------PRINTING THE PACKET INFO---------------------\n");
 	printf("text is: %s\n", arg);
 	printf("Packet Length is: %d\n", ntohs(cheader.packetLen));
 	printf("Handle is: %s\n", handle);
 	printf("first dest is: %s\n", *destHandles);
 	printf("second dest is: %s\n", *(destHandles + 1));	
-	printf("\n");
+	printf("\n");*/
 
 	//Make packet:
 	packetPtr = packet;
