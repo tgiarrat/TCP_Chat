@@ -100,17 +100,40 @@ int serverActivity(int socketNum) {
 }
 
 int messageRecieved(char *packet, struct chat_header cheader) {
-	char handle[MAX_HANDLE_LEN];
+	char srcHandle[MAX_HANDLE_LEN];
+	//char messageText[MAX_MSG_LEN];
 	uint8_t srcHandleLen;
 	int offset = 0;
 
 	srcHandleLen = packet[offset++];
-	memcpy(handle, (packet + offset), srcHandleLen);
+	memcpy(srcHandle, (packet + offset), srcHandleLen);
+	offset += srcHandleLen;
+	printMessageText(packet);
 
 	printf("Sending client handle length: %d    Sending Client handle: %s\n ", srcHandleLen, handle); 
 	return 0;
 
 
+}
+
+int printMessageText(char *packet) {
+	int offset = 0; 
+	int messageLen, i;
+	uint8_t numDest;
+	uint8_t curHandleLen;
+
+	numDest = *(packet + offset++);
+
+	for (i = 0; i < numDest; i++) {
+		curHandleLen = *(packet + offset++);
+		offset+= curHandleLen;
+	}
+	//offset should now be pointing to the start of the message
+	//messageLen = cheader.packetLen - offset;
+	printf("Message Length is: %d\n", messageLen);
+	printf("%s\n", packet + offset);
+
+	return 0;
 }
 
 int localInput(int socketNum) {

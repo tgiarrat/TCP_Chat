@@ -8,6 +8,7 @@
 #define xstr(a) str(a)
 #define str(a) #a
 
+int printMessageText(char *packet);
 int freeDestHandles(char **destHandles, int numDestinations);
 int messageRecieved(char *packet, struct chat_header cheader);
 void chatSession(int socketNum);
