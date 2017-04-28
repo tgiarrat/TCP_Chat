@@ -108,7 +108,7 @@ int messageRecieved(char *packet, struct chat_header cheader) {
 	srcHandleLen = packet[offset++];
 	memcpy(srcHandle, (packet + offset), srcHandleLen);
 	offset += srcHandleLen;
-	printMessageText(packet);
+	printMessageText(packet+offset);
 
 	printf("Sending client handle length: %d    Sending Client handle: %s\n ", srcHandleLen, handle); 
 	return 0;
