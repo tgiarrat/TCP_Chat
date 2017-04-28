@@ -83,7 +83,7 @@ int chatSession(int serverSocket, int portNumber) {
 		while(curNode != NULL) {
 			//check if curNode's socket is set
 			if (FD_ISSET(curNode->socket, &rfds)) {
-				clientActivity(curNode->socket);
+				clientActivity(curNode->socket, headClientNode);
 			}
 			curNode = curNode->next;
 		}
@@ -91,7 +91,7 @@ int chatSession(int serverSocket, int portNumber) {
 	freeClientList(headClientNode);
 } 
 
-int clientActivity(int clientSocket) {
+int clientActivity(int clientSocket, struct clientNode *head) {
 	char buf[MAXBUF];
 	int recieved, packetLength;
 	uint8_t byteFlag;
@@ -105,7 +105,6 @@ int clientActivity(int clientSocket) {
 	   perror("Error: Read incoming client packet as zero bytes \n");
 	   exit(-1);
    	}
-	printf("I GET TO CLIENT ACTIVITY AT LEAST \n");
 	memcpy(&cheader, buf, sizeof(struct chat_header)); //gets the header from the recieved packet
 	byteFlag = cheader.byteFlag; 
 	packetLength = ntohs(cheader.packetLen);
@@ -113,7 +112,7 @@ int clientActivity(int clientSocket) {
 	printf("Packet length recieved from client activity is %d and byte flag is: %d\n", packetLength, byteFlag);
 
 	if (byteFlag == 5 ) { //message flag
-		messageRecieved(buf, cheader);
+		messageRecieved(buf, cheader, head);
 	}
 	else if (byteFlag == 8) { //client exiting flag
 
@@ -128,13 +127,12 @@ int clientActivity(int clientSocket) {
 	return 0; 
 }
 
-int messageRecieved(char *recieved, struct chat_header cheader) {
+int messageRecieved(char *recieved, struct chat_header cheader, struct clientNode *head) {
 	char packet[MAX_PACKET_SIZE];
 	char curHandle[MAX_HANDLE_LEN];
 	uint8_t srcHandleLength, numDestinations;
 	int offset = sizeof(struct chat_header);
-	int i;
-	int curHandleLen;
+	int curHandleLen, curSocket , i;
 
 	//first we need to check if there are multiple destination handles:
 	//memcpy(&srcHandleLength, recieved + offset, sizeof(uint8_t)); //gets the src handle length so that I can get num destinations
@@ -144,34 +142,41 @@ int messageRecieved(char *recieved, struct chat_header cheader) {
 
 	for (i = 0; i < numDestinations; i++) {
 		curHandleLen = *(recieved + offset++);
-		printf("cur handle len is %d\n", curHandleLen);
 		memcpy(curHandle, recieved + offset, curHandleLen); //gets the dest name
 		offset += curHandleLen;
 		curHandle[curHandleLen] = '\0';
+		
+		printf("cur handle len is %d\n", curHandleLen);
 		printf("cur handle is: %s\n", curHandle);
+		curSocket = getSocket(curHandle, head);
+
+		if (curSocket < 0) {
+			perror("Could not find socket for a destination handle");
+			exit(-1);
+		}
+		else {
+			printf("Socket found is %d\n", curSocket);
+		}
+
 	}
 
 
 	return 0;
 }
-/*
-int breakMessagePacket(char *recieved, int numDestinations, int offest) {
-	char packet[MAX_PACKET_SIZE];
-	char *ptr;
-	char curHandle[MAX_HANDLE_LEN];
-	uint8_t curHandleLen;
-	int i;
-	printf("Just to be sure, offset is -- %d --", offset);
 
-	ptr = offset; 
-	memcpy(packet, recieved, offset); //this will be the same for all packets
-	for (i = 0; i < numDestinations; i++) {
-		curHandleLen = recieved + offset++;
-		printf("cur handle len is %d\n", curHandleLen);
-		memcpy(packet);
+int getSocket(char *handle, struct clientNode *head) {
+	struct clientNode *curNode = head;
 
+	while (curNode != NULL) {
+		if (strcmp(handle, curNode->handle) == 0) {
+			printf("Dest handle found!\n");
+			return curNode->socket;
+		}
+		curNode = curNode->next; 
 	}
-}*/
+
+	return -1; //socket could not be found for this handle
+}
 
 int newClientConnection(int serverSocket,struct clientNode **head ){
 	int clientSocket, messageLen;
