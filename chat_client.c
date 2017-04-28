@@ -87,9 +87,30 @@ int serverActivity(int socketNum) {
 	byteFlag = cheader.byteFlag; 
 	packetLength = ntohs(cheader.packetLen);
 
-	printf("Packet length recieved from client activity is %d and byte flag is: %d\n", packetLength, byteFlag);
+	printf("Packet length recieved from server activity is %d and byte flag is: %d\n", packetLength, byteFlag);
+
+	if (byteFlag == 5) {
+		messageRecieved(buf + sizeof(struct chat_header), cheader);
+	}
+	else if (byteFlag == 8) {
+
+	}
 
 	return 0;
+}
+
+int messageRecieved(char *packet, struct chat_header cheader) {
+	char handle[MAX_HANDLE_LEN];
+	uint8_t srcHandleLen;
+	int offset = 0;
+
+	srcHandleLen = packet[offset++];
+	memcpy(handle, (packet + offset), srcHandleLen);
+
+	printf("Sending client handle length: %d    Sending Client handle: %s\n ", srcHandleLen, handle); 
+	return 0;
+
+
 }
 
 int localInput(int socketNum) {

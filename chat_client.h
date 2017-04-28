@@ -9,6 +9,7 @@
 #define str(a) #a
 
 int freeDestHandles(char **destHandles, int numDestinations);
+int messageRecieved(char *packet, struct chat_header cheader);
 void chatSession(int socketNum);
 void sendToServer(int socketNum);
 void checkArgs(int argc, char * argv[]);
