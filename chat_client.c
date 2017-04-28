@@ -99,7 +99,6 @@ int serverActivity(int socketNum) {
 	else if (byteFlag == 8) {
 
 	}
-	printf("$: ");
 	return 0;
 }
 
