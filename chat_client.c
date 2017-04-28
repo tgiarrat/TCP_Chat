@@ -126,6 +126,7 @@ int printMessageText(char *packet) {
 
 	for (i = 0; i < numDest; i++) {
 		curHandleLen = *(packet + offset++);
+		printf("Cur handle length is %d\n", curHandleLen);
 		offset+= curHandleLen;
 	}
 	//offset should now be pointing to the start of the message
