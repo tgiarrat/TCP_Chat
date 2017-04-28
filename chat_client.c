@@ -224,7 +224,7 @@ int message(char *textBuffer, int socketNum) {
 	printf("second dest is: %s\n", *(destHandles + 1));	
 	printf("\n");
 
-	//begin making packet:
+	//Make packet:
 	packetPtr = packet;
 	memcpy(packetPtr, &cheader, sizeof(struct chat_header)); //copy chat header
 	packetPtr += sizeof(struct chat_header);
@@ -249,18 +249,27 @@ int message(char *textBuffer, int socketNum) {
 	//packetComplete
 
 
-	//send packet
+	//send packet:
 	sent =  send(socketNum, packet, htons(cheader.packetLen), 0);
 	if (sent < 0)
 	{
 		perror("send call");
 		exit(-1);
 	}
-
-	//!!!!!
-	//free 
+	freeDestHandles(destHandles, numDestinations); 
 	return 0;
 }
+
+int freeDestHandles(char **destHandles, int numDestinations) {
+	//char *curHandlee;
+	int i;
+
+	for (i = 0; i < numDestinations; i++) {
+		free(destHandles[i]);
+	}
+	free(destHandles);
+}
+
 
 void checkArgs(int argc, char * argv[])
 {
