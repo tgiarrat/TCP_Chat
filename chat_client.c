@@ -123,7 +123,7 @@ int printMessageText(char *packet) {
 	uint8_t curHandleLen;
 
 	numDest = *(packet + offset++);
-
+	printf("offset is: %d   num dest is:  %d\n", offset, numDest);
 	for (i = 0; i < numDest; i++) {
 		curHandleLen = *(packet + offset++);
 		printf("Cur handle length is %d\n", curHandleLen);
