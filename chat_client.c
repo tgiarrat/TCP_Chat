@@ -42,7 +42,7 @@ int main(int argc, char * argv[])
 
 void chatSession(int socketNum) {
 	fd_set rfds;
-	char **blockedHandles;
+	struct blockedHandles *blockedHandles = NULL;
 	sendInitialPacket(socketNum);
 	printf("$: ");
 	fflush(stdout);
@@ -72,7 +72,7 @@ void chatSession(int socketNum) {
 
 }
 
-int serverActivity(int socketNum, char **blockedHandles) {
+int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 	char buf[MAXBUF];
 	int recieved, packetLength;
 	uint8_t byteFlag;
@@ -151,7 +151,7 @@ int printMessageText(char *packet) {
 	return 0;
 }
 
-int localInput(int socketNum, char **blockedHandles) {
+int localInput(int socketNum, struct blockedHandles *blockedHandles) {
 	char textBuffer[MAXBUF];
 	int textLength;
 	char commandType;
@@ -194,18 +194,19 @@ int localInput(int socketNum, char **blockedHandles) {
 
 }
 
-int block(char *textBuffer, char **blockedHandles) {
-	char *curHandle;
+int block(char *textBuffer, struct blockedHandles *blockedHandles) {
+	struct blockedHandles *curHandle;
 	int i = 0;
 	
-	curHandle = blockedHandles[i];
+	curHandle = blockedHandles;
 	while(curHandle != NULL) {
-		printf("%dst handle in blocked list is: %s", i , curHandle);
-		curHandle = blockedHandles[i];
+		printf("%dst handle in blocked list is: %s", i , curHandle->handle);
+		curHandle = curHandle->next;
 		i++;
 	}
-	curHandle = malloc(MAX_HANDLE_LEN);
-	strcpy(curHandle, textBuffer);
+	curHandle = malloc(sizeof(struct blockedHandles));
+	strcpy(curHandle->handle, textBuffer);
+	curHandle->next = NULL;
 	
 	
 	return 0;
