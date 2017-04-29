@@ -42,7 +42,7 @@ int main(int argc, char * argv[])
 
 void chatSession(int socketNum) {
 	fd_set rfds;
-	char *blockedHandles[MAX_HANDLE_LEN];
+	char *blockedHandles[];
 	sendInitialPacket(socketNum);
 	printf("$: ");
 	fflush(stdout);
