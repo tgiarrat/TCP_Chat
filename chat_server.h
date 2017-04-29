@@ -21,7 +21,7 @@ int sendInvalidDest(int destSocket ,int sendingSocket, char *destHandle, int des
 int messageRecieved(char *recieved, struct chat_header cheader, struct clientNode *head, int sendingSocket);
 int addClient(struct clientNode **head, char *handle, int handleLen, int clientSocket);
 int newClientConnection(int serverSocket, struct clientNode **) ;
-void recvFromClient(int clientSocket);
+void recvFromClient(int clientSocket, char *packet[]);
 int checkArgs(int argc, char *argv[]);
 int chatSession(int serverSocket, int portNumber);
 int freeClientList(struct clientNode *head);
