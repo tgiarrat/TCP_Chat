@@ -146,8 +146,8 @@ int messageRecieved(char *recieved, struct chat_header cheader, struct clientNod
 		offset += curHandleLen;
 		curHandle[curHandleLen] = '\0';
 		
-		printf("cur handle len is %d\n", curHandleLen);
-		printf("cur handle is: %s\n", curHandle);
+		//printf("cur handle len is %d\n", curHandleLen);
+		//printf("cur handle is: %s\n", curHandle);
 		curSocket = getSocket(curHandle, head);
 
 		if (curSocket < 0) {
