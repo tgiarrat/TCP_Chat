@@ -201,7 +201,7 @@ int block(char *textBuffer, char *blockedHandles[]) {
 
 	while(curHandle != NULL) {
 		printf("%dst handle in blocked list is: %s", i , curHandle);
-		curHandle = *(blockedHandles + i);
+		curHandle = (*blockedHandles + i);
 		i++;
 	}
 	curHandle = malloc(MAX_HANDLE_LEN);
