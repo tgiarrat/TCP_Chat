@@ -58,7 +58,7 @@ void chatSession(int socketNum) {
 		
 		//server update, read from server
 		if (FD_ISSET(socketNum, &rfds)) {
-			serverActivity(socketNum, &blockedHandles); //DONT NEED AND ????????? 
+			serverActivity(socketNum, blockedHandles); //DONT NEED AND ????????? 
 
 		}
 		//keyboard update, read from keyboard
@@ -72,7 +72,7 @@ void chatSession(int socketNum) {
 
 }
 
-int serverActivity(int socketNum, struct blockedHandles **blockedHandles) {
+int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 	char buf[MAXBUF];
 	int recieved, packetLength;
 	uint8_t byteFlag;
@@ -94,7 +94,7 @@ int serverActivity(int socketNum, struct blockedHandles **blockedHandles) {
 	//printf("Packet length recieved from server activity is %d and byte flag is: %d\n", packetLength, byteFlag);
 
 	if (byteFlag == 5) {
-		messageRecieved(buf + sizeof(struct chat_header), cheader);
+		messageRecieved(buf + sizeof(struct chat_header), cheader, blockedHandles);
 	}
 	else if (byteFlag == 7) {
 		//error: destination handle does not exist
@@ -110,7 +110,7 @@ int invalidDestRecieved(char *packet, struct chat_header cheader){
 	return 0;
 }
 
-int messageRecieved(char *packet, struct chat_header cheader) {
+int messageRecieved(char *packet, struct chat_header cheader,  struct blockedHandles *blockedHandles) {
 	char srcHandle[MAX_HANDLE_LEN];
 	//char messageText[MAX_MSG_LEN];
 	uint8_t srcHandleLen;
@@ -120,6 +120,13 @@ int messageRecieved(char *packet, struct chat_header cheader) {
 	memcpy(srcHandle, (packet + offset), srcHandleLen);
 	srcHandle[srcHandleLen] = '\0';
 	offset += srcHandleLen;
+
+	if (checkBlocked(srcHandle, blockedHandles) == 1) {
+		perror("handle is blocked (get rid of this)");
+		exit(-1);
+	}
+
+
 	
 	printf("\n%s: ", srcHandle);
 	printMessageText(packet+offset);
@@ -128,6 +135,21 @@ int messageRecieved(char *packet, struct chat_header cheader) {
 	return 0;
 
 
+}
+
+int checkBlocked(char *srcHandle, struct blockedHandles *blockedHandles){
+	struct blockedHandles *curHandle = blockedHandles;
+
+	while (curHandle != NULL) {
+		if (strcmp(srcHandle, curHandle->handle) == 0) {
+			printf("BLOCKED USER ATTEMPED TO SEND A MESSAGE\n");
+			return 1;
+		}
+		curHandle = curHandle->next; 
+	}
+
+
+	return 0;
 }
 
 int printMessageText(char *packet) {
@@ -198,7 +220,7 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 	struct blockedHandles *newBlock = (struct blockedHandles *)malloc(sizeof(struct blockedHandles));
 	struct blockedHandles *curHandle;
 	int i = 0;
-	printf("Handle to block is %s", textBuffer);
+	//printf("Handle to block is %s", textBuffer);
 	strcpy(newBlock->handle, textBuffer);
 	if (*blockedHandles == NULL) {
 		*blockedHandles =  newBlock;
@@ -206,7 +228,7 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 	else {
 		curHandle = *blockedHandles;
 		while(curHandle->next != NULL) {
-			printf("%dst handle in blocked list is: %s", i , curHandle->handle);
+			//printf("%dst handle in blocked list is: %s", i , curHandle->handle);
 			curHandle = curHandle->next;
 			i++;
 		}
