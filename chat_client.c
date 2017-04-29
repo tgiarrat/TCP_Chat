@@ -58,7 +58,7 @@ void chatSession(int socketNum) {
 		
 		//server update, read from server
 		if (FD_ISSET(socketNum, &rfds)) {
-			serverActivity(socketNum, &blockedHandles);
+			serverActivity(socketNum, &blockedHandles); //DONT NEED AND ????????? 
 
 		}
 		//keyboard update, read from keyboard
@@ -195,18 +195,25 @@ int localInput(int socketNum, struct blockedHandles **blockedHandles) {
 }
 
 int block(char *textBuffer, struct blockedHandles **blockedHandles) {
+	struct blockedHandles *newBlock = (struct blockedHandles *)malloc(sizeof(struct blockedHandles));
 	struct blockedHandles *curHandle;
 	int i = 0;
-	
-	curHandle = *blockedHandles;
-	while(curHandle != NULL) {
-		printf("%dst handle in blocked list is: %s", i , curHandle->handle);
-		curHandle = curHandle->next;
-		i++;
+	printf("Handle to block is %s", textBuffer);
+	strcpy(newBlock->handle, textBuffer);
+	if (*blockedHandles == NULL) {
+		*blockedHandles =  newBlock;
 	}
-	curHandle = malloc(sizeof(struct blockedHandles));
-	strcpy(curHandle->handle, textBuffer);
-	curHandle->next = NULL;
+	else {
+		curHandle = *blockedHandles;
+		while(curHandle->next != NULL) {
+			printf("%dst handle in blocked list is: %s", i , curHandle->handle);
+			curHandle = curHandle->next;
+			i++;
+		}
+		//curHandle = (struct blockedHandles *)malloc(sizeof(struct blockedHandles));
+		//strcpy(curHandle->handle, textBuffer);
+		curHandle->next = newBlock;
+	}
 	
 	
 	return 0;
