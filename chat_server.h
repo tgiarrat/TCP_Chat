@@ -16,8 +16,8 @@ struct clientNode{
 
 int sendPacket(int socket, char *packet, struct chat_header cheader); 
 int getSocket(char *handle, struct clientNode *head);
-int invalidDestrecieved(char *packet, struct chat_header cheader);
-int messageRecieved(char *recieved, struct chat_header cheader, struct clientNode *head);
+int sendInvalidDest(int destSocket ,int sendingSocket, char *destHandle, int destHandleLength);
+int messageRecieved(char *recieved, struct chat_header cheader, struct clientNode *head, int sendingSocket);
 int addClient(struct clientNode **head, char *handle, int handleLen, int clientSocket);
 int newClientConnection(int serverSocket, struct clientNode **) ;
 void recvFromClient(int clientSocket);

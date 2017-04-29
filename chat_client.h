@@ -10,6 +10,7 @@
 
 int printMessageText(char *packet);
 int freeDestHandles(char **destHandles, int numDestinations);
+int invalidDestRecieved(char *packet, struct chat_header cheader);
 int messageRecieved(char *packet, struct chat_header cheader);
 void chatSession(int socketNum);
 void sendToServer(int socketNum);

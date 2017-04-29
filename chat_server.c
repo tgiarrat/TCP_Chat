@@ -112,7 +112,7 @@ int clientActivity(int clientSocket, struct clientNode *head) {
 	printf("Packet length recieved from client activity is %d and byte flag is: %d\n", packetLength, byteFlag);
 
 	if (byteFlag == 5 ) { //message flag
-		messageRecieved(buf, cheader, head);
+		messageRecieved(buf, cheader, head, clientSocket);
 	}
 	else if (byteFlag == 8) { //client exiting flag
 
@@ -127,7 +127,7 @@ int clientActivity(int clientSocket, struct clientNode *head) {
 	return 0; 
 }
 
-int messageRecieved(char *recieved, struct chat_header cheader, struct clientNode *head) {
+int messageRecieved(char *recieved, struct chat_header cheader, struct clientNode *head, int sendingSocket) {
 	char packet[MAX_PACKET_SIZE];
 	char curHandle[MAX_HANDLE_LEN];
 	uint8_t srcHandleLength, numDestinations;
@@ -151,6 +151,8 @@ int messageRecieved(char *recieved, struct chat_header cheader, struct clientNod
 		curSocket = getSocket(curHandle, head);
 
 		if (curSocket < 0) {
+			//send src 
+			sendInvalidDest(curSocket ,sendingSocket, curHandle, curHandleLen);
 			perror("Could not find socket for a destination handle");
 			exit(-1);
 		}
@@ -161,6 +163,24 @@ int messageRecieved(char *recieved, struct chat_header cheader, struct clientNod
 
 	}
 
+
+	return 0;
+}
+
+int sendInvalidDest(int destSocket ,int sendingSocket, char *destHandle, int destHandleLength) {
+	char *packet[MAX_PACKET_SIZE];
+	struct chat_header cheader;
+	int offset = 0;
+
+	cheader.byteFlag = 7;
+	cheader.packetLen = htons(sizeof(struct chat_header) + destHandleLength + 1);
+
+	memcpy(packet, &cheader, sizeof(struct chat_header));
+	offset += sizeof(struct chat_header);
+
+	////////////////
+	//MAKE SURE THAT A NULL IS NOT SENT AT END OF SRC HANDLE 
+	//////////////////
 
 	return 0;
 }
@@ -203,7 +223,7 @@ int newClientConnection(int serverSocket,struct clientNode **head ){
 		exit(-1);
 	}
 	//recieve the clients initial packet containing handle and handle length
-	if ((messageLen = recv(clientSocket, buf, MAXBUF, 0)) < 0)
+	if ((messageLen = recv(clientSocket, buf, MAX_PACKET_SIZE, 0)) < 0)
 	{
 		perror("Initial Client Recieve Call Error");
 		exit(-1);
