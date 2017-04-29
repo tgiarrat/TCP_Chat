@@ -255,7 +255,7 @@ int newClientConnection(int serverSocket,struct clientNode **head ){
 	return 0;
 }
 
-int recievePacket(int socket, char **packet) {
+int recievePacket(int socket, char *packet[]) {
 	uint16_t packetLength;
 	//char packet[MAX_PACKET_SIZE];
 	char *buf = *packet; 
