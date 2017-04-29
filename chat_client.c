@@ -102,6 +102,7 @@ int serverActivity(int socketNum) {
 		
 
 	}
+	printf("\n$:");
 	return 0;
 }
 
