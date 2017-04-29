@@ -259,12 +259,13 @@ recievePacket(int socket, char *packet) {
 	uint16_t packetLength;
 	int messageLen;
 
-	if ((messageLen = recv(clientSocket, buf, sizeof(uint16_t), MSG_WAITALL)) < 2)
+	if ((messageLen = recv(socket, packet, sizeof(uint16_t), MSG_WAITALL)) < 2)
 	{
 		perror("RECV ERROR");
 		exit(-1);
 	}
-	packetLength = ntohs(buf);
+	memcpy(&packetLength, packet, sizeof(uint16_t));
+	packetLength = ntohs(packetLength);
 
 	messageLen += recv(clientSocket, buf + sizeof(uint16_t), MSG_WAITALL);
 	if (messageLen < packetLen) {
