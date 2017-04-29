@@ -13,7 +13,7 @@ struct blockedHandles {
     struct blockedHandles *next;
 };
 
-int block(char *textbuffer, struct blockedHandles *blockedHandles);
+int block(char *textbuffer, struct blockedHandles **blockedHandles);
 int printMessageText(char *packet);
 int freeDestHandles(char **destHandles, int numDestinations);
 int invalidDestRecieved(char *packet, struct chat_header cheader);
@@ -21,8 +21,8 @@ int messageRecieved(char *packet, struct chat_header cheader);
 void chatSession(int socketNum);
 void sendToServer(int socketNum);
 void checkArgs(int argc, char * argv[]);
-int serverActivity(int socketNum, struct blockedHandles *blockedHandles);
-int localInput(int, struct blockedHandles *blockedHandles); 
+int serverActivity(int socketNum, struct blockedHandles **blockedHandles);
+int localInput(int, struct blockedHandles **blockedHandles); 
 int message(char *, int);
 int sendInitialPacket(int socketNum);
 

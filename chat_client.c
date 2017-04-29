@@ -58,12 +58,12 @@ void chatSession(int socketNum) {
 		
 		//server update, read from server
 		if (FD_ISSET(socketNum, &rfds)) {
-			serverActivity(socketNum, blockedHandles);
+			serverActivity(socketNum, &blockedHandles);
 
 		}
 		//keyboard update, read from keyboard
 		if (FD_ISSET(0, &rfds)) { 
-			localInput(socketNum, blockedHandles);
+			localInput(socketNum, &blockedHandles);
 			printf("$: ");
 			fflush(stdout);
 		}
@@ -72,7 +72,7 @@ void chatSession(int socketNum) {
 
 }
 
-int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
+int serverActivity(int socketNum, struct blockedHandles **blockedHandles) {
 	char buf[MAXBUF];
 	int recieved, packetLength;
 	uint8_t byteFlag;
@@ -151,7 +151,7 @@ int printMessageText(char *packet) {
 	return 0;
 }
 
-int localInput(int socketNum, struct blockedHandles *blockedHandles) {
+int localInput(int socketNum, struct blockedHandles **blockedHandles) {
 	char textBuffer[MAXBUF];
 	int textLength;
 	char commandType;
@@ -194,11 +194,11 @@ int localInput(int socketNum, struct blockedHandles *blockedHandles) {
 
 }
 
-int block(char *textBuffer, struct blockedHandles *blockedHandles) {
+int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 	struct blockedHandles *curHandle;
 	int i = 0;
 	
-	curHandle = blockedHandles;
+	curHandle = *blockedHandles;
 	while(curHandle != NULL) {
 		printf("%dst handle in blocked list is: %s", i , curHandle->handle);
 		curHandle = curHandle->next;
