@@ -216,6 +216,7 @@ int newClientConnection(int serverSocket,struct clientNode **head ){
 	uint8_t handleLength;
 	char buf[MAX_PACKET_SIZE];
 	struct chat_header cheader;
+	int mesageLen;
 
 	if ((clientSocket = accept(serverSocket,(struct sockaddr*) 0, (socklen_t *) 0)) < 0) {
 		perror("accept call error");
@@ -236,8 +237,8 @@ int newClientConnection(int serverSocket,struct clientNode **head ){
 		exit(-1);
 	}
 
-	memcpy(&handleLength, *buf + sizeof(struct chat_header), sizeof(uint8_t));
-	memcpy(handle, *buf + sizeof(struct chat_header) + sizeof(uint8_t), handleLength); 
+	memcpy(&handleLength, buf + sizeof(struct chat_header), sizeof(uint8_t));
+	memcpy(handle, buf + sizeof(struct chat_header) + sizeof(uint8_t), handleLength); 
 	handle[handleLength] = '\0';
 
 	if (checkHandle(handle, *head) == 1) {
