@@ -42,7 +42,7 @@ int main(int argc, char * argv[])
 
 void chatSession(int socketNum) {
 	fd_set rfds;
-	char *blockedHandles[];
+	char **blockedHandles;
 	sendInitialPacket(socketNum);
 	printf("$: ");
 	fflush(stdout);
@@ -72,7 +72,7 @@ void chatSession(int socketNum) {
 
 }
 
-int serverActivity(int socketNum, char *blockedHandles[]) {
+int serverActivity(int socketNum, char **blockedHandles) {
 	char buf[MAXBUF];
 	int recieved, packetLength;
 	uint8_t byteFlag;
@@ -151,7 +151,7 @@ int printMessageText(char *packet) {
 	return 0;
 }
 
-int localInput(int socketNum, char *blockedHandles[]) {
+int localInput(int socketNum, char **blockedHandles) {
 	char textBuffer[MAXBUF];
 	int textLength;
 	char commandType;
@@ -194,7 +194,7 @@ int localInput(int socketNum, char *blockedHandles[]) {
 
 }
 
-int block(char *textBuffer, char *blockedHandles[]) {
+int block(char *textBuffer, char **blockedHandles) {
 	char *curHandle;
 	int i = 0;
 	

@@ -8,7 +8,7 @@
 #define xstr(a) str(a)
 #define str(a) #a
 
-int block(char *textbuffer, char *blockedHandles[]);
+int block(char *textbuffer, char **blockedHandles);
 int printMessageText(char *packet);
 int freeDestHandles(char **destHandles, int numDestinations);
 int invalidDestRecieved(char *packet, struct chat_header cheader);
@@ -16,8 +16,8 @@ int messageRecieved(char *packet, struct chat_header cheader);
 void chatSession(int socketNum);
 void sendToServer(int socketNum);
 void checkArgs(int argc, char * argv[]);
-int serverActivity(int socketNum, char *blockedHandles[]);
-int localInput(int, char *blockedHandles[]); 
+int serverActivity(int socketNum, char **blockedHandles);
+int localInput(int, char **blockedHandles); 
 int message(char *, int);
 int sendInitialPacket(int socketNum);
 
