@@ -199,9 +199,10 @@ int block(char *textBuffer, char *blockedHandles[]) {
 	int i = 0;
 	curHandle = *blockedHandles;
 
-	for (i = 0; curHandle != NULL; i++) {
+	while(curHandle != NULL) {
 		printf("%dst handle in blocked list is: %s", i , curHandle);
 		curHandle = *(blockedHandles + i);
+		i++;
 	}
 	curHandle = malloc(MAX_HANDLE_LEN);
 	strcpy(curHandle, textBuffer);
