@@ -14,7 +14,7 @@ struct clientNode{
     struct clientNode *next;
 }__attribute__((packed));
 
-int recievePacket(int socket, char **packet);
+int recievePacket(int socket, char *packet);
 int sendPacket(int socket, char *packet, struct chat_header cheader); 
 int getSocket(char *handle, struct clientNode *head);
 int sendInvalidDest(int destSocket ,int sendingSocket, char *destHandle, int destHandleLength);
