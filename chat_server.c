@@ -215,7 +215,7 @@ int newClientConnection(int serverSocket,struct clientNode **head ){
 	int clientSocket, messageLen;
 	char handle[MAX_HANDLE_LEN];
 	uint8_t handleLength;
-	char buf[MAX_PACKET_LEN];
+	char buf[MAX_PACKET_SIZE];
 	struct chat_header cheader;
 
 	if ((clientSocket = accept(serverSocket,(struct sockaddr*) 0, (socklen_t *) 0)) < 0) {
