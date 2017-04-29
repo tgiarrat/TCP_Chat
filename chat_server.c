@@ -215,13 +215,17 @@ int newClientConnection(int serverSocket,struct clientNode **head ){
 	int clientSocket, messageLen;
 	char handle[MAX_HANDLE_LEN];
 	uint8_t handleLength;
-	char buf[MAXBUF];
+	char buf[MAX_PACKET_LEN];
 	struct chat_header cheader;
 
 	if ((clientSocket = accept(serverSocket,(struct sockaddr*) 0, (socklen_t *) 0)) < 0) {
 		perror("accept call error");
 		exit(-1);
 	}
+
+	messageLen = recievePacket(clientSocket, buf);
+
+	/*
 	//recieve the clients initial packet containing handle and handle length
 	if ((messageLen = recv(clientSocket, buf, MAX_PACKET_SIZE, 0)) < 0)
 	{
@@ -231,7 +235,7 @@ int newClientConnection(int serverSocket,struct clientNode **head ){
 	if (messageLen == 0) {
 		perror("Zero bytes received for initial packet");
 		exit(-1);
-	}
+	}*/
 
 	memcpy(&handleLength, buf + sizeof(struct chat_header), sizeof(uint8_t));
 	memcpy(handle, buf + sizeof(struct chat_header) + sizeof(uint8_t), handleLength); 
@@ -250,6 +254,25 @@ int newClientConnection(int serverSocket,struct clientNode **head ){
 	}
 	return 0;
 }
+
+recievePacket(int socket, char *packet) {
+	uint16_t packetLength;
+	
+
+	if ((messageLen = recv(clientSocket, buf, sizeof(uint16_t), MSG_WAITALL)) < 2)
+	{
+		perror("RECV ERROR");
+		exit(-1);
+	}
+	packetLength = ntohs(buf);
+
+	messageLen += recv(clientSocket, buf + sizeof(uint16_t), MSG_WAITALL);
+	if (messageLen < packetLen) {
+		perror("error recieveing packet");
+	}
+	return messageLen;
+}
+
 
 int addClient(struct clientNode **head, char *handle, int handleLen, int clientSocket) {
 	struct clientNode *newClient = (struct clientNode *) malloc(sizeof(struct clientNode)); 
