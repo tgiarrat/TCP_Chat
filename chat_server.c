@@ -22,8 +22,7 @@
 #include "chat_server.h"
 
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]){
 	int serverSocket = 0;   //socket descriptor for the server socket
 	int clientSocket = 0;   //socket descriptor for the client socket
 	int portNumber = 0;
@@ -223,7 +222,7 @@ int newClientConnection(int serverSocket,struct clientNode **head ){
 		exit(-1);
 	}
 
-	recievePacket(clientSocket, &buf);
+	recievePacket(clientSocket, &((char *)buf));
 
 	/*
 	//recieve the clients initial packet containing handle and handle length
@@ -255,7 +254,7 @@ int newClientConnection(int serverSocket,struct clientNode **head ){
 	return 0;
 }
 
-int recievePacket(int socket, char *packet[]) {
+int recievePacket(int socket, char **packet) {
 	uint16_t packetLength;
 	//char packet[MAX_PACKET_SIZE];
 	char *buf = *packet; 
