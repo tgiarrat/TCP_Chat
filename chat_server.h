@@ -14,14 +14,14 @@ struct clientNode{
     struct clientNode *next;
 }__attribute__((packed));
 
-int recievePacket(int socket, char **packet);
+int recievePacket(int socket, char *packet[]);
 int sendPacket(int socket, char *packet, struct chat_header cheader); 
 int getSocket(char *handle, struct clientNode *head);
 int sendInvalidDest(int destSocket ,int sendingSocket, char *destHandle, int destHandleLength);
 int messageRecieved(char *recieved, struct chat_header cheader, struct clientNode *head, int sendingSocket);
 int addClient(struct clientNode **head, char *handle, int handleLen, int clientSocket);
 int newClientConnection(int serverSocket, struct clientNode **) ;
-void recvFromClient(int clientSocket, char *packet[]);
+void recvFromClient(int clientSocket;
 int checkArgs(int argc, char *argv[]);
 int chatSession(int serverSocket, int portNumber);
 int freeClientList(struct clientNode *head);
