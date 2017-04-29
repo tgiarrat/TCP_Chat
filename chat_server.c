@@ -214,7 +214,7 @@ int newClientConnection(int serverSocket,struct clientNode **head ){
 	int clientSocket, messageLen;
 	char handle[MAX_HANDLE_LEN];
 	uint8_t handleLength;
-	char buf[MAX_PACKET_SIZE];
+	char *buf[MAX_PACKET_SIZE];
 	struct chat_header cheader;
 
 	if ((clientSocket = accept(serverSocket,(struct sockaddr*) 0, (socklen_t *) 0)) < 0) {
@@ -222,7 +222,7 @@ int newClientConnection(int serverSocket,struct clientNode **head ){
 		exit(-1);
 	}
 
-	recievePacket(clientSocket, &((char *)buf));
+	recievePacket(clientSocket, buf);
 
 	/*
 	//recieve the clients initial packet containing handle and handle length
@@ -236,8 +236,8 @@ int newClientConnection(int serverSocket,struct clientNode **head ){
 		exit(-1);
 	}*/
 
-	memcpy(&handleLength, buf + sizeof(struct chat_header), sizeof(uint8_t));
-	memcpy(handle, buf + sizeof(struct chat_header) + sizeof(uint8_t), handleLength); 
+	memcpy(&handleLength, *buf + sizeof(struct chat_header), sizeof(uint8_t));
+	memcpy(handle, *buf + sizeof(struct chat_header) + sizeof(uint8_t), handleLength); 
 	handle[handleLength] = '\0';
 
 	if (checkHandle(handle, *head) == 1) {
