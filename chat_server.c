@@ -96,14 +96,15 @@ int clientActivity(int clientSocket, struct clientNode *head) {
 	uint8_t byteFlag;
 	struct chat_header cheader;
 
-	if ((recieved = recv(clientSocket, buf, MAXBUF, 0)) < 0) {
+	recievePacket(clientSocket, buf);
+	/*if ((recieved = recv(clientSocket, buf, MAXBUF, 0)) < 0) {
     	perror("Error recieveing incoming client packet \n");
     	exit(-1);
   	}
 	if (recieved == 0) {
 	   perror("Error: Read incoming client packet as zero bytes \n");
 	   exit(-1);
-   	}
+   	}*/
 	memcpy(&cheader, buf, sizeof(struct chat_header)); //gets the header from the recieved packet
 	byteFlag = cheader.byteFlag; 
 	packetLength = ntohs(cheader.packetLen);
