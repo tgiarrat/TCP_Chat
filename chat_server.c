@@ -257,7 +257,7 @@ int newClientConnection(int serverSocket,struct clientNode **head ){
 
 recievePacket(int socket, char *packet) {
 	uint16_t packetLength;
-	
+	int messageLen;
 
 	if ((messageLen = recv(clientSocket, buf, sizeof(uint16_t), MSG_WAITALL)) < 2)
 	{
