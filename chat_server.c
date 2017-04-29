@@ -215,7 +215,7 @@ int newClientConnection(int serverSocket,struct clientNode **head ){
 	int clientSocket, messageLen;
 	char handle[MAX_HANDLE_LEN];
 	uint8_t handleLength;
-	char buf[MAX_PACKET_SIZE];
+	char *buf;
 	struct chat_header cheader;
 
 	if ((clientSocket = accept(serverSocket,(struct sockaddr*) 0, (socklen_t *) 0)) < 0) {
@@ -242,7 +242,7 @@ int newClientConnection(int serverSocket,struct clientNode **head ){
 	handle[handleLength] = '\0';
 
 	if (checkHandle(handle, *head) == 1) {
-		//handdle is invalid
+		//handle is invalid
 		printf("Handle is INVALID (exists), sending error packet\n");
 		sendHandleExistsError(clientSocket);
 	}
