@@ -267,7 +267,7 @@ recievePacket(int socket, char **packet) {
 	memcpy(&packetLength, *packet, sizeof(uint16_t));
 	packetLength = ntohs(packetLength);
 
-	messageLen += recv(socket, *packet + sizeof(uint16_t), packetLength,MSG_WAITALL);
+	messageLen += recv(socket, (*packet) + sizeof(uint16_t), packetLength,MSG_WAITALL);
 	if (messageLen < packetLength) {
 		perror("error recieveing packet");
 	}
