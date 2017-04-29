@@ -223,7 +223,7 @@ int newClientConnection(int serverSocket,struct clientNode **head ){
 		exit(-1);
 	}
 
-	messageLen = recievePacket(clientSocket, &buf);
+	buf = recievePacket(clientSocket);
 
 	/*
 	//recieve the clients initial packet containing handle and handle length
@@ -255,23 +255,24 @@ int newClientConnection(int serverSocket,struct clientNode **head ){
 	return 0;
 }
 
-recievePacket(int socket, char **packet) {
+char * recievePacket(int socket) {
 	uint16_t packetLength;
+	char packet[MAX_PACKET_SIZE];
 	int messageLen;
 
-	if ((messageLen = recv(socket, *packet, sizeof(uint16_t), MSG_WAITALL)) < 2)
+	if ((messageLen = recv(socket, packet, sizeof(uint16_t), MSG_WAITALL)) < 2)
 	{
 		perror("RECV ERROR");
 		exit(-1);
 	}
-	memcpy(&packetLength, *packet, sizeof(uint16_t));
+	memcpy(&packetLength, packet, sizeof(uint16_t));
 	packetLength = ntohs(packetLength);
 
-	messageLen += recv(socket, (*packet) + sizeof(uint16_t), packetLength,MSG_WAITALL);
+	messageLen += recv(socket, packet + sizeof(uint16_t), packetLength - sizeof(uint16_t),MSG_WAITALL);
 	if (messageLen < packetLength) {
 		perror("error recieveing packet");
 	}
-	return messageLen;
+	return packet;
 }
 
 
