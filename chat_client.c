@@ -256,7 +256,7 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 	int i = 0;
 
 	
-	/*
+	
 	printf("\n");
 	printf("Before blocking here is the list of handles:\n ");
 	curHandle = *blockedHandles;
@@ -265,7 +265,7 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 		curHandle = curHandle->next; 
 	}
 	printf("\n");
-	*/
+	
 	invalidHandle = strtok(textBuffer, " ");
 	printf("Here is the invalid handle... %s", invalidHandle);
 	if (checkBlocked(invalidHandle, *blockedHandles) == 1){
