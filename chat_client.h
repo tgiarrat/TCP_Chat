@@ -29,4 +29,4 @@ int serverActivity(int socketNum, struct blockedHandles *blockedHandles);
 int localInput(int, struct blockedHandles **blockedHandles); 
 int message(char *, int);
 int sendInitialPacket(int socketNum);
-
+int sendPacket(char *packet, int socketNum, int packetLength);
