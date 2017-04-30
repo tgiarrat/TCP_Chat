@@ -99,7 +99,8 @@ int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 		
 
 	}
-	printf("\n$:");
+	printf("$:");
+	fflush(stdout);
 	return 0;
 }
 
@@ -145,7 +146,6 @@ int checkBlocked(char *srcHandle, struct blockedHandles *blockedHandles){
 
 	while (curHandle != NULL) {
 		if (strcmp(srcHandle, curHandle->handle) == 0) {
-			printf("BLOCKED USER ATTEMPED TO SEND A MESSAGE\n");
 			return 1;
 		}
 		curHandle = curHandle->next; 
@@ -232,6 +232,10 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 		curHandle = *blockedHandles;
 		while(curHandle->next != NULL) {
 			//printf("%dst handle in blocked list is: %s", i , curHandle->handle);
+			if(strcmp(curHandle->handle, newBlock->handle) == 0) {
+				perror("Block failed, handle %s is already blocked.\n");
+				return 1;
+			}
 			curHandle = curHandle->next;
 			i++;
 		}
