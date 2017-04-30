@@ -219,6 +219,7 @@ int unblock(char *textBuffer, struct blockedHandles **blockedHandles) {
 	curHandle = *blockedHandles;
 	while (curHandle->next != NULL) {
 		if (strcmp(blockedHandle, curHandle->next->handle) == 0) {
+			printf("Got here\n");
 			temp = curHandle->next;
 			curHandle->next = curHandle->next->next;
 			//freeTemp
