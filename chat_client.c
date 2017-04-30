@@ -104,6 +104,7 @@ int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 }
 
 int invalidDestRecieved(char *packet, struct chat_header cheader){
+	printf("got invalid dest\n");
 	return 0;
 }
 

@@ -178,10 +178,8 @@ int sendInvalidDest(int destSocket ,int sendingSocket, char *destHandle, uint8_t
 	memcpy(packet + offset, &destHandleLength, sizeof(uint8_t));
 	offset++;
 	memcpy(packet+offset, destHandle, destHandleLength);
-	////////////////
-	//MAKE SURE THAT A NULL IS NOT SENT AT END OF SRC HANDLE 
-	//////////////////
-
+	sendPacket(sendingSocket, packet, cheader);
+	
 	return 0;
 }
 
