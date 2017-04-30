@@ -496,8 +496,8 @@ void checkArgs(int argc, char * argv[])
 	}
 }
 
-int sendPacket(char *packet, int socketNum, packetLength) {
-	sent =  send(socketNum, packet, htons(cheader.packetLen), 0);
+int sendPacket(char *packet, int socketNum,int packetLength) {
+	sent =  send(socketNum, packet, packetLength, 0);
 	if (sent < 0)
 	{
 		perror("send call");
