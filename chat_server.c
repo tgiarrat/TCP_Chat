@@ -160,8 +160,6 @@ int messageRecieved(char *recieved, struct chat_header cheader, struct clientNod
 		}
 
 	}
-
-
 	return 0;
 }
 

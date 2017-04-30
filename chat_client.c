@@ -248,7 +248,9 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 	char *invalidHandle;
 	int i = 0;
 
-	
+	if(textBuffer == NULL) {
+		perror("got here");
+	}	
 	
 	printf("\n");
 	printf("Before blocking here is the list of handles:\n ");
