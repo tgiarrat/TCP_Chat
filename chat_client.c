@@ -212,26 +212,25 @@ int unblock(char *textBuffer, struct blockedHandles **blockedHandles) {
 
 	blockedHandle = strtok(textBuffer, " ");
 	if ((checkBlocked(blockedHandle, *blockedHandles) == 0) || (*blockedHandles == NULL)) {
-		printf("Unblock failed, handle <put handle here> is not blocked.\n");
+		printf("Unblock failed, handle %s is not blocked.\n", blockedHandle);
 		return 1;
 	}
 
 	curHandle = *blockedHandles;
-	while (curHandle != NULL) {
-		if (strcmp(blockedHandle, curHandle->handle) == 0) {
-			if (curHandle->next != NULL) {
-				temp = curHandle->next;
-				memcpy(curHandle, curHandle->next, sizeof(struct blockedHandles));
-				free(temp);
-			}
-			else {
-				free(curHandle);
-			}
+	while (curHandle->next != NULL) {
+		if (strcmp(blockedHandle, curHandle->next->handle) == 0) {
+			temp = curHandle->next;
+			curHandle->next = curHandle->next->next;
+			//freeTemp
 			return 0;
 		}
 		curHandle = curHandle->next;
 	}
 	return 0;
+	//
+	//
+	//MAKE SURE TO FREE
+	//
 }
 
 int block(char *textBuffer, struct blockedHandles **blockedHandles) {
