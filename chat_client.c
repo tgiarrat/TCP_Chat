@@ -229,7 +229,7 @@ int unblock(char *textBuffer, struct blockedHandles **blockedHandles) {
 			printf("Got here\n");
 			temp = curHandle->next;
 			curHandle->next = curHandle->next->next;
-			freE(temp);
+			free(temp);
 			return 0;
 		}
 		curHandle = curHandle->next;
