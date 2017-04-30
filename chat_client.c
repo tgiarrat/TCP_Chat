@@ -263,6 +263,7 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 		return 1;
 	}
 	memcpy(newBlock->handle, invalidHandle, strlen(invalidHandle));
+	newBlock->next = NULL;
 	if (*blockedHandles == NULL) {
 		*blockedHandles =  newBlock;
 		printf("just once\n");
