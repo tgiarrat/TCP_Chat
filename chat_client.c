@@ -107,7 +107,7 @@ int invalidDestRecieved(char *packet, struct chat_header cheader){
 	uint8_t handleSize; 
 	char handle[MAX_HANDLE_LEN];
 
-	memcpy(&handleSize, packer, sizeof(uint8_t));
+	memcpy(&handleSize, packet, sizeof(uint8_t));
 	memcpy(handle, (packet + 1), handleSize);
 	handle[handleSize] = '\0';
 	printf("Client with handle %s does not exist\n", handle);
