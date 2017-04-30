@@ -229,6 +229,7 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 	memcpy(invalidHandle, textBuffer, strlen(invalidHandle));
 	if (*blockedHandles == NULL) {
 		*blockedHandles =  newBlock;
+		printf("just once\n");
 	}
 	else {
 		curHandle = *blockedHandles;
