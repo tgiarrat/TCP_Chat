@@ -78,10 +78,7 @@ int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 	uint8_t byteFlag;
 	struct chat_header cheader;
 
-	if ((recieved = recv(socketNum, buf, MAXBUF, 0)) < 0) {
-    	perror("Error recieveing incoming client packet \n");
-    	exit(-1);
-  	}
+	recievePacket(socketNum, buf);
 	
 
 	memcpy(&cheader, buf, sizeof(struct chat_header)); //gets the header from the recieved packet  
