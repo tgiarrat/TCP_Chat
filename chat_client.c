@@ -244,6 +244,7 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 
 	if (checkBlocked(invalidHandle, *blockedHandles) == 1){
 		printf("Block failed, handle %s is already blocked.\n", invalidHandle);
+		return 1;
 	}
 	memcpy(newBlock->handle, invalidHandle, strlen(invalidHandle));
 	if (*blockedHandles == NULL) {
@@ -258,12 +259,10 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 				return 1;
 		} //i know this is bad but we all cut corners sometimes...*/
 		while(curHandle->next != NULL) {
-			//printf("%dst handle in blocked list is: %s", i , curHandle->handle);
-			/*if(strcmp(curHandle->handle, newBlock->handle) == 0) {
-				printf("Block failed, handle %s is already blocked.\n", newBlock->handle);
-				free(newBlock);
+			if (checkBlocked(invalidHandle, *blockedHandles) == 1){
+				printf("Block failed, handle %s is already blocked.\n", invalidHandle);
 				return 1;
-			}*/
+			}
 			curHandle = curHandle->next;
 			i++;
 		}
