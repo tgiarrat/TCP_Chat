@@ -193,7 +193,7 @@ int localInput(int socketNum, struct blockedHandles **blockedHandles) {
 		unblock(textBuffer + COMMAND_OFFSET, blockedHandles);
 	}
 	else if (commandType == 'L') { //list handles
-		listHandles(textBuffer);
+		listHandles(socketNum);
 	}
 	else if (commandType == 'E') { //exit
 		//exitServer(textBuffer);
@@ -207,7 +207,7 @@ int localInput(int socketNum, struct blockedHandles **blockedHandles) {
 
 }
 
-int listHandles() {
+int listHandles(int socketNum) {
 	char packet[MAX_PACKET_SIZE];
 	struct chat_header cheader; 
 	uint16_t packetSize = sizeof(struct chat_header);
@@ -217,6 +217,7 @@ int listHandles() {
 
 	memcpy(packet, &cheader, packetSize);
 	
+	sendPacket();
 
 }
 
@@ -338,19 +339,6 @@ int sendInitialPacket(int socketNum){
 	memcpy(packetPtr, handle, handleLen); //copy handle
 
 	sent = sendPacket(packet, socketNum, packetLength);
-	//send packet
-	//printf("Sending Initial packet...\n");
-	/*sent =  send(socketNum, packet, packetLength, 0);
-	if (sent < 0)
-	{
-		perror("flag = 1 send call");
-		exit(-1);
-	}
-	if (sent == 0) {
-		perror("sent 0 bytes instead of initial header packet");
-		exit(-1);
-	}*/
-
 	recievePacket(socketNum,incomingBuffer);
 
 	memcpy(&flag, incomingBuffer + sizeof(uint16_t), sizeof(uint8_t)); //gets the flag from the incoming buffer
@@ -463,13 +451,6 @@ int message(char *textBuffer, int socketNum) {
 	//packetComplete
 
 	sent = sendPacket(packet, socketNum, htons(cheader.packetLen));
-	//send packet:
-	/*sent =  send(socketNum, packet, htons(cheader.packetLen), 0);
-	if (sent < 0)
-	{
-		perror("send call");
-		exit(-1);
-	}*/
 	freeDestHandles(destHandles, numDestinations); 
 	return 0;
 }
