@@ -222,9 +222,11 @@ int localInput(int socketNum, struct blockedHandles **blockedHandles) {
 int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 	struct blockedHandles *newBlock = (struct blockedHandles *)malloc(sizeof(struct blockedHandles));
 	struct blockedHandles *curHandle;
+	char *invalidHandle;
 	int i = 0;
 	//printf("Handle to block is %s", textBuffer);
-	strcpy(newBlock->handle, textBuffer);
+	invalidHandle = strtok(textBuffer, " ");
+	memcpy(invalidHandle, textBuffer, strlen(invalidHandle));
 	if (*blockedHandles == NULL) {
 		*blockedHandles =  newBlock;
 	}
