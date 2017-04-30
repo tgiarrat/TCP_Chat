@@ -220,8 +220,8 @@ int unblock(char *textBuffer, struct blockedHandles **blockedHandles) {
 	while (curHandle != NULL) {
 		if (strcmp(blockedHandle, curHandle->handle) == 0) {
 			if (curHandle->next != NULL) {
-				temp = curHandle;
-				curHandle = curHandle->next;
+				temp = curHandle->next;
+				memcpy(curHandle, curHandle->next, sizeof(struct blockedHandles));
 				free(temp);
 			}
 			else {
