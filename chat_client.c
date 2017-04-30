@@ -497,11 +497,13 @@ void checkArgs(int argc, char * argv[])
 }
 
 int sendPacket(char *packet, int socketNum,int packetLength) {
+	int sent;
+	
 	sent =  send(socketNum, packet, packetLength, 0);
 	if (sent < 0)
 	{
 		perror("send call");
 		exit(-1);
 	}
-	return 0;
+	return sent;
 }
