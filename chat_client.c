@@ -237,6 +237,9 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 
 
 	invalidHandle = strtok(textBuffer, " ");
+	printf("\n");
+	printf("invalid handle is: %s", invalidHandle);
+	printf("\n");
 	memcpy(newBlock->handle, invalidHandle, strlen(invalidHandle));
 	if (*blockedHandles == NULL) {
 		*blockedHandles =  newBlock;
