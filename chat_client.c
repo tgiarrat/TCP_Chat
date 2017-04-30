@@ -226,7 +226,7 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 	int i = 0;
 	//printf("Handle to block is %s", textBuffer);
 	invalidHandle = strtok(textBuffer, " ");
-	memcpy(invalidHandle, textBuffer, strlen(invalidHandle));
+	memcpy(newBlock->handle, invalidHandle, strlen(invalidHandle));
 	if (*blockedHandles == NULL) {
 		*blockedHandles =  newBlock;
 		printf("just once\n");
