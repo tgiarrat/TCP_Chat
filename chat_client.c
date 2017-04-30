@@ -272,6 +272,7 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 		printf("Block failed, handle %s is already blocked.\n", invalidHandle);
 		return 1;
 	}
+	printf("\nstrlen of the new handle is %d\n", strlen(invalidHandle));
 	memcpy(newBlock->handle, invalidHandle, strlen(invalidHandle));
 	newBlock->next = NULL;
 	if (*blockedHandles == NULL) {
