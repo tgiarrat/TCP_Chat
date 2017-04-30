@@ -226,6 +226,7 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 	int i = 0;
 	//printf("Handle to block is %s", textBuffer);
 
+
 	printf("\n");
 	printf("Before blocking here is the list of handles:\n ");
 	curHandle = *blockedHandles;
@@ -240,6 +241,10 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 	printf("\n");
 	printf("invalid handle is: %s", invalidHandle);
 	printf("\n");
+
+	if (checkBlocked(invalidHandle, *blockedHandles) == 1){
+		printf("Block failed, handle %s is already blocked.\n", invalidHandle);
+	}
 	memcpy(newBlock->handle, invalidHandle, strlen(invalidHandle));
 	if (*blockedHandles == NULL) {
 		*blockedHandles =  newBlock;
@@ -247,18 +252,18 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 	}
 	else {
 		curHandle = *blockedHandles;
-		if(strcmp(curHandle->handle, newBlock->handle) == 0) {
+		/*if(strcmp(curHandle->handle, newBlock->handle) == 0) {
 				printf("Block failed, handle %s is already blocked.\n", newBlock->handle);
 				free(newBlock);
 				return 1;
-		} //i know this is bad but we all cut corners sometimes...
+		} //i know this is bad but we all cut corners sometimes...*/
 		while(curHandle->next != NULL) {
 			//printf("%dst handle in blocked list is: %s", i , curHandle->handle);
-			if(strcmp(curHandle->handle, newBlock->handle) == 0) {
+			/*if(strcmp(curHandle->handle, newBlock->handle) == 0) {
 				printf("Block failed, handle %s is already blocked.\n", newBlock->handle);
 				free(newBlock);
 				return 1;
-			}
+			}*/
 			curHandle = curHandle->next;
 			i++;
 		}
