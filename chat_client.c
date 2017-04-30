@@ -187,6 +187,7 @@ int localInput(int socketNum, struct blockedHandles **blockedHandles) {
 	else if (commandType == 'B') { //block user
 		printf("narrow\n");
 		block(textBuffer + COMMAND_OFFSET, blockedHandles);
+		printBlocked(*blockedHandles);
 	}
 	else if (commandType == 'U') { //unblock user
 		unblock(textBuffer + COMMAND_OFFSET, blockedHandles);
@@ -204,6 +205,19 @@ int localInput(int socketNum, struct blockedHandles **blockedHandles) {
 
 	return 0;
 
+}
+
+int printBlocked(struct blockedHandles *head) {
+	struct blockedHandles *curHandle;
+
+	curHandle = head;
+	printf("Blocked: ");
+	while (curHandle != NULL) {
+		printf(", %s", curHandle->handle);
+	}
+	printf("\n");
+
+	return 0;
 }
 
 int unblock(char *textBuffer, struct blockedHandles **blockedHandles) {
@@ -261,7 +275,7 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 	
 	invalidHandle = strtok(textBuffer, " ");
 	if(invalidHandle == NULL) {
-		perror("got here");
+		return 0;
 	}
 	printf("Here is the invalid handle... \n");
 	if (checkBlocked(invalidHandle, *blockedHandles) == 1){
@@ -290,6 +304,7 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 
 		curHandle->next = newBlock;
 	}
+
 	return 0;
 }
 
