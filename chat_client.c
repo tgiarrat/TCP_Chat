@@ -253,11 +253,7 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 	}
 	else {
 		curHandle = *blockedHandles;
-		/*if(strcmp(curHandle->handle, newBlock->handle) == 0) {
-				printf("Block failed, handle %s is already blocked.\n", newBlock->handle);
-				free(newBlock);
-				return 1;
-		} //i know this is bad but we all cut corners sometimes...*/
+	
 		while(curHandle->next != NULL) {
 			if (checkBlocked(invalidHandle, *blockedHandles) == 1){
 				printf("Block failed, handle %s is already blocked.\n", invalidHandle);
@@ -266,8 +262,7 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 			curHandle = curHandle->next;
 			i++;
 		}
-		//curHandle = (struct blockedHandles *)malloc(sizeof(struct blockedHandles));
-		//strcpy(curHandle->handle, textBuffer);
+
 		curHandle->next = newBlock;
 	}
 	
@@ -310,8 +305,10 @@ int sendInitialPacket(int socketNum){
 		perror("sent 0 bytes instead of initial header packet");
 		exit(-1);
 	}
+
+	recievePacket(socketNum,incomingBuffer);
 	//printf("Recieveing packet response after sending intitial packet...\n");
-	recieved = recv(socketNum, incomingBuffer, MAXBUF, 0);
+	/*recieved = recv(socketNum, incomingBuffer, MAXBUF, 0);
 	if (recieved < 0) {
 		perror("Initial packet recieved no response from the server");
 		exit(-1);
@@ -319,7 +316,8 @@ int sendInitialPacket(int socketNum){
 	if (recieved == 0) {
 		perror("Recieved zero bytes in response to initial packet");
 		exit(-1);
-	}
+	}*/
+	
 
 	memcpy(&flag, incomingBuffer + sizeof(uint16_t), sizeof(uint8_t)); //gets the flag from the incoming buffer
 
@@ -336,6 +334,25 @@ int sendInitialPacket(int socketNum){
 	}
 	return 0;
 }
+
+int recievePacket(int socket, char *packet) {
+		uint16_t packetLength;
+		int messageLen;
+
+		if ((messageLen = recv(socket, packet, sizeof(uint16_t), MSG_WAITALL)) < 2)
+		{
+			perror("RECV ERROR");
+			exit(-1);
+		}
+		memcpy(&packetLength, packet, sizeof(uint16_t));
+		packetLength = ntohs(packetLength);
+
+		messageLen += recv(socket, packet + sizeof(uint16_t), packetLength - sizeof(uint16_t),MSG_WAITALL);
+		if (messageLen < packetLength) {
+			perror("error recieveing packet");
+		}
+		return 0;
+	}
 
 int message(char *textBuffer, int socketNum) {
 	char packet[MAX_PACKET_SIZE]; //this will be the entire packet. I knoe its a lil confusing but oh well too late
