@@ -193,7 +193,7 @@ int localInput(int socketNum, struct blockedHandles **blockedHandles) {
 		unblock(textBuffer + COMMAND_OFFSET, blockedHandles);
 	}
 	else if (commandType == 'L') { //list handles
-		//listHandles(textBuffer);
+		listHandles(textBuffer);
 	}
 	else if (commandType == 'E') { //exit
 		//exitServer(textBuffer);
@@ -204,6 +204,19 @@ int localInput(int socketNum, struct blockedHandles **blockedHandles) {
 	}
 
 	return 0;
+
+}
+
+int listHandles() {
+	char packet[MAX_PACKET_SIZE];
+	struct chat_header cheader; 
+	uint16_t packetSize = sizeof(struct chat_header);
+
+	cheader.byteFlag = 10;
+	cheader.packetLen = htons(packetSize);
+
+	memcpy(packet, &cheader, packetSize);
+	
 
 }
 
@@ -261,7 +274,7 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 	struct blockedHandles *curHandle;
 	char *invalidHandle;
 	
-	printf("\n");
+	/*printf("\n");
 	printf("Before blocking here is the list of handles:\n ");
 	curHandle = *blockedHandles;
 	while(curHandle != NULL) {
@@ -269,7 +282,7 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 		curHandle = curHandle->next; 
 	}
 	printf("\n");
-	
+	*/
 	invalidHandle = strtok(textBuffer, " ");
 	if(invalidHandle == NULL) {
 		return 0;
@@ -285,7 +298,7 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 	newBlock->next = NULL;
 	if (*blockedHandles == NULL) {
 		*blockedHandles =  newBlock;
-		printf("just once\n");
+		//printf("just once\n");
 	}
 	else {
 		curHandle = *blockedHandles;
@@ -324,9 +337,10 @@ int sendInitialPacket(int socketNum){
 	packetPtr+= sizeof(uint8_t);
 	memcpy(packetPtr, handle, handleLen); //copy handle
 
+	sent = sendPacket(packet, socketNum, packetLength);
 	//send packet
 	//printf("Sending Initial packet...\n");
-	sent =  send(socketNum, packet, packetLength, 0);
+	/*sent =  send(socketNum, packet, packetLength, 0);
 	if (sent < 0)
 	{
 		perror("flag = 1 send call");
@@ -335,7 +349,7 @@ int sendInitialPacket(int socketNum){
 	if (sent == 0) {
 		perror("sent 0 bytes instead of initial header packet");
 		exit(-1);
-	}
+	}*/
 
 	recievePacket(socketNum,incomingBuffer);
 
@@ -448,14 +462,14 @@ int message(char *textBuffer, int socketNum) {
 	packetPtr += messageLength;
 	//packetComplete
 
-
+	sent = sendPacket(packet, socketNum, htons(cheader.packetLen));
 	//send packet:
-	sent =  send(socketNum, packet, htons(cheader.packetLen), 0);
+	/*sent =  send(socketNum, packet, htons(cheader.packetLen), 0);
 	if (sent < 0)
 	{
 		perror("send call");
 		exit(-1);
-	}
+	}*/
 	freeDestHandles(destHandles, numDestinations); 
 	return 0;
 }
@@ -480,4 +494,14 @@ void checkArgs(int argc, char * argv[])
 		printf("usage: %s handle server-name server-port \n", argv[0]);
 		exit(1);
 	}
+}
+
+int sendPacket(char *packet, int socketNum, packetLength) {
+	sent =  send(socketNum, packet, htons(cheader.packetLen), 0);
+	if (sent < 0)
+	{
+		perror("send call");
+		exit(-1);
+	}
+	return 0;
 }
