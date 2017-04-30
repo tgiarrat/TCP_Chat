@@ -82,10 +82,7 @@ int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
     	perror("Error recieveing incoming client packet \n");
     	exit(-1);
   	}
-	if (recieved == 0) {
-	   perror("Error: Read incoming server packet as zero bytes \n");
-	   exit(-1);
-   	}
+	
 
 	memcpy(&cheader, buf, sizeof(struct chat_header)); //gets the header from the recieved packet  
 	byteFlag = cheader.byteFlag; 

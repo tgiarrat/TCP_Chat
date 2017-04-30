@@ -153,8 +153,6 @@ int messageRecieved(char *recieved, struct chat_header cheader, struct clientNod
 		if (curSocket < 0) {
 			//send src 
 			sendInvalidDest(curSocket ,sendingSocket, curHandle, curHandleLen);
-			perror("Could not find socket for a destination handle");
-			exit(-1);
 		}
 		else {
 			printf("Socket found is %d\n", curSocket);
