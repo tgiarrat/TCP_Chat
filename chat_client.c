@@ -185,6 +185,7 @@ int localInput(int socketNum, struct blockedHandles **blockedHandles) {
 		message(textBuffer + COMMAND_OFFSET, socketNum);
 	}
 	else if (commandType == 'B') { //block user
+		printf("narrow\n");
 		block(textBuffer + COMMAND_OFFSET, blockedHandles);
 	}
 	else if (commandType == 'U') { //unblock user
@@ -206,6 +207,10 @@ int localInput(int socketNum, struct blockedHandles **blockedHandles) {
 }
 
 int unblock(char *textBuffer, struct blockedHandles **blockedHandles) {
+	//
+	//Ill admit the way I did blocking ended up being a little gross and badly done but.. oh well 
+	//
+	
 	char *blockedHandle; 
 	struct blockedHandles *curHandle;
 	struct blockedHandles *temp;
@@ -217,24 +222,16 @@ int unblock(char *textBuffer, struct blockedHandles **blockedHandles) {
 	}
 
 	curHandle = *blockedHandles;
-	/*if(curHandle->next == NULL){
-		temp = curHandle;
-		*blockedHandles = NULL;
-		printf("HERE 1\n");
-		//free(temp);
-		return 0; 
-	}*/
 	if (strcmp(blockedHandle, curHandle->handle) == 0) {
 		temp = curHandle;
 		*blockedHandles = curHandle->next;
-		//*blockedHandles = NULL;
-		printf("HERE 1\n");
 		free(temp);
+		printf("Handle %s unblocked\n", blockedHandle);
 		return 0;
 	}
 	while (curHandle->next != NULL) {
 		if (strcmp(blockedHandle, curHandle->next->handle) == 0) {
-			printf("Got here\n");
+			//printf("Got here\n");
 			temp = curHandle->next;
 			curHandle->next = curHandle->next->next;
 			free(temp);
@@ -243,10 +240,6 @@ int unblock(char *textBuffer, struct blockedHandles **blockedHandles) {
 		curHandle = curHandle->next;
 	}
 	return 0;
-	//
-	//
-	//MAKE SURE TO FREE
-	//
 }
 
 int block(char *textBuffer, struct blockedHandles **blockedHandles) {
