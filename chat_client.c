@@ -126,16 +126,9 @@ int messageRecieved(char *packet, struct chat_header cheader,  struct blockedHan
 	if (checkBlocked(srcHandle, blockedHandles) == 1) {
 		return 1;
 	}
-
-
-	
 	printf("\n%s: ", srcHandle);
 	printMessageText(packet+offset);
-
-	//printf("Sending client handle length: %d    Sending Client handle: %s\n ", srcHandleLen, handle); 
 	return 0;
-
-
 }
 
 int checkBlocked(char *srcHandle, struct blockedHandles *blockedHandles){
@@ -147,8 +140,6 @@ int checkBlocked(char *srcHandle, struct blockedHandles *blockedHandles){
 		}
 		curHandle = curHandle->next; 
 	}
-
-
 	return 0;
 }
 
@@ -192,14 +183,12 @@ int localInput(int socketNum, struct blockedHandles **blockedHandles) {
 			perror("message entered is greater than 1000 characters");
 		}
 		message(textBuffer + COMMAND_OFFSET, socketNum);
-		
-
 	}
 	else if (commandType == 'B') { //block user
 		block(textBuffer + COMMAND_OFFSET, blockedHandles);
 	}
 	else if (commandType == 'U') { //unblock user
-		//unblock(textBuffer);
+		unblock(textBuffer + COMMAND_OFFSET, blockedHandles);
 	}
 	else if (commandType == 'L') { //list handles
 		//listHandles(textBuffer);
@@ -216,14 +205,42 @@ int localInput(int socketNum, struct blockedHandles **blockedHandles) {
 
 }
 
+int unblock(char *textBuffer, struct blockedHandles **blockedHandles) {
+	char *blockedHandle; 
+	struct blockedHandles *curHandle;
+	struct blockedHandles *temp;
+
+	blockedHandle = strtok(textBuffer, " ");
+	if ((checkBlocked(blockedHandle, *blockedHandles) == 0) || (*blockedHandles == NULL)) {
+		printf("Unblock failed, handle <put handle here> is not blocked.\n");
+		return 1;
+	}
+
+	curHandle = *blockedHandles;
+	while (curHandle != NULL) {
+		if (strcmp(blockedHandle, curHandle->handle) == 0) {
+			if (curHandle->next != NULL) {
+				temp = curHandle;
+				curHandle = curHandle->next;
+				free(temp);
+			}
+			else {
+				free(curHandle);
+			}
+			return 0;
+		}
+		curHandle = curHandle->next;
+	}
+	return 0;
+}
+
 int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 	struct blockedHandles *newBlock = (struct blockedHandles *)malloc(sizeof(struct blockedHandles));
 	struct blockedHandles *curHandle;
 	char *invalidHandle;
 	int i = 0;
-	//printf("Handle to block is %s", textBuffer);
 
-
+	/*
 	printf("\n");
 	printf("Before blocking here is the list of handles:\n ");
 	curHandle = *blockedHandles;
@@ -232,13 +249,8 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 		curHandle = curHandle->next; 
 	}
 	printf("\n");
-
-
+	*/
 	invalidHandle = strtok(textBuffer, " ");
-	printf("\n");
-	printf("invalid handle is: %s", invalidHandle);
-	printf("\n");
-
 	if (checkBlocked(invalidHandle, *blockedHandles) == 1){
 		printf("Block failed, handle %s is already blocked.\n", invalidHandle);
 		return 1;
@@ -262,8 +274,6 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 
 		curHandle->next = newBlock;
 	}
-	
-	
 	return 0;
 }
 
@@ -277,8 +287,6 @@ int sendInitialPacket(int socketNum){
 	uint8_t flag;
 
 	packetLength = sizeof(struct chat_header) + 1 + strlen(handle);
-	//printf("\nInitial packet size is: %d\n", packetLength);
-	//packet = malloc(packetLength);
 	packetPtr = packet;
 
 	cheader.packetLen = htons(packetLength);
@@ -304,20 +312,8 @@ int sendInitialPacket(int socketNum){
 	}
 
 	recievePacket(socketNum,incomingBuffer);
-	//printf("Recieveing packet response after sending intitial packet...\n");
-	/*recieved = recv(socketNum, incomingBuffer, MAXBUF, 0);
-	if (recieved < 0) {
-		perror("Initial packet recieved no response from the server");
-		exit(-1);
-	}
-	if (recieved == 0) {
-		perror("Recieved zero bytes in response to initial packet");
-		exit(-1);
-	}*/
-	
 
 	memcpy(&flag, incomingBuffer + sizeof(uint16_t), sizeof(uint8_t)); //gets the flag from the incoming buffer
-
 	if (flag == 3) {
 		perror("Invalid Handle Flag = 3\n");
 		exit(-1);
@@ -333,23 +329,23 @@ int sendInitialPacket(int socketNum){
 }
 
 int recievePacket(int socket, char *packet) {
-		uint16_t packetLength;
-		int messageLen;
+	uint16_t packetLength;
+	int messageLen;
 
-		if ((messageLen = recv(socket, packet, sizeof(uint16_t), MSG_WAITALL)) < 2)
-		{
-			perror("RECV ERROR");
-			exit(-1);
-		}
-		memcpy(&packetLength, packet, sizeof(uint16_t));
-		packetLength = ntohs(packetLength);
-
-		messageLen += recv(socket, packet + sizeof(uint16_t), packetLength - sizeof(uint16_t),MSG_WAITALL);
-		if (messageLen < packetLength) {
-			perror("error recieveing packet");
-		}
-		return 0;
+	if ((messageLen = recv(socket, packet, sizeof(uint16_t), MSG_WAITALL)) < 2)
+	{
+		perror("RECV ERROR");
+		exit(-1);
 	}
+	memcpy(&packetLength, packet, sizeof(uint16_t));
+	packetLength = ntohs(packetLength);
+
+	messageLen += recv(socket, packet + sizeof(uint16_t), packetLength - sizeof(uint16_t),MSG_WAITALL);
+	if (messageLen < packetLength) {
+		perror("error recieveing packet");
+	}
+	return 0;
+}
 
 int message(char *textBuffer, int socketNum) {
 	char packet[MAX_PACKET_SIZE]; //this will be the entire packet. I knoe its a lil confusing but oh well too late
