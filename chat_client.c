@@ -248,9 +248,7 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 	char *invalidHandle;
 	int i = 0;
 
-	if(textBuffer == NULL) {
-		perror("got here");
-	}	
+		
 	
 	printf("\n");
 	printf("Before blocking here is the list of handles:\n ");
@@ -262,6 +260,9 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 	printf("\n");
 	
 	invalidHandle = strtok(textBuffer, " ");
+	if(invalidHandle == NULL) {
+		perror("got here");
+	}
 	printf("Here is the invalid handle... \n");
 	if (checkBlocked(invalidHandle, *blockedHandles) == 1){
 		printf("Block failed, handle %s is already blocked.\n", invalidHandle);
