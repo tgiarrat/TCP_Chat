@@ -122,8 +122,7 @@ int messageRecieved(char *packet, struct chat_header cheader,  struct blockedHan
 	offset += srcHandleLen;
 
 	if (checkBlocked(srcHandle, blockedHandles) == 1) {
-		perror("handle is blocked (get rid of this)");
-		exit(-1);
+		return 1;
 	}
 
 
