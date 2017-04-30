@@ -130,9 +130,9 @@ int clientActivity(int clientSocket, struct clientNode *head) {
 int messageRecieved(char *recieved, struct chat_header cheader, struct clientNode *head, int sendingSocket) {
 	char packet[MAX_PACKET_SIZE];
 	char curHandle[MAX_HANDLE_LEN];
-	uint8_t srcHandleLength, numDestinations;
+	uint8_t srcHandleLength, numDestinations, curHandleLen;
 	int offset = sizeof(struct chat_header);
-	int curHandleLen, curSocket , i;
+	int curSocket , i;
 
 	//first we need to check if there are multiple destination handles:
 	//memcpy(&srcHandleLength, recieved + offset, sizeof(uint8_t)); //gets the src handle length so that I can get num destinations
@@ -165,7 +165,7 @@ int messageRecieved(char *recieved, struct chat_header cheader, struct clientNod
 	return 0;
 }
 
-int sendInvalidDest(int destSocket ,int sendingSocket, char *destHandle, int destHandleLength) {
+int sendInvalidDest(int destSocket ,int sendingSocket, char *destHandle, uint8_t destHandleLen) {
 	char *packet[MAX_PACKET_SIZE];
 	struct chat_header cheader;
 	int offset = 0;
@@ -175,7 +175,9 @@ int sendInvalidDest(int destSocket ,int sendingSocket, char *destHandle, int des
 
 	memcpy(packet, &cheader, sizeof(struct chat_header));
 	offset += sizeof(struct chat_header);
-
+	memcpy(packet + offsest, &destHandleLength, sizeof(uint8_t));
+	offset++;
+	memcpy(packet+offset, destHandle, destHandleLen);
 	////////////////
 	//MAKE SURE THAT A NULL IS NOT SENT AT END OF SRC HANDLE 
 	//////////////////
