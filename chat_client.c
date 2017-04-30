@@ -228,7 +228,14 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 
 	printf("\n");
 	printf("Before blocking here is the list of handles:\n ");
+	curHandle = *blockedHandles;
+	while(curHandle != NULL) {
+		printf("element: %s\n", curHandle->handle);				
+		curHandle = curHandle->next; 
+	}
 	printf("\n");
+
+
 	invalidHandle = strtok(textBuffer, " ");
 	memcpy(newBlock->handle, invalidHandle, strlen(invalidHandle));
 	if (*blockedHandles == NULL) {
