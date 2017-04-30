@@ -222,10 +222,6 @@ int printBlocked(struct blockedHandles *head) {
 }
 
 int unblock(char *textBuffer, struct blockedHandles **blockedHandles) {
-	//
-	//Ill admit the way I did blocking ended up being a little gross and badly done but.. oh well 
-	//
-	
 	char *blockedHandle; 
 	struct blockedHandles *curHandle;
 	struct blockedHandles *temp;
@@ -258,12 +254,12 @@ int unblock(char *textBuffer, struct blockedHandles **blockedHandles) {
 }
 
 int block(char *textBuffer, struct blockedHandles **blockedHandles) {
+	//
+	//Ill admit the way I did blocking ended up being a little gross and badly done but.. oh well 
+	//
 	struct blockedHandles *newBlock = (struct blockedHandles *)malloc(sizeof(struct blockedHandles));
 	struct blockedHandles *curHandle;
 	char *invalidHandle;
-	int i = 0;
-
-		
 	
 	printf("\n");
 	printf("Before blocking here is the list of handles:\n ");
@@ -300,9 +296,7 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 				return 1;
 			}
 			curHandle = curHandle->next;
-			i++;
 		}
-
 		curHandle->next = newBlock;
 	}
 
