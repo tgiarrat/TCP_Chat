@@ -166,7 +166,7 @@ int messageRecieved(char *recieved, struct chat_header cheader, struct clientNod
 }
 
 int sendInvalidDest(int destSocket ,int sendingSocket, char *destHandle, uint8_t destHandleLength) {
-	char *packet[MAX_PACKET_SIZE];
+	char packet[MAX_PACKET_SIZE];
 	struct chat_header cheader;
 	int offset = 0;
 
@@ -179,7 +179,7 @@ int sendInvalidDest(int destSocket ,int sendingSocket, char *destHandle, uint8_t
 	offset++;
 	memcpy(packet+offset, destHandle, destHandleLength);
 	sendPacket(sendingSocket, packet, cheader);
-	
+
 	return 0;
 }
 
