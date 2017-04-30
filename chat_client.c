@@ -217,8 +217,8 @@ int listHandles(int socketNum) {
 
 	memcpy(packet, &cheader, packetSize);
 	
-	sendPacket();
-
+	sendPacket(packet, socketNum, packetSize);
+	return 0;
 }
 
 int printBlocked(struct blockedHandles *head) {
