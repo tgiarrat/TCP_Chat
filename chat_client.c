@@ -231,14 +231,14 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 	else {
 		curHandle = *blockedHandles;
 		if(strcmp(curHandle->handle, newBlock->handle) == 0) {
-				perror("Block failed, handle %s is already blocked.\n", newBlock->handle);
+				printf("Block failed, handle %s is already blocked.\n", newBlock->handle);
 				free(newBlock);
 				return 1;
 		} //i know this is bad but we all cut corners sometimes...
 		while(curHandle->next != NULL) {
 			//printf("%dst handle in blocked list is: %s", i , curHandle->handle);
 			if(strcmp(curHandle->handle, newBlock->handle) == 0) {
-				perror("Block failed, handle %s is already blocked.\n", newBlock->handle);
+				printf("Block failed, handle %s is already blocked.\n", newBlock->handle);
 				free(newBlock);
 				return 1;
 			}
