@@ -170,6 +170,7 @@ int sendInvalidDest(int destSocket ,int sendingSocket, char *destHandle, uint8_t
 	struct chat_header cheader;
 	int offset = 0;
 
+	printf("Sending invalid dest packet, invalid dest handle is: %s", destHandle);
 	cheader.byteFlag = 7;
 	cheader.packetLen = htons(sizeof(struct chat_header) + destHandleLength + 1);
 
