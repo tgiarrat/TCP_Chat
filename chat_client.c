@@ -213,10 +213,10 @@ int printBlocked(struct blockedHandles *head) {
 	curHandle = head;
 	printf("Blocked: ");
 	while (curHandle != NULL) {
-		printf(", %s", curHandle->handle);
+		printf("%s, ", curHandle->handle);
 		curHandle = curHandle->next;
 	}
-	printf("\n");
+	printf("\b\b\n");
 
 	return 0;
 }
