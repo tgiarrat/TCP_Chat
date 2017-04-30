@@ -216,7 +216,7 @@ int printBlocked(struct blockedHandles *head) {
 		printf("%s, ", curHandle->handle);
 		curHandle = curHandle->next;
 	}
-	printf("\b\b\b\n");
+	printf("\b\b  \n");
 
 	return 0;
 }
