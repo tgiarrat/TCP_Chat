@@ -104,7 +104,13 @@ int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 }
 
 int invalidDestRecieved(char *packet, struct chat_header cheader){
-	printf("got invalid dest\n");
+	uint8_t handleSize; 
+	char handle[MAX_HANDLE_LEN];
+
+	handlesize = packet;
+	memcpy(handle, (packet + 1), handleSize);
+	handle[handleSize] = '\0';
+	printf("Client with handle %s does not exist\n", handle);
 	return 0;
 }
 
