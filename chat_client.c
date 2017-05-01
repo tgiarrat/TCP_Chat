@@ -123,6 +123,7 @@ int listRecieved(char *packet, struct chat_header cheader, int socketNum) {
 	while (cheader.byteFlag != 13) {
 		memcpy(&curHandleLen, packet + sizeof(struct chat_header), sizeof(uint8_t));
 		memcpy(curHandle, packet + sizeof(struct chat_header) + sizeof(uint8_t), curHandleLen);
+		curHandle[curHandleLen] = '\0';
 		printf("\t%s", curHandle);
 
 		recievePacket(socketNum, packet);
