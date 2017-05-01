@@ -307,14 +307,13 @@ int unblock(char *textBuffer, struct blockedHandles **blockedHandles) {
 
 	blockedHandle = strtok(textBuffer, " ");
 	if (blockedHandle == NULL) { //no handle provieded check
-		printf("hopefully I get here \n");
-		exit(-1);
+		printf("Ublock failed, no handle provided\n");
+		return 1;
 	}
 	if ((checkBlocked(blockedHandle, *blockedHandles) == 0) || (*blockedHandles == NULL)) {
 		printf("Unblock failed, handle %s is not blocked.\n", blockedHandle);
 		return 1;
 	}
-
 	curHandle = *blockedHandles;
 	if (strcmp(blockedHandle, curHandle->handle) == 0) {
 		temp = curHandle;
@@ -357,7 +356,6 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 	if(invalidHandle == NULL) {
 		return 0;
 	}
-	printf("Here is the invalid handle... \n");
 	if (checkBlocked(invalidHandle, *blockedHandles) == 1){
 		printf("Block failed, handle %s is already blocked.\n", invalidHandle);
 		return 1;
@@ -368,7 +366,6 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 	newBlock->next = NULL;
 	if (*blockedHandles == NULL) {
 		*blockedHandles =  newBlock;
-		//printf("just once\n");
 	}
 	else {
 		curHandle = *blockedHandles;

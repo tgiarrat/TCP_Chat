@@ -95,7 +95,11 @@ int clientActivity(int clientSocket, struct clientNode **head) {
 	uint8_t byteFlag;
 	struct chat_header cheader;
 
-	recievePacket(clientSocket, buf);
+	if (recievePacket(clientSocket, buf) == 1){
+		removeClientNode(head, clientSocket);
+		close(clientSocket);
+		return 1;
+	}
 
 	memcpy(&cheader, buf, sizeof(struct chat_header)); //gets the header from the recieved packet
 	byteFlag = cheader.byteFlag; 
@@ -338,8 +342,9 @@ int recievePacket(int socket, char *packet) {
 
 	if ((messageLen = recv(socket, packet, sizeof(uint16_t), MSG_WAITALL)) < 2)
 	{
-		perror("RECV ERROR");
-		exit(-1);
+		if (messageLen == 0) {
+			return 1;
+		}
 	}
 	memcpy(&packetLength, packet, sizeof(uint16_t));
 	packetLength = ntohs(packetLength);
