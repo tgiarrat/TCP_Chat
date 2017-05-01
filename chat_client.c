@@ -81,7 +81,7 @@ void chatSession(int socketNum) {
 
 		}
 		//keyboard update, read from keyboard
-		if (FD_ISSET(0, &rfds)) { 
+		else if (FD_ISSET(0, &rfds)) { 
 			localInput(socketNum, &blockedHandles);
 			printf("$: ");
 			fflush(stdout);
