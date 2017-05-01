@@ -277,7 +277,7 @@ int sendPacket(int socket, char *packet, struct chat_header cheader) {
 }
 
 int getSocket(char *handle, struct clientNode *head) {
-	struct clientNode *curNode = head;f
+	struct clientNode *curNode = head;
 
 	while (curNode != NULL) {
 		if (strcmp(handle, curNode->handle) == 0) {
