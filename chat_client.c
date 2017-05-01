@@ -100,7 +100,7 @@ int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 	}
 	else if (byteFlag == 11) {
 		//listing handles
-		listRecieved(cheader, socketNum);
+		listRecieved(buf + sizeof(struct chat_header), cheader, socketNum);
 	}
 	else if(byteFlag == 12) {
 		printf("Got here, shout not have\n");
@@ -113,13 +113,13 @@ int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 	return 0;
 }
 
-int listRecieved(struct chat_header cheader, int socketNum) {
+int listRecieved(char *buf,struct chat_header cheader, int socketNum) {
 	char packet[MAX_PACKET_SIZE];
 	uint32_t handleCount;
 	char curHandle[MAX_HANDLE_LEN];
 	uint8_t curHandleLen; 
 
-	memcpy(&handleCount, packet, sizeof(uint32_t));
+	memcpy(&handleCount, buf, sizeof(uint32_t));
 	handleCount = ntohl(handleCount);
 	printf("Number of clients: %zu\n", handleCount);
 	
