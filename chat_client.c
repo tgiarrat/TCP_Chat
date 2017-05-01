@@ -96,22 +96,22 @@ int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 	}
 	else if (byteFlag == 11) {
 		//listing handles
-		listRecieved(buf + sizeof(struct chat_header), cheader);
+		listRecieved(buf + sizeof(struct chat_header), cheader, socketNum);
 	}
-	else if (byteFlag == 12) {
-		printf("A CLIENT\n");
-	}
+	
 	printf("$:");
 	fflush(stdout);
 	return 0;
 }
 
-int listRecieved(char *packet, struct chat_header cheader) {
+int listRecieved(char *packet, struct chat_header cheader, int socketNum) {
 	uint32_t handleCount;
 
 	memcpy(&handleCount, packet, sizeof(uint32_t));
 	handleCount = ntohl(handleCount);
 	printf("Number of clients: %zu\n", handleCount);
+
+
 	return 0;
 }
 
