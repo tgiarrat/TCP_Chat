@@ -152,7 +152,6 @@ int removeClientNode(struct clientNode **head, int socket) {
 
 	curNode = *head;
 	if (socket == curNode->socket) {
-		printf("removing client from list\n");
 		temp = curNode;
 		*head = curNode->next;
 		free(temp);
@@ -160,7 +159,6 @@ int removeClientNode(struct clientNode **head, int socket) {
 	}
 	while(curNode->next != NULL) {
 		if(socket == curNode->socket) {
-			printf("removing client from list\n");
 			temp = curNode->next;
 			curNode->next = curNode->next->next;
 			free(temp);
@@ -170,7 +168,6 @@ int removeClientNode(struct clientNode **head, int socket) {
 		curNode = curNode->next;
 	}
 	if (socket == curNode->socket) {
-		printf("removing client from list (end of list)\n");
 		temp->next = NULL;
 		free(curNode);
 	}
@@ -337,7 +334,6 @@ int recievePacket(int socket, char *packet) {
 	if ((messageLen = recv(socket, packet, sizeof(uint16_t), MSG_WAITALL)) < 2)
 	{
 		if (messageLen == 0) {
-			printf("got here at least\n");
 			return 1;
 		}
 	}
@@ -356,6 +352,7 @@ int addClient(struct clientNode **head, char *handle, int handleLen, int clientS
 	struct clientNode *curNode; 
 	
 	newClient->socket = clientSocket;
+	handle[handleLen] = '\0';
 	memcpy(newClient->handle, handle, handleLen);
 	newClient->next = NULL;
 
