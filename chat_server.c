@@ -337,7 +337,7 @@ int recievePacket(int socket, char *packet) {
 	if ((messageLen = recv(socket, packet, sizeof(uint16_t), MSG_WAITALL)) < 2)
 	{
 		if (messageLen == 0) {
-			exit(-1);
+			printf("got here at least\n");
 			return 1;
 		}
 	}
