@@ -74,7 +74,7 @@ void chatSession(int socketNum) {
 		if (FD_ISSET(socketNum, &rfds)) {
 			printf("HERE\n");
 			
-			serverActivity(socketNum, blockedHandles); //DONT NEED AND ????????? 
+			serverActivity(socketNum, blockedHandles); 
 			printf("sfadfsdf\n");
 			if (removethis == 1 ) {
 				printf("one\n");
@@ -131,6 +131,7 @@ int listRecieved(char *packet, struct chat_header cheader, int socketNum) {
 	handleCount = ntohl(handleCount);
 	printf("Number of clients: %zu\n", handleCount);
 	removethis = 1;
+	printf("afsdfsdfsdfasdfsdfsadfsfasdfsdfafsdsdf\n");
 	return 0;
 }
 
