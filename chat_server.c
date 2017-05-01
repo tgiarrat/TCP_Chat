@@ -85,6 +85,7 @@ int chatSession(int serverSocket, int portNumber) {
 				curNode = curNode->next;
 			}
 		}
+		printf("must print before segfault 6\n");
 	}
 	freeClientList(headClientNode);
 } 
