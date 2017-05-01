@@ -50,6 +50,7 @@ int chatSession(int serverSocket, int portNumber) {
 	int maxSocket = serverSocket; //need this because we are going to loop throug hte set of sockets used and we need to know where to stop looking 
 
 	while (1) {
+		printf("must print before segfault num 5\n");
 		FD_ZERO(&rfds);
 		FD_SET(serverSocket, &rfds ); //watch socket for update
 		
