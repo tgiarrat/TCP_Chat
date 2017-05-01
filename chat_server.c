@@ -51,12 +51,10 @@ int chatSession(int serverSocket, int portNumber) {
 	int ret;
 
 	while (1) {
-		printf("must print before segfault num 5\n");
 		FD_ZERO(&rfds);
 		FD_SET(serverSocket, &rfds ); //watch socket for update
 		
 		//go through list of connected clients and watch each of the sockets
-		printf("must print before segfault num 3\n");
 		curNode = headClientNode; 
 		while(curNode != NULL) {
 			FD_SET(curNode->socket, &rfds);
@@ -65,7 +63,6 @@ int chatSession(int serverSocket, int portNumber) {
 			}
 				curNode = curNode->next;
 		}
-		printf("must print before segfault num 4\n");
 		if (select(maxSocket + 1 , &rfds,NULL,NULL,NULL) < 0  ){
 			perror("server select call error");
 			exit(-1);
@@ -78,24 +75,17 @@ int chatSession(int serverSocket, int portNumber) {
 		//now check for client activity by looping through the set of sockets
 		curNode = headClientNode;
 		while(curNode != NULL) {
-			 printf("FUCK\n");
-			 printf("must print before segfault 9. The curNode socket is: %d and its handle is %s\n", curNode->socket, curNode->handle);
 			//check if curNode's socket is set
 			if (FD_ISSET(curNode->socket, &rfds)) {
-				printf("must print before segfault 11\n");
 				ret = clientActivity(curNode->socket, &headClientNode);
 				if (ret > 0) {
-					//unset fd 
 					curNode = NULL;
-					printf("Returning the disconnected socket: %d\n", ret);
 				}
 			}
 			if (curNode != NULL) {
 				curNode = curNode->next;
-				printf("must print before segfault 8\n");
 			}
 		}
-		printf("must print before segfault 6\n");
 	}
 	freeClientList(headClientNode);
 } 
@@ -162,7 +152,6 @@ int removeClientNode(struct clientNode **head, int socket) {
 	struct clientNode *temp;
 
 	curNode = *head;
-	printf("socket being looked for is %d\n", socket);
 	if (socket == curNode->socket) {
 		printf("removing client from list\n");
 		temp = curNode;
