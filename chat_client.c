@@ -23,6 +23,16 @@
 
 char handle[MAX_HANDLE_LEN];
 
+
+///
+
+
+int removethis = 0; 
+
+
+//////
+
+
 int main(int argc, char * argv[])
 {
 	int socketNum = 0;         //socket descriptor, will be the socket of the server i believe
@@ -41,12 +51,19 @@ int main(int argc, char * argv[])
 }
 
 void chatSession(int socketNum) {
+	
+
+	
 	fd_set rfds;
 	struct blockedHandles *blockedHandles = NULL;
 	sendInitialPacket(socketNum);
 	printf("$: ");
 	fflush(stdout);
 	while (1) { //1 is possibly temporary, need to run client until the user exits the client
+		if (removethis == 1 ) {
+			printf("one\n");
+		}
+
 		FD_ZERO(&rfds);
 		FD_SET(STD_IN, &rfds); //watch std in
 		FD_SET(socketNum, &rfds ); //watch socket for update
@@ -59,6 +76,7 @@ void chatSession(int socketNum) {
 		//server update, read from server
 		if (FD_ISSET(socketNum, &rfds)) {
 			printf("HERE\n");
+			
 			serverActivity(socketNum, blockedHandles); //DONT NEED AND ????????? 
 
 		}
@@ -102,7 +120,6 @@ int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 	
 	printf("$:");
 	fflush(stdout);
-	printf("sdfasdfsdf\n");
 	return 0;
 }
 
@@ -112,6 +129,7 @@ int listRecieved(char *packet, struct chat_header cheader, int socketNum) {
 	memcpy(&handleCount, packet, sizeof(uint32_t));
 	handleCount = ntohl(handleCount);
 	printf("Number of clients: %zu\n", handleCount);
+	removethis = 1;
 	return 0;
 }
 
