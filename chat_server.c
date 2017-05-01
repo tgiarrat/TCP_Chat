@@ -77,6 +77,7 @@ int chatSession(int serverSocket, int portNumber) {
 		//now check for client activity by looping through the set of sockets
 		curNode = headClientNode;
 		while(curNode != NULL) {
+			 printf("must print before segfault 9\n");
 			//check if curNode's socket is set
 			if (FD_ISSET(curNode->socket, &rfds)) {
 				clientActivity(curNode->socket, &headClientNode);
