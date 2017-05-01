@@ -134,7 +134,7 @@ int clientExit(struct clientNode **head ,int clientSocket) {
 	memcpy(packet, &cheader, sizeof(struct chat_header));
 	sendPacket(clientSocket, packet, cheader);
 	printf("must print before segfault\n");
-	close(clientSocket);
+	//close(clientSocket);
 	printf("must print before segfault num 2\n");
 	return 0;
 }
