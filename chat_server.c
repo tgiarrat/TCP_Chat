@@ -135,6 +135,7 @@ int listHandles(struct clientNode *head, int socket) {
 		handleCount++;
 		curNode = curNode->next;
 	}
+	printf("handle count was %zu\n", handleCount);
 	handleCount = htonl(handleCount);
 	memcpy(packet, &cheader, sizeof(struct chat_header)); //header
 	memcpy((packet + sizeof(struct chat_header)), &handleCount, sizeof(uint32_t));//num handles
