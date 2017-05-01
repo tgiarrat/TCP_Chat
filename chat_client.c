@@ -102,6 +102,7 @@ int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 	else if (byteFlag == 11) {
 		//listing handles
 		listRecieved(buf + sizeof(struct chat_header), cheader, socketNum);
+		printf("what is going on \n");
 	}
 	else if (byteFlag == 12) {
 		exit(-1);
