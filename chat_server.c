@@ -124,7 +124,7 @@ int listHandles(struct clientNode *head, int socket) {
 	char *packet[MAX_PACKET_SIZE];
 	struct chat_header cheader;
 	uint32_t handleCount;
-	struct *curNode = head;
+	struct clientNode *curNode = head;
 	uint16_t packetSize;
 
 	//first send flag = 11 packet
