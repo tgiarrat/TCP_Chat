@@ -64,10 +64,11 @@ void chatSession(int socketNum) {
 		if (FD_ISSET(socketNum, &rfds)) {
 
 			serverActivity(socketNum, blockedHandles); 
-		
+			printf("what is going on 4\n");
 		}
 		//keyboard update, read from keyboard
 		else if (FD_ISSET(0, &rfds)) { 
+			printf("what is going on 51\n");
 			localInput(socketNum, &blockedHandles);
 			printf("$: ");
 			fflush(stdout);
@@ -102,14 +103,15 @@ int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 	else if (byteFlag == 11) {
 		//listing handles
 		listRecieved(buf + sizeof(struct chat_header), cheader, socketNum);
-		printf("what is going on \n");
 	}
+	printf("what is going on 2\n");
 	else if (byteFlag == 12) {
 		exit(-1);
 	}
 
 	printf("$:");
 	fflush(stdout);
+	printf("what is going on 3\n");
 	return 0;
 }
 
