@@ -121,7 +121,7 @@ int listRecieved(char *packet, struct chat_header cheader, int socketNum) {
 	recievePacket(socketNum,packet);
 	memcpy(&cheader, packet, sizeof(struct chat_header));
 	while (cheader.byteFlag != 13) {
-		memcpy(curHandleLen, packet + sizeof(struct chat_header), sizeof(uint8_t));
+		memcpy(&curHandleLen, packet + sizeof(struct chat_header), sizeof(uint8_t));
 		memcpy(curHandle, packet + sizeof(struct chat_header) + sizeof(uint8_t), curHandleLen);
 		printf("\t%s", curHandle);
 
