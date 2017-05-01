@@ -144,7 +144,7 @@ int listHandles(struct clientNode *head, int socket) {
 	//now for the flag 12s
 	curNode = head;
 	cheader.byteFlag = 12; 
-
+/*
 	while (curNode != NULL) { 
 		handleLength = strlen(curNode->handle);
 		packetSize = sizeof(struct chat_header) + handleLength + sizeof(uint8_t);
@@ -155,7 +155,7 @@ int listHandles(struct clientNode *head, int socket) {
 		sendPacket(socket, packet, cheader);
 		curNode = curNode->next; 
 	}
-
+*/
 }
 
 int messageRecieved(char *recieved, struct chat_header cheader, struct clientNode *head, int sendingSocket) {
