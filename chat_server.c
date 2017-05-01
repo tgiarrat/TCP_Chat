@@ -130,6 +130,7 @@ int clientExit(struct clientNode **head ,int clientSocket) {
 	cheader.packetLen = htons(sizeof(struct chat_header));
 	memcpy(packet, &cheader, sizeof(struct chat_header));
 	sendPacket(clientSocket, packet, cheader);
+	close(clientSocket);
 	return 0;
 }
 
