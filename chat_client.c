@@ -58,6 +58,7 @@ void chatSession(int socketNum) {
 		
 		//server update, read from server
 		if (FD_ISSET(socketNum, &rfds)) {
+			printf("HERE\n");
 			serverActivity(socketNum, blockedHandles); //DONT NEED AND ????????? 
 
 		}
@@ -109,7 +110,7 @@ int listRecieved(char *packet, struct chat_header cheader, int socketNum) {
 
 	memcpy(&handleCount, packet, sizeof(uint32_t));
 	handleCount = ntohl(handleCount);
-	//printf("Number of clients: %zu\n", handleCount);
+	printf("Number of clients: %zu\n", handleCount);
 
 
 	return 0;
