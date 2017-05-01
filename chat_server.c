@@ -126,23 +126,35 @@ int listHandles(struct clientNode *head, int socket) {
 	uint32_t handleCount = 0;
 	struct clientNode *curNode = head;
 	uint16_t packetSize;
+	uint8_t handleLength;
 
 	//first send flag = 11 packet
 	cheader.byteFlag = 11;
 	packetSize = sizeof(struct chat_header) + sizeof(uint32_t);
-	cheader.packetLen = htons(packetSize);
+	cheader.packetLen = packetSize;
 	while(curNode != NULL) {
 		handleCount++;
 		curNode = curNode->next;
 	}
-	printf("handle count was %zu\n", handleCount);
 	handleCount = htonl(handleCount);
 	memcpy(packet, &cheader, sizeof(struct chat_header)); //header
 	memcpy((packet + sizeof(struct chat_header)), &handleCount, sizeof(uint32_t));//num handles
-
 	sendPacket(socket, packet, cheader);
-	printf("handle count was %zu\n", handleCount);
 	
+	//now for the flag 12s
+	curNode = head;
+	cheader.byteFlag = 12; 
+
+	while (curNode != NULL) { 
+		handleLength = strlen(curNode->handle);
+		packetSize = sizeof(stuct chat_header) + handleLength + sizeof(uint8_t);
+		cheader.packetLen = packetSize;
+		memcpy(packet, &cheader, sizeof(struct chat_header));
+		memcpy(packet + sizeof(struct chat_header), &handleLen, sizeof(uint8_t)); 
+		memcpy(packet + sizeof(struct chat_header)+sizeof(uint8_t), handle, handleLen)
+		sendPacket(socket, packet, cheader);
+		curNode = curNode->next; 
+	}
 
 }
 
