@@ -108,7 +108,7 @@ int listRecieved(char *packet, struct chat_header cheader) {
 
 	memcpy(&handleCount, packet, sizeof(uint32_t));
 	handleCount = ntohl(handleCount);
-	printf("HANDLE COUNT IS %ld\n", handleCount);
+	printf("HANDLE COUNT IS %zu\n", handleCount);
 
 }
 

@@ -140,7 +140,7 @@ int listHandles(struct clientNode *head, int socket) {
 	memcpy((packet + sizeof(struct chat_header)), &handleCount, sizeof(uint32_t));//num handles
 
 	sendPacket(socket, packet, cheader);
-	printf("handle count was %d\n", handleCount);
+	printf("handle count was %zu\n", handleCount);
 	
 
 }
