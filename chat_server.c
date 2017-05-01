@@ -86,6 +86,7 @@ int chatSession(int serverSocket, int portNumber) {
 				ret = clientActivity(curNode->socket, &headClientNode);
 				if (ret > 0) {
 					//unset fd 
+					curNode = NULL;
 					printf("Returning the disconnected socket: %d\n", ret);
 				}
 			}
