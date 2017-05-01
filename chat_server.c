@@ -132,7 +132,7 @@ int clientExit(struct clientNode **head ,int clientSocket) {
 	
 	struct clientNode *curNode;
 
-	removeClientNode(head,clientSocket);
+	//removeClientNode(head,clientSocket);
 
 	curNode = *head;
 	while(curNode != NULL) {
