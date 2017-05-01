@@ -79,6 +79,7 @@ int chatSession(int serverSocket, int portNumber) {
 				clientActivity(curNode->socket, &headClientNode);
 			}
 			if (curNode != NULL) {
+				printf("must print before segfault\n");
 				curNode = curNode->next;
 			}
 		}
