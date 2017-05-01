@@ -121,7 +121,7 @@ int clientActivity(int clientSocket, struct clientNode *head) {
 }
 
 int listHandles(struct clientNode *head, int socket) {
-	char *packet[MAX_PACKET_SIZE];
+	char packet[MAX_PACKET_SIZE];
 	struct chat_header cheader;
 	uint32_t handleCount;
 	struct clientNode *curNode = head;
