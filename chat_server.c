@@ -78,7 +78,9 @@ int chatSession(int serverSocket, int portNumber) {
 			if (FD_ISSET(curNode->socket, &rfds)) {
 				clientActivity(curNode->socket, &headClientNode);
 			}
-			curNode = curNode->next;
+			if (curNode != NULL) {
+				curNode = curNode->next;
+			}
 		}
 	}
 	freeClientList(headClientNode);
