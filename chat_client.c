@@ -118,9 +118,10 @@ int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 		listRecieved(buf + sizeof(struct chat_header), cheader, socketNum);
 	}
 
-
+	printf("before\n");
 	printf("$:");
 	fflush(stdout);
+	printf("after\n");
 	return 0;
 }
 
@@ -131,7 +132,9 @@ int listRecieved(char *packet, struct chat_header cheader, int socketNum) {
 	handleCount = ntohl(handleCount);
 	printf("Number of clients: %zu\n", handleCount);
 	removethis = 1;
-	printf("afsdfsdfsdfasdfsdfsadfsfasdfsdfafsdsdf\n");
+	if (removethis == 1 ) {
+				printf("two\n");
+	}	
 	return 0;
 }
 
