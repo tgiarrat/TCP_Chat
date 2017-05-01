@@ -156,6 +156,7 @@ int listHandles(struct clientNode *head, int socket) {
 		curNode = curNode->next; 
 	}
 */
+	return 0;
 }
 
 int messageRecieved(char *recieved, struct chat_header cheader, struct clientNode *head, int sendingSocket) {
