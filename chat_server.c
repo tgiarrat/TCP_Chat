@@ -188,7 +188,7 @@ int messageRecieved(char *recieved, struct chat_header cheader, struct clientNod
 		memcpy(curHandle, recieved + offset, curHandleLen); //gets the dest name
 		offset += curHandleLen;
 		curHandle[curHandleLen] = '\0';
-		curSocket = getSocket(curHandle, *head);
+		curSocket = getSocket(curHandle, head);
 		if (curSocket < 0) {
 			sendInvalidDest(curSocket ,sendingSocket, curHandle, curHandleLen);
 		}
