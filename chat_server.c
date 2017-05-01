@@ -125,7 +125,7 @@ int clientExit(struct clientNode **head ,int clientSocket) {
 	char packet[MAX_PACKET_SIZE];
 	struct chat_header cheader;
 	
-	struct *curNode;
+	struct clientNode *curNode;
 
 	removeClientNode(head,clientSocket);
 
