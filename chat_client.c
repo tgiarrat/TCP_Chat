@@ -24,13 +24,6 @@
 char handle[MAX_HANDLE_LEN];
 
 
-///
-
-
-int removethis = 0; 
-
-
-//////
 
 
 int main(int argc, char * argv[])
@@ -51,9 +44,6 @@ int main(int argc, char * argv[])
 }
 
 void chatSession(int socketNum) {
-	
-
-	
 	fd_set rfds;
 	struct blockedHandles *blockedHandles = NULL;
 	sendInitialPacket(socketNum);
@@ -72,13 +62,9 @@ void chatSession(int socketNum) {
 		
 		//server update, read from server
 		if (FD_ISSET(socketNum, &rfds)) {
-			printf("HERE\n");
-			
+
 			serverActivity(socketNum, blockedHandles); 
-			printf("sfadfsdf\n");
-			if (removethis == 1 ) {
-				printf("one\n");
-			}	
+		
 		}
 		//keyboard update, read from keyboard
 		else if (FD_ISSET(0, &rfds)) { 
@@ -117,6 +103,9 @@ int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 		//listing handles
 		listRecieved(buf + sizeof(struct chat_header), cheader, socketNum);
 	}
+	else if (byteFlag == 12) {
+		exit(-1);
+	}
 
 	printf("$:");
 	fflush(stdout);
@@ -129,7 +118,6 @@ int listRecieved(char *packet, struct chat_header cheader, int socketNum) {
 	memcpy(&handleCount, packet, sizeof(uint32_t));
 	handleCount = ntohl(handleCount);
 	printf("Number of clients: %zu\n", handleCount);
-	removethis = 1;
 	
 	return 0;
 }
@@ -392,9 +380,7 @@ int recievePacket(int socket, char *packet) {
 	uint16_t packetLength;
 	int messageLen;
 
-	if (removethis == 1 ) {
-				printf("THREE\n");
-	}	
+
 	if ((messageLen = recv(socket, packet, sizeof(uint16_t), MSG_WAITALL)) < 2)
 	{
 		perror("RECV ERROR");
