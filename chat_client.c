@@ -78,7 +78,9 @@ void chatSession(int socketNum) {
 			printf("HERE\n");
 			
 			serverActivity(socketNum, blockedHandles); //DONT NEED AND ????????? 
-
+			if (removethis == 1 ) {
+				printf("one\n");
+			}	
 		}
 		//keyboard update, read from keyboard
 		else if (FD_ISSET(0, &rfds)) { 
