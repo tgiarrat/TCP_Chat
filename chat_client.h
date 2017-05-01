@@ -13,6 +13,7 @@ struct blockedHandles {
     struct blockedHandles *next;
 };
 
+int exitServer(int socketNum);
 int listHandles(int socketNum) ;
 int printBlocked(struct blockedHandles *head);
 int recievePacket(int socket, char *packet); 

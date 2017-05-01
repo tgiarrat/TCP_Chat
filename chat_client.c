@@ -234,7 +234,7 @@ int localInput(int socketNum, struct blockedHandles **blockedHandles) {
 		listHandles(socketNum);
 	}
 	else if (commandType == 'E') { //exit
-		//exitServer(textBuffer);
+		exitServer(socketNum);
 	}
 	else {
 		printf("Error: %c is an invalid command type\n", commandType);
@@ -243,6 +243,19 @@ int localInput(int socketNum, struct blockedHandles **blockedHandles) {
 
 	return 0;
 
+}
+
+int exitServer(int socketNum) {
+	char packet[MAX_PACKET_SIZE];
+	struct chat_header cheader;
+
+	cheader.byteFlag = 8;
+	cheader.packetLen = htons(sizeof(struct chat_header));
+	memcpy(packet, &cheader, sizeof(struct chat_header));
+	sendPacket(packet, socketNum, sizeof(struct chat_header));
+	printf("sent exit packet\n");
+	
+	return 0;
 }
 
 int listHandles(int socketNum) {

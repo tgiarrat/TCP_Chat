@@ -82,7 +82,7 @@ int chatSession(int serverSocket, int portNumber) {
 		while(curNode != NULL) {
 			//check if curNode's socket is set
 			if (FD_ISSET(curNode->socket, &rfds)) {
-				clientActivity(curNode->socket, headClientNode);
+				clientActivity(curNode->socket, &headClientNode);
 			}
 			curNode = curNode->next;
 		}
@@ -90,7 +90,7 @@ int chatSession(int serverSocket, int portNumber) {
 	freeClientList(headClientNode);
 } 
 
-int clientActivity(int clientSocket, struct clientNode *head) {
+int clientActivity(int clientSocket, struct clientNode **head) {
 	char buf[MAX_PACKET_SIZE];
 	int recieved, packetLength;
 	uint8_t byteFlag;
@@ -105,19 +105,25 @@ int clientActivity(int clientSocket, struct clientNode *head) {
 	printf("Packet length recieved from client activity is %d and byte flag is: %d\n", packetLength, byteFlag);
 
 	if (byteFlag == 5 ) { //message flag
-		messageRecieved(buf, cheader, head, clientSocket);
+		messageRecieved(buf, cheader, *head, clientSocket);
 	}
 	else if (byteFlag == 8) { //client exiting flag
-
+		clientExit(head, clientSocket);
 	}
 	else if (byteFlag == 10) { //list handle flag
-		listHandles(head, clientSocket);
+		listHandles(*head, clientSocket);
 	}
+	
 	else {
 		perror("Incomming byte flag is invalid");
 		exit(-1);
 	}
 	return 0; 
+}
+
+int clientExit(struct clientNode **head ,struct clientNode) {
+	printf("got client exit flag\n");
+	return 0;
 }
 
 int listHandles(struct clientNode *head, int socket) {
@@ -182,7 +188,7 @@ int messageRecieved(char *recieved, struct chat_header cheader, struct clientNod
 		memcpy(curHandle, recieved + offset, curHandleLen); //gets the dest name
 		offset += curHandleLen;
 		curHandle[curHandleLen] = '\0';
-		curSocket = getSocket(curHandle, head);
+		curSocket = getSocket(curHandle, *head);
 		if (curSocket < 0) {
 			sendInvalidDest(curSocket ,sendingSocket, curHandle, curHandleLen);
 		}
@@ -307,6 +313,7 @@ int recievePacket(int socket, char *packet) {
 	}
 	return 0;
 }
+
 
 
 int addClient(struct clientNode **head, char *handle, int handleLen, int clientSocket) {
