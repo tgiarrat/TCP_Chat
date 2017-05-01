@@ -131,7 +131,7 @@ int clientExit(struct clientNode **head ,int clientSocket) {
 
 	curNode = *head;
 	while(curNode != NULL) {
-		printf("element: %s\n", curNode->handle);				
+		printf("element: %s, socket = %d\n", curNode->handle, curNode->socket);				
 		curNode = curNode->next; 
 	}
 
@@ -277,7 +277,7 @@ int sendPacket(int socket, char *packet, struct chat_header cheader) {
 }
 
 int getSocket(char *handle, struct clientNode *head) {
-	struct clientNode *curNode = head;
+	struct clientNode *curNode = head;f
 
 	while (curNode != NULL) {
 		if (strcmp(handle, curNode->handle) == 0) {
