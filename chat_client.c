@@ -123,7 +123,6 @@ int listRecieved(char *packet, struct chat_header cheader, int socketNum) {
 	printf("Number of clients: %zu\n", handleCount);
 	
 	recievePacket(socketNum,packet);
-	printf("recieve?\n");
 	memcpy(&cheader, packet, sizeof(struct chat_header));
 	while (cheader.byteFlag != 13) {
 		memcpy(&curHandleLen, packet + sizeof(struct chat_header), sizeof(uint8_t));
@@ -133,8 +132,9 @@ int listRecieved(char *packet, struct chat_header cheader, int socketNum) {
 
 		recievePacket(socketNum, packet);
 		memcpy(&cheader, packet, sizeof(struct chat_header));
+		printf("byte flag is: %s\n", cheader.byteFlag);
 	}
-
+	printf("");
 
 	return 0;
 }
