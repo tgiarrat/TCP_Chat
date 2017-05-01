@@ -135,6 +135,7 @@ int listRecieved(char *buf,struct chat_header cheader, int socketNum) {
 		recievePacket(socketNum, packet);
 		printf("I get here\n");
 		memcpy(&cheader, packet, sizeof(struct chat_header));
+		printf("asfsdfsdfasdf\n");
 		printf("byte flag is: %s\n", cheader.byteFlag);
 	}
 	printf("");
