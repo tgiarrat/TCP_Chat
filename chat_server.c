@@ -221,6 +221,10 @@ int sendPacket(int socket, char *packet, struct chat_header cheader) {
 		perror("send call");
 		exit(-1);
 	}
+	if (sent ==0) {
+		perror("sent zero");
+		exit(-1);
+	}
 	return 0;
 }
 
