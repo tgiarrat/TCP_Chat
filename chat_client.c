@@ -437,6 +437,10 @@ int message(char *textBuffer, int socketNum) {
 
 	//Get destination handles:
 	arg = strtok(textBuffer, " "); //get a space separated token of the string 
+	if (arg == NULL) {
+		printf("Invalid Command \n");
+	}
+
 	if (isdigit(textBuffer[0])) {
 		numDestinations = atoi(arg);
 		arg = strtok(NULL, " ");
