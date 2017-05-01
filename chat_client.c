@@ -111,7 +111,7 @@ int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 
 int listRecieved(char *packet, struct chat_header cheader, int socketNum) {
 	uint32_t handleCount;
-	char curHandle[MAX_HANDLE_LEN]
+	char curHandle[MAX_HANDLE_LEN];
 	uint8_t curHandleLen; 
 
 	memcpy(&handleCount, packet, sizeof(uint32_t));
