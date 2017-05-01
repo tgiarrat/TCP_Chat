@@ -120,7 +120,7 @@ int listRecieved(char *packet, struct chat_header cheader, int socketNum) {
 	handleCount = ntohl(handleCount);
 	printf("Number of clients: %zu\n", handleCount);
 	
-	recievePacket(socketNum,packet);
+	//recievePacket(socketNum,packet);
 	return 0;
 }
 
@@ -239,7 +239,7 @@ int listHandles(int socketNum) {
 	cheader.packetLen = htons(packetSize);
 	memcpy(packet, &cheader, packetSize);
 	
-	sendPacket(packet, socketNum, packetSize);
+	sendPacket(packet, socketNum, cheader.packetLen);
 	return 0;
 }
 
