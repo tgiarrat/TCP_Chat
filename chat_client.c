@@ -98,11 +98,11 @@ int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 	else if (byteFlag == 11) {
 		//listing handles
 		listRecieved(buf + sizeof(struct chat_header), cheader, socketNum);
-		printf("sdfasdfsdf\n");
 	}
 	
 	printf("$:");
 	fflush(stdout);
+	printf("sdfasdfsdf\n");
 	return 0;
 }
 
