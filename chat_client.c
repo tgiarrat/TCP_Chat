@@ -439,6 +439,7 @@ int message(char *textBuffer, int socketNum) {
 	arg = strtok(textBuffer, " "); //get a space separated token of the string 
 	if (arg == NULL) {
 		printf("Invalid Command \n");
+		return 1; 
 	}
 
 	if (isdigit(textBuffer[0])) {
