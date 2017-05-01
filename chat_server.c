@@ -121,7 +121,7 @@ int clientActivity(int clientSocket, struct clientNode **head) {
 	return 0; 
 }
 
-int clientExit(struct clientNode **head ,struct clientNode) {
+int clientExit(struct clientNode **head ,int clientSocket) {
 	printf("got client exit flag\n");
 	return 0;
 }
