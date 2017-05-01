@@ -149,6 +149,7 @@ int removeClientNode(struct clientNode **head, int socket) {
 	struct clientNode *temp;
 
 	curNode = *head;
+	printf("socket being looked for is %d\n", socket);
 	if (socket == curNode->socket) {
 		printf("removing client from list\n");
 		temp = curNode;
