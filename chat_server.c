@@ -94,7 +94,7 @@ int clientActivity(int clientSocket, struct clientNode **head) {
 	int recieved, packetLength;
 	uint8_t byteFlag;
 	struct chat_header cheader;
-
+	printf("Socket with activity is %d", clientSocket);
 	if (recievePacket(clientSocket, buf) == 1){
 		removeClientNode(head, clientSocket);
 		close(clientSocket);
@@ -104,9 +104,6 @@ int clientActivity(int clientSocket, struct clientNode **head) {
 	memcpy(&cheader, buf, sizeof(struct chat_header)); //gets the header from the recieved packet
 	byteFlag = cheader.byteFlag; 
 	packetLength = ntohs(cheader.packetLen);
-
-	printf("Packet length recieved from client activity is %d and byte flag is: %d\n", packetLength, byteFlag);
-
 	if (byteFlag == 5 ) { //message flag
 		messageRecieved(buf, cheader, *head, clientSocket);
 	}
@@ -322,12 +319,10 @@ int newClientConnection(int serverSocket,struct clientNode **head ){
 
 	if (checkHandle(handle, *head) == 1) {
 		//handle is invalid
-		printf("Handle is INVALID (exists), sending error packet\n");
 		sendHandleExistsError(clientSocket);
 	}
 	else {
 		//handle is valid
-		printf("Handle is VALID, sending packet\n");
 		sendValidHandle(clientSocket);
 		addClient(head, handle, handleLength, clientSocket);
 	}
@@ -336,8 +331,6 @@ int newClientConnection(int serverSocket,struct clientNode **head ){
 
 int recievePacket(int socket, char *packet) {
 	uint16_t packetLength;
-	//char packet[MAX_PACKET_SIZE];
-	//char *buf = *packet; 
 	int messageLen;
 
 	if ((messageLen = recv(socket, packet, sizeof(uint16_t), MSG_WAITALL)) < 2)
