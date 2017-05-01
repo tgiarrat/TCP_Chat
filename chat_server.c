@@ -54,6 +54,7 @@ int chatSession(int serverSocket, int portNumber) {
 		FD_SET(serverSocket, &rfds ); //watch socket for update
 		
 		//go through list of connected clients and watch each of the sockets
+		printf("must print before segfault\n");
 		curNode = headClientNode; 
 		while(curNode != NULL) {
 			FD_SET(curNode->socket, &rfds);
@@ -79,7 +80,6 @@ int chatSession(int serverSocket, int portNumber) {
 				clientActivity(curNode->socket, &headClientNode);
 			}
 			if (curNode != NULL) {
-				printf("must print before segfault\n");
 				curNode = curNode->next;
 			}
 		}
