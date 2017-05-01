@@ -130,7 +130,7 @@ int listRecieved(char *packet, struct chat_header cheader, int socketNum) {
 		memcpy(&curHandleLen, packet + sizeof(struct chat_header), sizeof(uint8_t));
 		memcpy(curHandle, packet + sizeof(struct chat_header) + sizeof(uint8_t), curHandleLen);
 		curHandle[curHandleLen] = '\0';
-		printf("\t%s", curHandle);
+		printf("asdfasdfsdf\t%s", curHandle);
 
 		recievePacket(socketNum, packet);
 		memcpy(&cheader, packet, sizeof(struct chat_header));
