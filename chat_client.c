@@ -102,6 +102,11 @@ int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 		//listing handles
 		listRecieved(buf + sizeof(struct chat_header), cheader, socketNum);
 	}
+	else if(byteFlag == 12) {
+		printList();
+		 
+		 
+	}
 
 
 	printf("$:");
@@ -117,7 +122,7 @@ int listRecieved(char *packet, struct chat_header cheader, int socketNum) {
 	memcpy(&handleCount, packet, sizeof(uint32_t));
 	handleCount = ntohl(handleCount);
 	printf("Number of clients: %zu\n", handleCount);
-	
+	/*
 	recievePacket(socketNum,packet);
 	memcpy(&cheader, packet, sizeof(struct chat_header));
 	while (cheader.byteFlag != 13) {
@@ -127,7 +132,8 @@ int listRecieved(char *packet, struct chat_header cheader, int socketNum) {
 		printf("\t%s", curHandle);
 
 		recievePacket(socketNum, packet);
-	}
+	}*/
+
 
 	return 0;
 }

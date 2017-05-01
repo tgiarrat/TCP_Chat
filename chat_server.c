@@ -161,6 +161,7 @@ int listHandles(struct clientNode *head, int socket) {
 	cheader.packetLen = htons(packetSize);
 	printf("sending packet\n");
 	sendPacket(socket,packet,cheader);
+	printf("sent packet\n");
 	return 0;
 }
 
