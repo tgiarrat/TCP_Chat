@@ -15,6 +15,7 @@ struct clientNode{
 }__attribute__((packed));
 
 
+int clientExit(struct clientNode **head ,struct clientNode);
 int listHandles(struct clientNode *head, int socket);
 int recievePacket(int socket, char *packet);
 int sendPacket(int socket, char *packet, struct chat_header cheader); 
@@ -30,4 +31,4 @@ int freeClientList(struct clientNode *head);
 int checkHandle(char *handle, struct clientNode *head);
 int sendHandleExistsError(int serverSocket);
 int sendValidHandle(int socketServer);
-int clientActivity(int clientSocket, struct clientNode *head) ;
+int clientActivity(int clientSocket, struct clientNode **head) ;
