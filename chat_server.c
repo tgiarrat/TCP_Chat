@@ -140,7 +140,7 @@ int listHandles(struct clientNode *head, int socket) {
 	memcpy(packet, &cheader, sizeof(struct chat_header)); //header
 	memcpy((packet + sizeof(struct chat_header)), &handleCount, sizeof(uint32_t));//num handles
 	sendPacket(socket, packet, cheader);
-	/*
+	
 	//now for the flag 12s
 	curNode = head;
 	cheader.byteFlag = 12; 
@@ -154,7 +154,7 @@ int listHandles(struct clientNode *head, int socket) {
 		memcpy(packet + sizeof(struct chat_header)+sizeof(uint8_t), curNode->handle, handleLength);
 		sendPacket(socket, packet, cheader);
 		curNode = curNode->next; 
-	}*/
+	}
 
 }
 
