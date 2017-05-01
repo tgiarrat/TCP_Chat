@@ -70,12 +70,6 @@ int chatSession(int serverSocket, int portNumber) {
 		//new connection to server socket 
 		if (FD_ISSET(serverSocket, &rfds)) {
 			newClientConnection(serverSocket, &headClientNode);
-			/*printf("\nPRINT CLIENT LIST\n");
-			curNode = headClientNode;
-			while(curNode != NULL) {
-				printf("element: %s\n", curNode->handle);				
-				curNode = curNode->next; 
-			}*/
 		}
 		//now check for client activity by looping through the set of sockets
 		curNode = headClientNode;
@@ -133,6 +127,7 @@ int clientExit(struct clientNode **head ,int clientSocket) {
 	while(curNode != NULL) {
 		printf("element: %s, socket = %d\n", curNode->handle, curNode->socket);				
 		curNode = curNode->next; 
+		printf("must print before segfault\n");
 	}
 
 
