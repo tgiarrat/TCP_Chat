@@ -100,7 +100,7 @@ int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 	}
 	else if (byteFlag == 11) {
 		//listing handles
-		listRecieved(buf + sizeof(struct chat_header), cheader, socketNum);
+		listRecieved(cheader, socketNum);
 	}
 	else if(byteFlag == 12) {
 		printf("Got here, shout not have\n");
