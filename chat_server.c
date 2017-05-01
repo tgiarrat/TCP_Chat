@@ -97,14 +97,7 @@ int clientActivity(int clientSocket, struct clientNode *head) {
 	struct chat_header cheader;
 
 	recievePacket(clientSocket, buf);
-	/*if ((recieved = recv(clientSocket, buf, MAXBUF, 0)) < 0) {
-    	perror("Error recieveing incoming client packet \n");
-    	exit(-1);
-  	}
-	if (recieved == 0) {
-	   perror("Error: Read incoming client packet as zero bytes \n");
-	   exit(-1);
-   	}*/
+
 	memcpy(&cheader, buf, sizeof(struct chat_header)); //gets the header from the recieved packet
 	byteFlag = cheader.byteFlag; 
 	packetLength = ntohs(cheader.packetLen);
@@ -118,13 +111,38 @@ int clientActivity(int clientSocket, struct clientNode *head) {
 
 	}
 	else if (byteFlag == 10) { //list handle flag
-
+		listHandles(head, clientSocket);
 	}
 	else {
 		perror("Incomming byte flag is invalid");
 		exit(-1);
 	}
 	return 0; 
+}
+
+int listHandles(struct clientNode *head, int socket) {
+	char *packet[MAX_PACKET_SIZE];
+	struc chat_header cheader;
+	uint32_t handleCount;
+	struct *curNode = head;
+	uint16_t packetSize;
+
+	//first send flag = 11 packet
+	cheader.byteFlag = 11;
+	packetSize = sizeof(struct chat_header) + sizeof(uint32_t);
+	cheader.packetLen = htons(packetSize);
+	while(curNode != NULL) {
+		handleCount++;
+		curNode = curNode->next;
+	}
+	handleCount = htonl(handleCount);
+	memcpy(packet, &cheader, sizeof(struct chat_header)); //header
+	memcpy((packet + sizeof(struct chat_header)), &handleCount, sizeof(uint32_t));//num handles
+
+	sendPacket(socket, packet, cheader);
+	printf("DONEHERE\n");
+	
+
 }
 
 int messageRecieved(char *recieved, struct chat_header cheader, struct clientNode *head, int sendingSocket) {
@@ -135,7 +153,6 @@ int messageRecieved(char *recieved, struct chat_header cheader, struct clientNod
 	int curSocket , i;
 
 	//first we need to check if there are multiple destination handles:
-	//memcpy(&srcHandleLength, recieved + offset, sizeof(uint8_t)); //gets the src handle length so that I can get num destinations
 	srcHandleLength = recieved[offset];
 	offset += srcHandleLength + 1;
 	numDestinations = recieved[offset++];
@@ -145,20 +162,13 @@ int messageRecieved(char *recieved, struct chat_header cheader, struct clientNod
 		memcpy(curHandle, recieved + offset, curHandleLen); //gets the dest name
 		offset += curHandleLen;
 		curHandle[curHandleLen] = '\0';
-		
-		//printf("cur handle len is %d\n", curHandleLen);
-		//printf("cur handle is: %s\n", curHandle);
 		curSocket = getSocket(curHandle, head);
-
 		if (curSocket < 0) {
-			//send src 
 			sendInvalidDest(curSocket ,sendingSocket, curHandle, curHandleLen);
 		}
 		else {
-			printf("Socket found is %d\n", curSocket);
 			sendPacket(curSocket, recieved, cheader);
 		}
-
 	}
 	return 0;
 }

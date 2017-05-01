@@ -93,12 +93,23 @@ int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 	else if (byteFlag == 7) {
 		//error: destination handle does not exist
 		invalidDestRecieved(buf + sizeof(struct chat_header), cheader); 
-		
-
+	}
+	else if (byteFlag == 11) {
+		//listing handles
+		listRecieved(buf + sizeof(struct chat_header), cheader);
 	}
 	printf("$:");
 	fflush(stdout);
 	return 0;
+}
+
+int listRecieved(char *packet, struct chat_header cheader) {
+	uint32_t handleCount;
+
+	memcpy(&handleCount, packet, sizeof(uint32_t));
+	handleCount = ntohl(handleCount);
+	printf("HANDLE COUNT IS %ld\n", handleCount);
+
 }
 
 int invalidDestRecieved(char *packet, struct chat_header cheader){
