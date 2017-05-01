@@ -103,8 +103,8 @@ int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 		listRecieved(buf + sizeof(struct chat_header), cheader, socketNum);
 	}
 	else if(byteFlag == 9) {
-		printf("got here at least\n");
-		//exitACK(blockedHandles);
+		//printf("got here at least\n");
+		exitACK(blockedHandles);
 		return 0;
 	}
 	printf("$:");
