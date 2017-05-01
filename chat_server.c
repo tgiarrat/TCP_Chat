@@ -48,6 +48,7 @@ int chatSession(int serverSocket, int portNumber) {
 	struct clientNode *headClientNode = curNode;
 	int clientSocket;
 	int maxSocket = serverSocket; //need this because we are going to loop throug hte set of sockets used and we need to know where to stop looking 
+	int ret;
 
 	while (1) {
 		printf("must print before segfault num 5\n");
@@ -77,11 +78,15 @@ int chatSession(int serverSocket, int portNumber) {
 		//now check for client activity by looping through the set of sockets
 		curNode = headClientNode;
 		while(curNode != NULL) {
-			 printf("must print before segfault 9\n");
+			 printf("must print before segfault 9. The curNode socket is: %d and its handle is %s\n", curNode->socket, curNode->handle);
 			//check if curNode's socket is set
 			if (FD_ISSET(curNode->socket, &rfds)) {
 				printf("must print before segfault 11\n");
-				clientActivity(curNode->socket, &headClientNode);
+				ret = clientActivity(curNode->socket, &headClientNode);
+				if (ret > 0) {
+					//unset fd 
+					printf("Returning the disconnected socket: %d\n", ret);
+				}
 			}
 			printf("must print before segfault 10\n");
 			if (curNode != NULL) {
@@ -114,8 +119,10 @@ int clientActivity(int clientSocket, struct clientNode **head) {
 	}
 	else if (byteFlag == 8) { //client exiting flag
 		clientExit(head, clientSocket);
+		return clientSocket;
 	}
 	else if (byteFlag == 10) { //list handle flag
+		
 		listHandles(*head, clientSocket);
 	}
 	
@@ -132,7 +139,7 @@ int clientExit(struct clientNode **head ,int clientSocket) {
 	
 	struct clientNode *curNode;
 
-	//removeClientNode(head,clientSocket);
+	removeClientNode(head,clientSocket);
 
 	curNode = *head;
 	while(curNode != NULL) {
