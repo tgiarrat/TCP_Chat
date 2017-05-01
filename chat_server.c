@@ -150,8 +150,8 @@ int listHandles(struct clientNode *head, int socket) {
 		packetSize = sizeof(struct chat_header) + handleLength + sizeof(uint8_t);
 		cheader.packetLen = packetSize;
 		memcpy(packet, &cheader, sizeof(struct chat_header));
-		memcpy(packet + sizeof(struct chat_header), &handleLen, sizeof(uint8_t)); 
-		memcpy(packet + sizeof(struct chat_header)+sizeof(uint8_t), handle, handleLen);
+		memcpy(packet + sizeof(struct chat_header), &handleLength, sizeof(uint8_t)); 
+		memcpy(packet + sizeof(struct chat_header)+sizeof(uint8_t), handle, handleLength);
 		sendPacket(socket, packet, cheader);
 		curNode = curNode->next; 
 	}
