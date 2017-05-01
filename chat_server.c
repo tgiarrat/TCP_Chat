@@ -80,6 +80,7 @@ int chatSession(int serverSocket, int portNumber) {
 			 printf("must print before segfault 9\n");
 			//check if curNode's socket is set
 			if (FD_ISSET(curNode->socket, &rfds)) {
+				printf("must print before segfault 11\n");
 				clientActivity(curNode->socket, &headClientNode);
 			}
 			printf("must print before segfault 10\n");
