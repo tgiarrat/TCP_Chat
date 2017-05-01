@@ -90,9 +90,7 @@ int chatSession(int serverSocket, int portNumber) {
 					printf("Returning the disconnected socket: %d\n", ret);
 				}
 			}
-			printf("must print before segfault 10\n");
 			if (curNode != NULL) {
-				printf("must print before segfault 7\n");
 				curNode = curNode->next;
 				printf("must print before segfault 8\n");
 			}
@@ -222,6 +220,7 @@ int listHandles(struct clientNode *head, int socket) {
 		handleLength = strlen(curNode->handle);
 		packetSize = sizeof(struct chat_header) + handleLength + sizeof(uint8_t);
 		cheader.packetLen = htons(packetSize);
+		printf("Sending handle, handle length is %d and handle is %s\n", handleLength, curNode->handle);
 		memcpy(packet, &cheader, sizeof(struct chat_header));
 		memcpy(packet + sizeof(struct chat_header), &handleLength, sizeof(uint8_t)); 
 		memcpy(packet + sizeof(struct chat_header)+sizeof(uint8_t), curNode->handle, handleLength);
