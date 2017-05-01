@@ -63,7 +63,6 @@ void chatSession(int socketNum) {
 		
 		//server update, read from server
 		if (FD_ISSET(socketNum, &rfds)) {
-
 			connected = serverActivity(socketNum, blockedHandles); 
 		}
 		//keyboard update, read from keyboard
@@ -113,9 +112,23 @@ int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 }
 
 int exitACK (struct blockedHandles *head) {
-	printf("make sure to free blocked handles\n");
+	struct blockedHandles *curHandle;
+	struct blockedHandles *temp; 
+
+
+	curHandle = head;
+	while (curHandle != NULL) {
+		temp = curHandle;
+		curHandle = curHandle->next; 
+		free(temp);
+		printf("freeed one blocked handle\n");
+	}
+
+
 	return 0;
 }
+
+
 
 int listRecieved(char *buf,struct chat_header cheader, int socketNum) {
 	char packet[MAX_PACKET_SIZE];

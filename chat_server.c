@@ -126,14 +126,10 @@ int clientExit(struct clientNode **head ,int clientSocket) {
 	struct chat_header cheader;
 	
 	removeClientNode(head,clientSocket);
-
 	cheader.byteFlag = 9;
 	cheader.packetLen = htons(sizeof(struct chat_header));
 	memcpy(packet, &cheader, sizeof(struct chat_header));
-
 	sendPacket(clientSocket, packet, cheader);
-	printf("sent exit packet\n ");
-
 	return 0;
 }
 
@@ -143,23 +139,16 @@ int removeClientNode(struct clientNode **head, int socket) {
 
 	curNode = *head;
 	if (socket == curNode->socket) {
-		printf("blah\n");
 		temp = curNode;
 		*head = curNode->next;
-		
-		//
-		//free(temp)
-		//
-		
+		free(temp)
 		return 0;
 	}
 	while(curNode->next != NULL) {
 		if(socket == curNode->socket) {
 			temp = curNode->next;
 			curNode->next = curNode->next->next;
-			///
-			//,free(temp);
-			//
+			free(temp);
 			return 0;
 		}
 		curNode = curNode->next;
@@ -199,7 +188,6 @@ int listHandles(struct clientNode *head, int socket) {
 		memcpy(packet, &cheader, sizeof(struct chat_header));
 		memcpy(packet + sizeof(struct chat_header), &handleLength, sizeof(uint8_t)); 
 		memcpy(packet + sizeof(struct chat_header)+sizeof(uint8_t), curNode->handle, handleLength);
-		printf("sending packet\n");
 		sendPacket(socket, packet, cheader);
 		curNode = curNode->next; 
 	}
@@ -207,9 +195,7 @@ int listHandles(struct clientNode *head, int socket) {
 	cheader.byteFlag = 13;
 	cheader.packetLen = htons(packetSize);
 	memcpy(packet, &cheader, sizeof(struct chat_header));
-	printf("sending packet\n");
 	sendPacket(socket,packet,cheader);
-	printf("sent packet\n");
 	return 0;
 }
 
