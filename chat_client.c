@@ -77,7 +77,7 @@ void chatSession(int socketNum) {
 }
 
 int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
-	char buf[MAXBUF];
+	char buf[MAX_PACKET_SIZE];
 	int recieved, packetLength;
 	uint8_t byteFlag;
 	struct chat_header cheader;
@@ -103,7 +103,7 @@ int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 		listRecieved(buf + sizeof(struct chat_header), cheader, socketNum);
 	}
 	else if(byteFlag == 12) {
-
+		printf("Got here, shout not have\n");
 
 	}
 
@@ -113,7 +113,8 @@ int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 	return 0;
 }
 
-int listRecieved(char *packet, struct chat_header cheader, int socketNum) {
+int listRecieved(struct chat_header cheader, int socketNum) {
+	char packet[MAX_PACKET_SIZE];
 	uint32_t handleCount;
 	char curHandle[MAX_HANDLE_LEN];
 	uint8_t curHandleLen; 
@@ -254,7 +255,7 @@ int exitServer(int socketNum) {
 	memcpy(packet, &cheader, sizeof(struct chat_header));
 	sendPacket(packet, socketNum, sizeof(struct chat_header));
 	printf("sent exit packet\n");
-	
+
 	return 0;
 }
 

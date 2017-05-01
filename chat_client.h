@@ -13,6 +13,7 @@ struct blockedHandles {
     struct blockedHandles *next;
 };
 
+int listRecieved(struct chat_header cheader, int socketNum);
 int exitServer(int socketNum);
 int listHandles(int socketNum) ;
 int printBlocked(struct blockedHandles *head);
