@@ -159,6 +159,7 @@ int listHandles(struct clientNode *head, int socket) {
 	packetSize = sizeof(struct chat_header);
 	cheader.byteFlag = 13;
 	cheader.packetLen = htons(packetSize);
+	printf("sending packet\n");
 	sendPacket(socket,packet,cheader);
 	return 0;
 }
