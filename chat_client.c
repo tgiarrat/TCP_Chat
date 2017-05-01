@@ -133,6 +133,7 @@ int listRecieved(char *packet, struct chat_header cheader, int socketNum) {
 		printf("\t%s", curHandle);
 
 		recievePacket(socketNum, packet);
+		memcpy(&cheader, packet, sizeof(struct chat_header));
 	}
 
 
