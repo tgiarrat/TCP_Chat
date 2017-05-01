@@ -239,7 +239,7 @@ int listHandles(int socketNum) {
 	cheader.packetLen = htons(packetSize);
 	memcpy(packet, &cheader, packetSize);
 	
-	sendPacket(packet, socketNum, cheader.packetLen);
+	sendPacket(packet, socketNum, packetSize);
 	return 0;
 }
 
@@ -473,7 +473,7 @@ int message(char *textBuffer, int socketNum) {
 	packetPtr += messageLength;
 	//packetComplete
 
-	sent = sendPacket(packet, socketNum, htons(cheader.packetLen));
+	sent = sendPacket(packet, socketNum, ntohs(cheader.packetLen));
 	freeDestHandles(destHandles, numDestinations); 
 	return 0;
 }
