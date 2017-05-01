@@ -64,11 +64,10 @@ void chatSession(int socketNum) {
 		if (FD_ISSET(socketNum, &rfds)) {
 
 			serverActivity(socketNum, blockedHandles); 
-			printf("what is going on 4\n");
+			printf("what is going on 4\n"); //it happens here for some reason
 		}
 		//keyboard update, read from keyboard
 		else if (FD_ISSET(0, &rfds)) { 
-			printf("what is going on 51\n");
 			localInput(socketNum, &blockedHandles);
 			printf("$: ");
 			fflush(stdout);
@@ -121,6 +120,7 @@ int listRecieved(char *packet, struct chat_header cheader, int socketNum) {
 	handleCount = ntohl(handleCount);
 	printf("Number of clients: %zu\n", handleCount);
 	
+	recievePacket(socketNum,packet);
 	return 0;
 }
 
