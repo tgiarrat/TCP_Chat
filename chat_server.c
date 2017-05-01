@@ -82,6 +82,7 @@ int chatSession(int serverSocket, int portNumber) {
 			if (FD_ISSET(curNode->socket, &rfds)) {
 				clientActivity(curNode->socket, &headClientNode);
 			}
+			printf("must print before segfault 10\n");
 			if (curNode != NULL) {
 				printf("must print before segfault 7\n");
 				curNode = curNode->next;
