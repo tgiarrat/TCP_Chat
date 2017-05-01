@@ -156,7 +156,7 @@ int removeClientNode(struct clientNode **head, int socket) {
 	while(curNode->next != NULL) {
 		if(socket == curNode->socket) {
 			temp = curNode->next;
-			curNode->next = curHandle->next->next;
+			curNode->next = curNode->next->next;
 			///
 			//,free(temp);
 			//
