@@ -144,18 +144,21 @@ int listHandles(struct clientNode *head, int socket) {
 	//now for the flag 12s
 	curNode = head;
 	cheader.byteFlag = 12; 
-/*
+
 	while (curNode != NULL) { 
 		handleLength = strlen(curNode->handle);
 		packetSize = sizeof(struct chat_header) + handleLength + sizeof(uint8_t);
-		cheader.packetLen = packetSize;
+		cheader.packetLen = htons(packetSize);
 		memcpy(packet, &cheader, sizeof(struct chat_header));
 		memcpy(packet + sizeof(struct chat_header), &handleLength, sizeof(uint8_t)); 
 		memcpy(packet + sizeof(struct chat_header)+sizeof(uint8_t), curNode->handle, handleLength);
 		sendPacket(socket, packet, cheader);
 		curNode = curNode->next; 
 	}
-*/
+	packetSize = sizeof(struct chat_header);
+	cheader.byteFlag = 13;
+	cheader.packetLen = htons(packetSize);
+	sendPacket(socket,packet,cheader);
 	return 0;
 }
 

@@ -64,7 +64,6 @@ void chatSession(int socketNum) {
 		if (FD_ISSET(socketNum, &rfds)) {
 
 			serverActivity(socketNum, blockedHandles); 
-			printf("what is going on 4\n"); //it happens here for some reason
 		}
 		//keyboard update, read from keyboard
 		else if (FD_ISSET(0, &rfds)) { 
@@ -103,24 +102,32 @@ int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 		//listing handles
 		listRecieved(buf + sizeof(struct chat_header), cheader, socketNum);
 	}
-	else if (byteFlag == 12) {
-		exit(-1);
-	}
+
 
 	printf("$:");
 	fflush(stdout);
-	printf("what is going on 3\n");
 	return 0;
 }
 
 int listRecieved(char *packet, struct chat_header cheader, int socketNum) {
 	uint32_t handleCount;
+	char curHandle[MAX_HANDLE_LEN]
+	uint8_t curHandleLen; 
 
 	memcpy(&handleCount, packet, sizeof(uint32_t));
 	handleCount = ntohl(handleCount);
 	printf("Number of clients: %zu\n", handleCount);
 	
-	//recievePacket(socketNum,packet);
+	recievePacket(socketNum,packet);
+	memcpy(&cheader, packet, sizeof(struct chat_header));
+	while (cheader.byteFlag != 13) {
+		memcpy(curHandleLen, packet + sizeof(struct chat_header), sizeof(uint8_t));
+		memcpy(curHandle, packet + sizeof(struct chat_header) + sizeof(uint8_t), curHandleLen);
+		printf("\t%s", curHandle);
+
+		recievePacket(socketNum, packet);
+	}
+
 	return 0;
 }
 
