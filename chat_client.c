@@ -60,10 +60,7 @@ void chatSession(int socketNum) {
 	printf("$: ");
 	fflush(stdout);
 	while (1) { //1 is possibly temporary, need to run client until the user exits the client
-		if (removethis == 1 ) {
-			printf("one\n");
-		}
-
+		
 		FD_ZERO(&rfds);
 		FD_SET(STD_IN, &rfds); //watch std in
 		FD_SET(socketNum, &rfds ); //watch socket for update
@@ -78,6 +75,7 @@ void chatSession(int socketNum) {
 			printf("HERE\n");
 			
 			serverActivity(socketNum, blockedHandles); //DONT NEED AND ????????? 
+			printf("sfadfsdf\n");
 			if (removethis == 1 ) {
 				printf("one\n");
 			}	
@@ -119,7 +117,8 @@ int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 		//listing handles
 		listRecieved(buf + sizeof(struct chat_header), cheader, socketNum);
 	}
-	
+
+
 	printf("$:");
 	fflush(stdout);
 	return 0;
