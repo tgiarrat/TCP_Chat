@@ -125,7 +125,17 @@ int clientExit(struct clientNode **head ,int clientSocket) {
 	char packet[MAX_PACKET_SIZE];
 	struct chat_header cheader;
 	
+	struct *curNode;
+
 	removeClientNode(head,clientSocket);
+
+	curNode = *head;
+	while(curNode != NULL) {
+		printf("element: %s\n", curNode->handle);				
+		curNode = curNode->next; 
+	}
+
+
 	cheader.byteFlag = 9;
 	cheader.packetLen = htons(sizeof(struct chat_header));
 	memcpy(packet, &cheader, sizeof(struct chat_header));
@@ -293,19 +303,6 @@ int newClientConnection(int serverSocket,struct clientNode **head ){
 	}
 
 	recievePacket(clientSocket, buf);
-
-	/*
-	//recieve the clients initial packet containing handle and handle length
-	if ((messageLen = recv(clientSocket, buf, MAX_PACKET_SIZE, 0)) < 0)
-	{
-		perror("Initial Client Recieve Call Error");
-		exit(-1);
-	}
-	if (messageLen == 0) {
-		perror("Zero bytes received for initial packet");
-		exit(-1);
-	}*/
-
 	memcpy(&handleLength, buf + sizeof(struct chat_header), sizeof(uint8_t));
 	memcpy(handle, buf + sizeof(struct chat_header) + sizeof(uint8_t), handleLength); 
 	handle[handleLength] = '\0';
