@@ -348,7 +348,7 @@ int recievePacket(int socket, char *packet) {
 }
 
 int addClient(struct clientNode **head, char *handle, int handleLen, int clientSocket) {
-	struct clientNode *newClient = (struct clientNode *) malloc(sizeof(struct clientNode)); 
+	struct clientNode *newClient = (struct clientNode *) calloc(1, sizeof(struct clientNode)); 
 	struct clientNode *curNode; 
 	
 	newClient->socket = clientSocket;
