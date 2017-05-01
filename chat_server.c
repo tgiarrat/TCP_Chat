@@ -127,10 +127,9 @@ int clientExit(struct clientNode **head ,int clientSocket) {
 	while(curNode != NULL) {
 		printf("element: %s, socket = %d\n", curNode->handle, curNode->socket);				
 		curNode = curNode->next; 
-		printf("must print before segfault\n");
 	}
 
-
+	printf("must print before segfault\n");
 	cheader.byteFlag = 9;
 	cheader.packetLen = htons(sizeof(struct chat_header));
 	memcpy(packet, &cheader, sizeof(struct chat_header));
