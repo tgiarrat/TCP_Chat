@@ -131,7 +131,9 @@ int listRecieved(char *buf,struct chat_header cheader, int socketNum) {
 		curHandle[curHandleLen] = '\0';
 		printf("\t%s\n", curHandle);
 
+		printf("do i get here \n");
 		recievePacket(socketNum, packet);
+		printf("I get here\n");
 		memcpy(&cheader, packet, sizeof(struct chat_header));
 		printf("byte flag is: %s\n", cheader.byteFlag);
 	}
