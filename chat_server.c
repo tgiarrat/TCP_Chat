@@ -168,7 +168,7 @@ int removeClientNode(struct clientNode **head, int socket) {
 		curNode = curNode->next;
 	}
 	if (socket == curNode->socket) {
-		printf("removing client from list\n");
+		printf("removing client from list (end of list)\n");
 		temp = curNode;
 		curNode = NULL;
 		free(temp);
