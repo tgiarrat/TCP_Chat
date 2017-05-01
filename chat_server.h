@@ -15,7 +15,7 @@ struct clientNode{
 }__attribute__((packed));
 
 
-int clientExit(struct clientNode **head ,struct clientNode);
+int clientExit(struct clientNode **head ,int clientSocket);
 int listHandles(struct clientNode *head, int socket);
 int recievePacket(int socket, char *packet);
 int sendPacket(int socket, char *packet, struct chat_header cheader); 
