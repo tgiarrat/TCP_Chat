@@ -38,7 +38,7 @@ int main(int argc, char * argv[])
 	//sendToServer(socketNum);
 	chatSession(socketNum);
 	//
-	//close(socketNum);
+	close(socketNum);
 	//
 	return 0;
 }
