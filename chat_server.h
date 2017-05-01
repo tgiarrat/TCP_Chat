@@ -14,7 +14,7 @@ struct clientNode{
     struct clientNode *next;
 }__attribute__((packed));
 
-
+int removeClientNode(struct clientNode **head, int socket);
 int clientExit(struct clientNode **head ,int clientSocket);
 int listHandles(struct clientNode *head, int socket);
 int recievePacket(int socket, char *packet);
