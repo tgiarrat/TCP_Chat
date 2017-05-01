@@ -342,16 +342,6 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 	struct blockedHandles *newBlock = (struct blockedHandles *)malloc(sizeof(struct blockedHandles));
 	struct blockedHandles *curHandle;
 	char *invalidHandle;
-	
-	/*printf("\n");
-	printf("Before blocking here is the list of handles:\n ");
-	curHandle = *blockedHandles;
-	while(curHandle != NULL) {
-		printf("element: %s\n", curHandle->handle);				
-		curHandle = curHandle->next; 
-	}
-	printf("\n");
-	*/
 	invalidHandle = strtok(textBuffer, " ");
 	if(invalidHandle == NULL) {
 		return 0;
@@ -457,7 +447,7 @@ int message(char *textBuffer, int socketNum) {
 	destHandles = malloc(numDestinations);
 	for (i = 0; (i < numDestinations); i++) {
 
-		*(destHandles + i) = malloc(strlen(arg));
+		*(destHandles + i) = calloc(1, strlen(arg));
 		memcpy( (*(destHandles+i)) , arg, strlen(arg));
 		destHandleTotal += strlen(arg);
 		if (i != numDestinations - 1) { //dont get the next token
@@ -476,14 +466,15 @@ int message(char *textBuffer, int socketNum) {
 	cheader.packetLen =
 		htons(sizeof(struct chat_header) + srcLength + messageLength 
 		+ numDestinations + 2 + destHandleTotal);
-	/*printf("\n");
+	printf("\n");
 	printf("-----------PRINTING THE PACKET INFO---------------------\n");
 	printf("text is: %s\n", arg);
 	printf("Packet Length is: %d\n", ntohs(cheader.packetLen));
 	printf("Handle is: %s\n", handle);
 	printf("first dest is: %s\n", *destHandles);
 	printf("second dest is: %s\n", *(destHandles + 1));	
-	printf("\n");*/
+	printf("third dset is: %s\n", *(destHandles + 2));
+	printf("\n");
 
 	//Make packet:
 	packetPtr = packet;

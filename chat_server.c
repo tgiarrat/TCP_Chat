@@ -35,7 +35,7 @@ int main(int argc, char *argv[]){
 	chatSession(serverSocket, portNumber);
 	
 	/* close the sockets */
-	close(serverSocket);
+	//close(serverSocket);
 
 	
 	return 0;
@@ -86,7 +86,7 @@ int chatSession(int serverSocket, int portNumber) {
 			}
 		}
 	}
-	freeClientList(headClientNode);
+	//freeClientList(headClientNode);
 } 
 
 int clientActivity(int clientSocket, struct clientNode **head) {
@@ -116,7 +116,6 @@ int clientActivity(int clientSocket, struct clientNode **head) {
 		
 		listHandles(*head, clientSocket);
 	}
-	
 	else {
 		perror("Incomming byte flag is invalid");
 		exit(-1);
@@ -127,17 +126,8 @@ int clientActivity(int clientSocket, struct clientNode **head) {
 int clientExit(struct clientNode **head ,int clientSocket) {
 	char packet[MAX_PACKET_SIZE];
 	struct chat_header cheader;
-	
 	struct clientNode *curNode;
-
 	removeClientNode(head,clientSocket);
-
-	curNode = *head;
-	while(curNode != NULL) {
-		printf("element: %s, socket = %d\n", curNode->handle, curNode->socket);				
-		curNode = curNode->next; 
-	}
-
 	cheader.byteFlag = 9;
 	cheader.packetLen = htons(sizeof(struct chat_header));
 	memcpy(packet, &cheader, sizeof(struct chat_header));
@@ -171,8 +161,6 @@ int removeClientNode(struct clientNode **head, int socket) {
 		temp->next = NULL;
 		free(curNode);
 	}
-
-
 	return 0;
 }
 
@@ -205,7 +193,7 @@ int listHandles(struct clientNode *head, int socket) {
 		handleLength = strlen(curNode->handle);
 		packetSize = sizeof(struct chat_header) + handleLength + sizeof(uint8_t);
 		cheader.packetLen = htons(packetSize);
-		printf("Sending handle, handle length is %d and handle is %s\n", handleLength, curNode->handle);
+		//printf("Sending handle, handle length is %d and handle is %s\n", handleLength, curNode->handle);
 		memcpy(packet, &cheader, sizeof(struct chat_header));
 		memcpy(packet + sizeof(struct chat_header), &handleLength, sizeof(uint8_t)); 
 		memcpy(packet + sizeof(struct chat_header)+sizeof(uint8_t), curNode->handle, handleLength);
@@ -426,6 +414,7 @@ int checkHandle(char *handle, struct clientNode *head) {
 	return 0;
 }
 
+/*
 int freeClientList(struct clientNode *head){
 	struct clientNode *curNode = head;
 
@@ -436,6 +425,7 @@ int freeClientList(struct clientNode *head){
 	}
 	return 0;
 }
+*/
 
 int checkArgs(int argc, char *argv[])
 {
