@@ -126,14 +126,10 @@ int listRecieved(char *packet, struct chat_header cheader, int socketNum) {
 	printf("recieve?\n");
 	memcpy(&cheader, packet, sizeof(struct chat_header));
 	while (cheader.byteFlag != 13) {
-		printf("one\n");
 		memcpy(&curHandleLen, packet + sizeof(struct chat_header), sizeof(uint8_t));
-		printf("handle len: %d\n", curHandleLen);
 		memcpy(curHandle, packet + sizeof(struct chat_header) + sizeof(uint8_t), curHandleLen);
-		printf("three\n");
 		curHandle[curHandleLen] = '\0';
-		printf("Handle is: %s\n", curHandle);
-		printf("asdfasdfsdf\t%s", curHandle);
+		printf("\t%s\n", curHandle);
 
 		recievePacket(socketNum, packet);
 		memcpy(&cheader, packet, sizeof(struct chat_header));
