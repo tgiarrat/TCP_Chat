@@ -44,12 +44,13 @@ int main(int argc, char * argv[])
 }
 
 void chatSession(int socketNum) {
+	int connected = 1;
 	fd_set rfds;
 	struct blockedHandles *blockedHandles = NULL;
 	sendInitialPacket(socketNum);
 	printf("$: ");
 	fflush(stdout);
-	while (1) { //1 is possibly temporary, need to run client until the user exits the client
+	while (connected) { //1 is possibly temporary, need to run client until the user exits the client
 		
 		FD_ZERO(&rfds);
 		FD_SET(STD_IN, &rfds); //watch std in
@@ -63,7 +64,7 @@ void chatSession(int socketNum) {
 		//server update, read from server
 		if (FD_ISSET(socketNum, &rfds)) {
 
-			serverActivity(socketNum, blockedHandles); 
+			connected = serverActivity(socketNum, blockedHandles); 
 		}
 		//keyboard update, read from keyboard
 		else if (FD_ISSET(0, &rfds)) { 
@@ -102,14 +103,17 @@ int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 		//listing handles
 		listRecieved(buf + sizeof(struct chat_header), cheader, socketNum);
 	}
-	else if(byteFlag == 12) {
-		printf("Got here, shout not have\n");
-
+	else if(byteFlag == 9) {
+		exitACK(blockedHandles);
+		return 0;
 	}
-
-
 	printf("$:");
 	fflush(stdout);
+	return 1;
+}
+
+int exitACK (struct blockedHandles *head) {
+	printf("make sure to free blocked handles\n");
 	return 0;
 }
 
@@ -130,15 +134,9 @@ int listRecieved(char *buf,struct chat_header cheader, int socketNum) {
 		memcpy(curHandle, packet + sizeof(struct chat_header) + sizeof(uint8_t), curHandleLen);
 		curHandle[curHandleLen] = '\0';
 		printf("\t%s\n", curHandle);
-
-		printf("do i get here \n");
 		recievePacket(socketNum, packet);
-		printf("I get here\n");
 		memcpy(&cheader, packet, sizeof(struct chat_header));
-		printf("asfsdfsdfasdf\n");
-		printf("byte flag is: %d\n", cheader.byteFlag);
 	}
-
 	return 0;
 }
 

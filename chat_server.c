@@ -122,7 +122,48 @@ int clientActivity(int clientSocket, struct clientNode **head) {
 }
 
 int clientExit(struct clientNode **head ,int clientSocket) {
-	printf("got client exit flag\n");
+	char packet[MAX_PACKET_SIZE];
+	struct chat_header cheader;
+	
+	removeClientNode(head,clientSocket);
+
+	cheader.byteFlag = 9;
+	cheader.packetLen = htons(sizeof(struct chat_header));
+	memcpy(packet, &cheader, sizeof(struct chat_header));
+
+	sendPacket(clientSocket, packet, cheader);
+	printf("sent exit packet\n ");
+
+	return 0;
+}
+
+int removeClientNode(struct clientNode **head, int socket) {
+	struct clientNode *curNode;
+	struct clientNode *temp;
+
+	curNode = *head;
+	if (socket == curNode->socket) {
+		printf("blah\n");
+		temp = curNode;
+		*head = curNode->next;
+		
+		//
+		//free(temp)
+		//
+		
+		return 0;
+	}
+	while(curNode->next != NULL) {
+		if(socket == curNode->socket) {
+			temp = curNode->next;
+			curNode->next = curHandle->next->next;
+			///
+			//,free(temp);
+			//
+			return 0;
+		}
+		curNode = curNode->next;
+	}	
 	return 0;
 }
 
