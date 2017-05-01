@@ -131,7 +131,7 @@ int listHandles(struct clientNode *head, int socket) {
 	//first send flag = 11 packet
 	cheader.byteFlag = 11;
 	packetSize = sizeof(struct chat_header) + sizeof(uint32_t);
-	cheader.packetLen = packetSize;
+	cheader.packetLen = htons(packetSize);
 	while(curNode != NULL) {
 		handleCount++;
 		curNode = curNode->next;
@@ -209,7 +209,7 @@ int sendInvalidDest(int destSocket ,int sendingSocket, char *destHandle, uint8_t
 int sendPacket(int socket, char *packet, struct chat_header cheader) {
 	int sent;
 	//send packet:
-	sent =  send(socket, packet, htons(cheader.packetLen), 0);
+	sent =  send(socket, packet, ntohs(cheader.packetLen), 0);
 	if (sent < 0)
 	{
 		perror("send call");
