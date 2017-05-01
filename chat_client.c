@@ -306,6 +306,10 @@ int unblock(char *textBuffer, struct blockedHandles **blockedHandles) {
 	struct blockedHandles *temp;
 
 	blockedHandle = strtok(textBuffer, " ");
+	if (blockedHandle == NULL) { //no handle provieded check
+		printf("hopefully I get here \n");
+		exit(-1);
+	}
 	if ((checkBlocked(blockedHandle, *blockedHandles) == 0) || (*blockedHandles == NULL)) {
 		printf("Unblock failed, handle %s is not blocked.\n", blockedHandle);
 		return 1;
@@ -383,7 +387,6 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 }
 
 int sendInitialPacket(int socketNum){
-	//char *packet;
 	char packet[MAX_PACKET_SIZE];
 	char *packetPtr;
 	int packetLength, handleLen, sent, recieved;
@@ -408,14 +411,7 @@ int sendInitialPacket(int socketNum){
 
 	memcpy(&flag, incomingBuffer + sizeof(uint16_t), sizeof(uint8_t)); //gets the flag from the incoming buffer
 	if (flag == 3) {
-		perror("Invalid Handle Flag = 3\n");
-		exit(-1);
-	}
-	else if (flag ==2) {
-		//printf("Valid handle Flag = 2\n");
-	}
-	else {
-		perror("uh oh... flag != 2 or 3\n");
+		printf("Handle already in use: %s\n", handle);
 		exit(-1);
 	}
 	return 0;
