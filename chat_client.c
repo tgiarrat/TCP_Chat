@@ -474,8 +474,9 @@ int message(char *textBuffer, int socketNum) {
 
 	arg = strtok (NULL, "\n"); //arg is message
 	if (arg == NULL) {
-		printf("HEREREREREERERER\n");
+		arg = "";
 	}
+	printf("");
 	messageLength = strlen(arg) + 1;  // plus one is for the null terminating character at the end	
 	cheader.byteFlag = 5;
 	srcLength = strlen(handle);
