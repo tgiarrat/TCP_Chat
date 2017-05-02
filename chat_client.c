@@ -539,7 +539,7 @@ void checkArgs(int argc, char * argv[])
 		exit(1);
 	}
 	if (strlen(argv[1]) >= MAX_HANDLE_LEN) {
-		printf("Desired handle is %d characters greater than the maximum handle size.\n", (strlen(argv[1]) - MAX_HANDLE_LEN));
+		printf("Desired handle is %d characters greater than the maximum handle size.\n", ((strlen(argv[1]) - MAX_HANDLE_LEN) + 1));
 		exit(1);
 	}
 }
