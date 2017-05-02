@@ -457,7 +457,10 @@ int message(char *textBuffer, int socketNum) {
 	}
 	destHandles = malloc(numDestinations);
 	for (i = 0; (i < numDestinations); i++) {
-
+		if (strlen(arg) >= MAX_HANDLE_LEN) {
+			printf("here");
+			exit(-1);
+		}
 		*(destHandles + i) = calloc(1, strlen(arg));
 		memcpy( (*(destHandles+i)) , arg, strlen(arg));
 		destHandleTotal += strlen(arg);
