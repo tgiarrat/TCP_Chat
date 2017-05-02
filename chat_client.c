@@ -525,7 +525,7 @@ int message(char *textBuffer, int socketNum) {
 		sent = sendPacket(packet, socketNum, ntohs(cheader.packetLen));
 
 
-		messageLength -= textSize;
+		messageLength -= (textSize - 1);
 		arg += textSize;
 	}
 
