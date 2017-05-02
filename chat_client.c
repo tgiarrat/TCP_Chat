@@ -441,7 +441,7 @@ int message(char *textBuffer, int socketNum) {
 		printf("Invalid Command \n");
 		return 1; 
 	}
-	if (arg[0] == ' ') {
+	if (textBuffer[0] == ' ') {
 		printf("Extra spaces, format correctly >:(\n");
 		return 1;
 	}
