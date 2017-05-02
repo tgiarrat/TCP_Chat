@@ -206,7 +206,7 @@ int printMessageText(char *packet) {
 	return 0;
 }
 
-int localInput(int socketNum, struct blockedHandles **blockedHandles) {
+int localInput(int socketNum, struct blockedHandles **blockedHandles, char *srcHandle) {
 	char textBuffer[MAXBUF];
 	int textLength;
 	char commandType;
