@@ -34,12 +34,8 @@ int main(int argc, char * argv[])
 	/* set up the TCP Client socket  */
 	socketNum = tcpClientSetup(argv[2], argv[3], DEBUG_FLAG);
 	strcpy(handle, argv[1]);
-
-	//sendToServer(socketNum);
 	chatSession(socketNum);
-	//
 	close(socketNum);
-	//
 	return 0;
 }
 
@@ -449,7 +445,7 @@ int message(char *textBuffer, int socketNum) {
 	if (isdigit(textBuffer[0])) {
 		numDestinations = atoi(arg);
 		if (numDestinations > 9) {
-			printf("Your number of message recipients is %d larger than allowed\n", (numDestinations - 9));
+			printf("Your number of message recipients desired is %d larger than allowed\n", (numDestinations - 9));
 			return 1;
 		}
 		arg = strtok(NULL, " ");
@@ -535,10 +531,16 @@ int freeDestHandles(char **destHandles, int numDestinations) {
 
 void checkArgs(int argc, char * argv[])
 {
+	
 	/* check command line arguments  */
 	if (argc != 4)
 	{
 		printf("usage: %s handle server-name server-port \n", argv[0]);
+		exit(1);
+	}
+	if (strlen(argv[1]) >= MAX_HANDLE_LEN) {
+		printf("Desired handle is %d characters greater than the maximum handle size.\n
+		Also its a stupid handle. Nobody in thier right mind would use a 100 character handle let alone a 250 char handle.\n", (strlen(argv[1]) - MAX_HANDLE_LEN));
 		exit(1);
 	}
 }
