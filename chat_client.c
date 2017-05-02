@@ -484,7 +484,7 @@ int message(char *textBuffer, int socketNum) {
 	cheader.byteFlag = 5;
 	srcLength = strlen(handle);
 
-	while (messageLength > 0) {
+	while (messageLength > 1) {
 		printf("/nThe message length is: %d/n/n", messageLength);
 		if (messageLength > 200)  {
 			textSize = MAX_TEXT_LEN;//minus 1 for the mull char
