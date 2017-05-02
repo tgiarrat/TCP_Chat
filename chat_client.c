@@ -225,7 +225,7 @@ int localInput(int socketNum, struct blockedHandles **blockedHandles) {
 	}
 
 	if (commandType == 'M') { //send message
-		message(textBuffer + COMMAND_OFFSET, socketNum);
+		message(textBuffer + COMMAND_OFFSET, socketNum, srcHandle);
 	}
 	else if (commandType == 'B') { //block user
 		block(textBuffer + COMMAND_OFFSET, blockedHandles);

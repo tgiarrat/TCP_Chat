@@ -30,7 +30,7 @@ void chatSession(int socketNum, char *srcHandle);
 void sendToServer(int socketNum);
 void checkArgs(int argc, char * argv[]);
 int serverActivity(int socketNum, struct blockedHandles *blockedHandles);
-int localInput(int, struct blockedHandles **blockedHandles); 
+int localInput(int, struct blockedHandles **blockedHandles, char *srcHandle); 
 int message(char *, int, char *);
 int sendInitialPacket(int socketNum, char *srcHandle);
 int sendPacket(char *packet, int socketNum, int packetLength);
