@@ -448,11 +448,12 @@ int message(char *textBuffer, int socketNum) {
 	
 	printf("here 1\n");
 	if (isdigit(textBuffer[0])) {
-		numDestinations = atoi(arg);
+		printf("here 2\n");
+		umDestinations = atoi(arg);
 		arg = strtok(NULL, " ");
 	}
-	printf("here 2\n");
 	else {
+		printf("here 3\n");
 		printf("text buffer[0] is %c with a in value of %d", textBuffer[0], (int)textBuffer[0]);
 		numDestinations = 1;
 	}
