@@ -485,7 +485,7 @@ int message(char *textBuffer, int socketNum) {
 	srcLength = strlen(handle);
 
 	while (messageLength > 1) {
-		printf("/nThe message length is: %d/n/n", messageLength);
+		printf("The message length is: %d\n", messageLength);
 		if (messageLength > 200)  {
 			textSize = MAX_TEXT_LEN;//minus 1 for the mull char
 			memcpy(textSegment, arg , textSize-1);
@@ -526,7 +526,7 @@ int message(char *textBuffer, int socketNum) {
 
 
 		messageLength -= (textSize - 1);
-		arg += textSize;
+		arg += (textSize - 1);
 	}
 
 
