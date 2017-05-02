@@ -473,6 +473,7 @@ int message(char *textBuffer, int socketNum) {
 		+ numDestinations + 2 + destHandleTotal);
 	printf("\n");
 	printf("-----------PRINTING THE PACKET INFO---------------------\n");
+	printf("num dest is %d\n", numDestinations);
 	printf("text is: %s\n", arg);
 	printf("Packet Length is: %d\n", ntohs(cheader.packetLen));
 	printf("Handle is: %s\n", handle);
