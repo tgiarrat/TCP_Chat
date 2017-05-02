@@ -441,9 +441,11 @@ int message(char *textBuffer, int socketNum) {
 		printf("Invalid Command \n");
 		return 1; 
 	}
-	while (arg = strtok(textBuffer, " ")) {
-		printf("an extra space?\n");
+	if (arg[0] == ' ') {
+		printf("Extra spaces, format correctly >:(\n");
+		return 1;
 	}
+	
 
 	if (isdigit(textBuffer[0])) {
 		numDestinations = atoi(arg);
