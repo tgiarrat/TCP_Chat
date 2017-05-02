@@ -458,8 +458,9 @@ int message(char *textBuffer, int socketNum) {
 	destHandles = malloc(numDestinations);
 	for (i = 0; (i < numDestinations); i++) {
 		if (strlen(arg) >= MAX_HANDLE_LEN) {
-			printf("here");
-			exit(-1);
+			printf("A destination handle entered is too large \n");
+			freeDestHandles(destHandles, (i+1)); 
+			return 1;
 		}
 		*(destHandles + i) = calloc(1, strlen(arg));
 		memcpy( (*(destHandles+i)) , arg, strlen(arg));
