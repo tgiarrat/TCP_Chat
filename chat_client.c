@@ -118,7 +118,6 @@ int exitACK (struct blockedHandles *head) {
 		temp = curHandle;
 		curHandle = curHandle->next; 
 		free(temp);
-		printf("freeed one blocked handle\n");
 	}
 
 
@@ -152,12 +151,12 @@ int listRecieved(char *buf,struct chat_header cheader, int socketNum) {
 
 int invalidDestRecieved(char *packet, struct chat_header cheader){
 	uint8_t handleSize; 
-	char handle[MAX_HANDLE_LEN];
+	char invalidhandle[MAX_HANDLE_LEN];
 
 	memcpy(&handleSize, packet, sizeof(uint8_t));
-	memcpy(handle, (packet + 1), handleSize);
-	handle[handleSize] = '\0';
-	printf("Client with handle %s does not exist\n", handle);
+	memcpy(invalidhandle, (packet + 1), handleSize);
+	invalidhandle[handleSize] = '\0';
+	printf("Client with handle %s does not exist\n", invalidhandle);
 	return 0;
 }
 
