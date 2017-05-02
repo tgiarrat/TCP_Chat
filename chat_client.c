@@ -492,6 +492,7 @@ int message(char *textBuffer, int socketNum) {
 		}
 		else {
 			textSize = messageLength;
+			memcpy(textSegment, arg, textSize);
 		}
 		cheader.packetLen =
 			htons(sizeof(struct chat_header) + srcLength + textSize 
