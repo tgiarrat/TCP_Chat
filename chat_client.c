@@ -279,14 +279,12 @@ int printBlocked(struct blockedHandles *head) {
 	struct blockedHandles *curHandle;
 
 	curHandle = head;
-	printf("Blocked: ");
+	printf("Blocked:  ");
 	while (curHandle != NULL) {
 		printf("%s, ", curHandle->handle);
 		curHandle = curHandle->next;
 	}
-	if (curHandle != head) {//the semicolon would disappear if the blocked list is empty
-		printf("\b\b  \n\n");
-	}
+	printf("\b\b  \n\n");
 	return 0;
 }
 
