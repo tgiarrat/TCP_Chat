@@ -451,8 +451,6 @@ int message(char *textBuffer, int socketNum) {
 		arg = strtok(NULL, " ");
 	}
 	else {
-		printf("here 3\n");
-		printf("text buffer[0] is %c with a in value of %d", textBuffer[0], (int)textBuffer[0]);
 		numDestinations = 1;
 	}
 	destHandles = malloc(numDestinations);
