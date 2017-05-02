@@ -449,7 +449,7 @@ int message(char *textBuffer, int socketNum) {
 	printf("here 1\n");
 	if (isdigit(textBuffer[0])) {
 		printf("here 2\n");
-		umDestinations = atoi(arg);
+		numDestinations = atoi(arg);
 		arg = strtok(NULL, " ");
 	}
 	else {
