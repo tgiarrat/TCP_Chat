@@ -31,6 +31,6 @@ void sendToServer(int socketNum);
 void checkArgs(int argc, char * argv[]);
 int serverActivity(int socketNum, struct blockedHandles *blockedHandles);
 int localInput(int, struct blockedHandles **blockedHandles); 
-int message(char *, int);
-int sendInitialPacket(int socketNum);
+int message(char *, int, char *);
+int sendInitialPacket(int socketNum, char *srcHandle);
 int sendPacket(char *packet, int socketNum, int packetLength);
