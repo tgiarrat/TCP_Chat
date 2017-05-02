@@ -446,10 +446,12 @@ int message(char *textBuffer, int socketNum) {
 		return 1;
 	}
 	
-	printf("here 1\n");
 	if (isdigit(textBuffer[0])) {
-		printf("here 2\n");
 		numDestinations = atoi(arg);
+		if (numDestinations > 9) {
+			printf("Your number of message recipients is %d larger than allowed\n", (numDestinations - 9));
+			return 1;
+		}
 		arg = strtok(NULL, " ");
 	}
 	else {
