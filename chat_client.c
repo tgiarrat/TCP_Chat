@@ -425,12 +425,14 @@ int message(char *textBuffer, int socketNum) {
 	char packet[MAX_PACKET_SIZE]; //this will be the entire packet. I knoe its a lil confusing but oh well too late
 	char *packetPtr;
 	char *arg;
+	char textSegment[MAX_TEXT_LEN];
 	char **destHandles;
 	char *curDest;
 	struct chat_header cheader;
 	uint8_t srcLength, numDestinations ;
 	int messageLength, i, destLen, sent;
 	int destHandleTotal = 0;
+	int textSize;
 
 	//Get destination handles:
 	arg = strtok(textBuffer, " "); //get a space separated token of the string 
@@ -442,7 +444,6 @@ int message(char *textBuffer, int socketNum) {
 		printf("Extra spaces, format correctly >:(\n");
 		return 1;
 	}
-	
 	if (isdigit(textBuffer[0])) {
 		numDestinations = atoi(arg);
 		if (numDestinations > 9) {
@@ -479,11 +480,58 @@ int message(char *textBuffer, int socketNum) {
 	}
 	
 	messageLength = strlen(arg) + 1;  // plus one is for the null terminating character at the end	
+
 	cheader.byteFlag = 5;
 	srcLength = strlen(handle);
-	cheader.packetLen =
-		htons(sizeof(struct chat_header) + srcLength + messageLength 
-		+ numDestinations + 2 + destHandleTotal);
+
+	while (messageLength != 0) {
+		printf("/nThe message length is: %d/n/n", messageLength);
+		if (messageLength > 200)  {
+			textSize = 199;
+			memcpy(textSegment, arg , textSize);
+		}
+		else {
+			textSize = messageLength;
+		}
+		cheader.packetLen =
+			htons(sizeof(struct chat_header) + srcLength + textSize 
+			+ numDestinations + 2 + destHandleTotal);
+
+		packetPtr = packet;
+		memcpy(packetPtr, &cheader, sizeof(struct chat_header)); //copy chat header
+		packetPtr += sizeof(struct chat_header);
+		memcpy(packetPtr, &srcLength, sizeof(uint8_t));
+		packetPtr += sizeof(uint8_t);
+		memcpy(packetPtr, handle, srcLength);
+		packetPtr += srcLength;
+		memcpy(packetPtr, &numDestinations, sizeof(uint8_t));
+		packetPtr += sizeof(uint8_t);
+		//copy each of the destinations
+		for (i = 0; i < numDestinations; i++) {
+			curDest = *(destHandles+i);
+			destLen = strlen(curDest);
+			memcpy(packetPtr, &destLen, sizeof(uint8_t));
+			packetPtr += sizeof(uint8_t);
+			memcpy(packetPtr, curDest, destLen);
+			packetPtr += destLen;
+		}
+		//copy text
+		memcpy(packetPtr, textSegment, textSize);
+		packetPtr += textSize;
+		//packetComplete
+
+		sent = sendPacket(packet, socketNum, ntohs(cheader.packetLen));
+
+
+		messageLength -= textSize;
+		arg += textSize;
+	}
+
+
+
+	//cheader.packetLen =
+	//	htons(sizeof(struct chat_header) + srcLength + messageLength 
+	//	+ numDestinations + 2 + destHandleTotal);
 
 	/*	
 	printf("\n");
@@ -496,7 +544,7 @@ int message(char *textBuffer, int socketNum) {
 	printf("second dest is: %s\n", *(destHandles + 1));	
 	printf("third dset is: %s\n", *(destHandles + 2));
 	printf("\n");*/
-
+/*
 	//Make packet:
 	packetPtr = packet;
 	memcpy(packetPtr, &cheader, sizeof(struct chat_header)); //copy chat header
@@ -522,14 +570,13 @@ int message(char *textBuffer, int socketNum) {
 	//packetComplete
 
 	sent = sendPacket(packet, socketNum, ntohs(cheader.packetLen));
+	*/
 	freeDestHandles(destHandles, numDestinations); 
 	return 0;
 }
 
 int freeDestHandles(char **destHandles, int numDestinations) {
-	//char *curHandlee;
 	int i;
-
 	for (i = 0; i < numDestinations; i++) {
 		free(destHandles[i]);
 	}

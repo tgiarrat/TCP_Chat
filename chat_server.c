@@ -31,13 +31,7 @@ int main(int argc, char *argv[]){
 	
 	//create the server socket
 	serverSocket = tcpServerSetup(portNumber);
-
 	chatSession(serverSocket, portNumber);
-	
-	/* close the sockets */
-	//close(serverSocket);
-
-	
 	return 0;
 }
 
