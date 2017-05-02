@@ -135,7 +135,7 @@ int listRecieved(char *buf,struct chat_header cheader, int socketNum) {
 
 	memcpy(&handleCount, buf, sizeof(uint32_t));
 	handleCount = ntohl(handleCount);
-	printf("Number of clients: %zu\n", handleCount);
+	printf("\nNumber of clients: %zu\n", handleCount);
 	
 	recievePacket(socketNum,packet);
 	memcpy(&cheader, packet, sizeof(struct chat_header));
@@ -284,8 +284,9 @@ int printBlocked(struct blockedHandles *head) {
 		printf("%s, ", curHandle->handle);
 		curHandle = curHandle->next;
 	}
-	printf("\b\b  \n");
-
+	if (curHandle != head) {//the semicolon would disappear if the blocked list is empty
+		printf("\b\b  \n\n");
+	}
 	return 0;
 }
 
@@ -331,6 +332,7 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 	struct blockedHandles *newBlock = (struct blockedHandles *)malloc(sizeof(struct blockedHandles));
 	struct blockedHandles *curHandle;
 	char *invalidHandle;
+	printf("\n");
 	invalidHandle = strtok(textBuffer, " ");
 	if(invalidHandle == NULL) {
 		return 0;
@@ -477,7 +479,6 @@ int message(char *textBuffer, int socketNum, char *srcHandle) {
 	srcLength = strlen(srcHandle);
 
 	while (messageLength > 1) {
-		printf("The message length is: %d\n", messageLength);
 		if (messageLength > 200)  {
 			textSize = MAX_TEXT_LEN;//minus 1 for the mull char
 			memcpy(textSegment, arg , textSize-1);
