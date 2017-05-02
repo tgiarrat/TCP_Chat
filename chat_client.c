@@ -226,11 +226,12 @@ int localInput(int socketNum, struct blockedHandles **blockedHandles) {
 	}
 
 	commandType = toupper(textBuffer[1]); //letter of the command will be here in a properly formatted message
+	if (strlen(textBuffer) > MAX_MSG_LEN) {
+		printf("Command entered is too long, max command length is 1000\n");
+		return 1;
+	}
 
 	if (commandType == 'M') { //send message
-		if (strlen(textBuffer) > MAX_MSG_LEN) {
-			perror("message entered is greater than 1000 characters");
-		}
 		message(textBuffer + COMMAND_OFFSET, socketNum);
 	}
 	else if (commandType == 'B') { //block user
@@ -476,13 +477,15 @@ int message(char *textBuffer, int socketNum) {
 	if (arg == NULL) {
 		arg = "";
 	}
-	printf("");
+	
 	messageLength = strlen(arg) + 1;  // plus one is for the null terminating character at the end	
 	cheader.byteFlag = 5;
 	srcLength = strlen(handle);
 	cheader.packetLen =
 		htons(sizeof(struct chat_header) + srcLength + messageLength 
 		+ numDestinations + 2 + destHandleTotal);
+
+	/*	
 	printf("\n");
 	printf("-----------PRINTING THE PACKET INFO---------------------\n");
 	printf("num dest is %d\n", numDestinations);
@@ -492,7 +495,7 @@ int message(char *textBuffer, int socketNum) {
 	printf("first dest is: %s\n", *destHandles);
 	printf("second dest is: %s\n", *(destHandles + 1));	
 	printf("third dset is: %s\n", *(destHandles + 2));
-	printf("\n");
+	printf("\n");*/
 
 	//Make packet:
 	packetPtr = packet;

@@ -86,7 +86,6 @@ int chatSession(int serverSocket, int portNumber) {
 			}
 		}
 	}
-	//freeClientList(headClientNode);
 } 
 
 int clientActivity(int clientSocket, struct clientNode **head) {
