@@ -21,7 +21,7 @@
 #include "networks.h"
 #include "chat_client.h"
 
-char handle[MAX_HANDLE_LEN];
+//char handle[MAX_HANDLE_LEN];
 
 
 
@@ -29,21 +29,22 @@ char handle[MAX_HANDLE_LEN];
 int main(int argc, char * argv[])
 {
 	int socketNum = 0;         //socket descriptor, will be the socket of the server i believe
-
+	char srcHandle[MAX_HANDLE_LEN];
 	checkArgs(argc, argv);
 	/* set up the TCP Client socket  */
 	socketNum = tcpClientSetup(argv[2], argv[3], DEBUG_FLAG);
-	strcpy(handle, argv[1]);
-	chatSession(socketNum);
+	//strcpy(handle, argv[1]);
+	strcpy(srcHandle, argv[1])
+	chatSession(socketNum, srcHandle);
 	close(socketNum);
 	return 0;
 }
 
-void chatSession(int socketNum) {
+void chatSession(int socketNum, char *srcHandle) {
 	int connected = 1;
 	fd_set rfds;
 	struct blockedHandles *blockedHandles = NULL;
-	sendInitialPacket(socketNum);
+	sendInitialPacket(socketNum, srcHandle);
 	printf("$: ");
 	fflush(stdout);
 	while (connected) { //1 is possibly temporary, need to run client until the user exits the client
@@ -63,7 +64,7 @@ void chatSession(int socketNum) {
 		}
 		//keyboard update, read from keyboard
 		else if (FD_ISSET(0, &rfds)) { 
-			localInput(socketNum, &blockedHandles);
+			localInput(socketNum, &blockedHandles, srcHandle);
 			printf("$: ");
 			fflush(stdout);
 		}
@@ -361,7 +362,7 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 	return 0;
 }
 
-int sendInitialPacket(int socketNum){
+int sendInitialPacket(int socketNum, char *srcHandle){
 	char packet[MAX_PACKET_SIZE];
 	char *packetPtr;
 	int packetLength, handleLen, sent, recieved;
@@ -369,24 +370,24 @@ int sendInitialPacket(int socketNum){
 	char incomingBuffer[MAXBUF];
 	uint8_t flag;
 
-	packetLength = sizeof(struct chat_header) + 1 + strlen(handle);
+	handleLen = strlen(srcHandle);
+	packetLength = sizeof(struct chat_header) + 1 + handleLen;
 	packetPtr = packet;
 
 	cheader.packetLen = htons(packetLength);
 	cheader.byteFlag = 1;
 	memcpy(packetPtr, &cheader, sizeof(struct chat_header));
 	packetPtr += sizeof(struct chat_header);
-	handleLen = strlen(handle);
 	memcpy(packetPtr, &handleLen, sizeof(uint8_t)); //copy handle length
 	packetPtr+= sizeof(uint8_t);
-	memcpy(packetPtr, handle, handleLen); //copy handle
+	memcpy(packetPtr, srcHandle, handleLen); //copy handle
 
 	sent = sendPacket(packet, socketNum, packetLength);
 	recievePacket(socketNum,incomingBuffer);
 
 	memcpy(&flag, incomingBuffer + sizeof(uint16_t), sizeof(uint8_t)); //gets the flag from the incoming buffer
 	if (flag == 3) {
-		printf("Handle already in use: %s\n", handle);
+		printf("Handle already in use: %s\n", srcHandle);
 		exit(-1);
 	}
 	return 0;
@@ -412,7 +413,7 @@ int recievePacket(int socket, char *packet) {
 	return 0;
 }
 
-int message(char *textBuffer, int socketNum) {
+int message(char *textBuffer, int socketNum, char *srcHandle) {
 	char packet[MAX_PACKET_SIZE]; //this will be the entire packet. I knoe its a lil confusing but oh well too late
 	char *packetPtr;
 	char *arg;
@@ -473,7 +474,7 @@ int message(char *textBuffer, int socketNum) {
 	messageLength = strlen(arg) + 1;  // plus one is for the null terminating character at the end	
 
 	cheader.byteFlag = 5;
-	srcLength = strlen(handle);
+	srcLength = strlen(srcHandle);
 
 	while (messageLength > 1) {
 		printf("The message length is: %d\n", messageLength);
@@ -495,7 +496,7 @@ int message(char *textBuffer, int socketNum) {
 		packetPtr += sizeof(struct chat_header);
 		memcpy(packetPtr, &srcLength, sizeof(uint8_t));
 		packetPtr += sizeof(uint8_t);
-		memcpy(packetPtr, handle, srcLength);
+		memcpy(packetPtr, srcHandle, srcLength);
 		packetPtr += srcLength;
 		memcpy(packetPtr, &numDestinations, sizeof(uint8_t));
 		packetPtr += sizeof(uint8_t);
