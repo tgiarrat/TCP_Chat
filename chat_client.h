@@ -26,7 +26,7 @@ int printMessageText(char *packet);
 int freeDestHandles(char **destHandles, int numDestinations);
 int invalidDestRecieved(char *packet, struct chat_header cheader);
 int messageRecieved(char *packet, struct chat_header cheader,  struct blockedHandles *blockedHandles);
-void chatSession(int socketNum);
+void chatSession(int socketNum, char *srcHandle);
 void sendToServer(int socketNum);
 void checkArgs(int argc, char * argv[]);
 int serverActivity(int socketNum, struct blockedHandles *blockedHandles);

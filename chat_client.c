@@ -34,7 +34,7 @@ int main(int argc, char * argv[])
 	/* set up the TCP Client socket  */
 	socketNum = tcpClientSetup(argv[2], argv[3], DEBUG_FLAG);
 	//strcpy(handle, argv[1]);
-	strcpy(srcHandle, argv[1])
+	strcpy(srcHandle, argv[1]);
 	chatSession(socketNum, srcHandle);
 	close(socketNum);
 	return 0;
