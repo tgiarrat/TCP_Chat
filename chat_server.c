@@ -87,7 +87,7 @@ int clientActivity(int clientSocket, struct clientNode **head) {
 	int recieved, packetLength;
 	uint8_t byteFlag;
 	struct chat_header cheader;
-	printf("Socket with activity is %d\n", clientSocket);
+	//printf("Socket with activity is %d\n", clientSocket);
 	if (recievePacket(clientSocket, buf) == 1){
 		printf("client with socket %d exited \n", clientSocket);
 		removeClientNode(head, clientSocket);

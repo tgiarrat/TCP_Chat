@@ -197,18 +197,11 @@ int printMessageText(char *packet) {
 	int messageLen, i;
 	uint8_t numDest;
 	uint8_t curHandleLen;
-
 	numDest = *(packet + offset++);
-	//printf("offset is: %d   num dest is:  %d\n", offset, numDest);
 	for (i = 0; i < numDest; i++) {
 		curHandleLen = *(packet + offset++);
-		//printf("Cur handle length is %d\n", curHandleLen);
 		offset+= curHandleLen;
 	}
-	//offset should now be pointing to the start of the message
-	//messageLen = cheader.packetLen - offset;
-	//printf("offset is: %d\n", offset);
-	//printf("Here is the message : %s\n", packet + offset);
 	printf("%s\n", packet + offset);
 	return 0;
 }
@@ -235,7 +228,6 @@ int localInput(int socketNum, struct blockedHandles **blockedHandles) {
 		message(textBuffer + COMMAND_OFFSET, socketNum);
 	}
 	else if (commandType == 'B') { //block user
-		printf("narrow\n");
 		block(textBuffer + COMMAND_OFFSET, blockedHandles);
 		printBlocked(*blockedHandles);
 	}
@@ -528,51 +520,6 @@ int message(char *textBuffer, int socketNum) {
 		messageLength -= (textSize - 1);
 		arg += (textSize - 1);
 	}
-
-
-
-	//cheader.packetLen =
-	//	htons(sizeof(struct chat_header) + srcLength + messageLength 
-	//	+ numDestinations + 2 + destHandleTotal);
-
-	/*	
-	printf("\n");
-	printf("-----------PRINTING THE PACKET INFO---------------------\n");
-	printf("num dest is %d\n", numDestinations);
-	printf("text is: %s\n", arg);
-	printf("Packet Length is: %d\n", ntohs(cheader.packetLen));
-	printf("Handle is: %s\n", handle);
-	printf("first dest is: %s\n", *destHandles);
-	printf("second dest is: %s\n", *(destHandles + 1));	
-	printf("third dset is: %s\n", *(destHandles + 2));
-	printf("\n");*/
-/*
-	//Make packet:
-	packetPtr = packet;
-	memcpy(packetPtr, &cheader, sizeof(struct chat_header)); //copy chat header
-	packetPtr += sizeof(struct chat_header);
-	memcpy(packetPtr, &srcLength, sizeof(uint8_t));
-	packetPtr += sizeof(uint8_t);
-	memcpy(packetPtr, handle, srcLength);
-	packetPtr += srcLength;
-	memcpy(packetPtr, &numDestinations, sizeof(uint8_t));
-	packetPtr += sizeof(uint8_t);
-	//copy each of the destinations
-	for (i = 0; i < numDestinations; i++) {
-		curDest = *(destHandles+i);
-		destLen = strlen(curDest);
-		memcpy(packetPtr, &destLen, sizeof(uint8_t));
-		packetPtr += sizeof(uint8_t);
-		memcpy(packetPtr, curDest, destLen);
-		packetPtr += destLen;
-	}
-	//copy text
-	memcpy(packetPtr, arg, messageLength);
-	packetPtr += messageLength;
-	//packetComplete
-
-	sent = sendPacket(packet, socketNum, ntohs(cheader.packetLen));
-	*/
 	freeDestHandles(destHandles, numDestinations); 
 	return 0;
 }
