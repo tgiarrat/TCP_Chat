@@ -540,7 +540,7 @@ void checkArgs(int argc, char * argv[])
 	}
 	if (strlen(argv[1]) >= MAX_HANDLE_LEN) {
 		printf("Desired handle is %d characters greater than the maximum handle size.\n
-		Also its a stupid handle. Nobody in thier right mind would use a 100 character handle let alone a 250 char handle.\n", (strlen(argv[1]) - MAX_HANDLE_LEN));
+			Also its a stupid handle. Nobody in thier right mind would use a 100 character handle let alone a 250 char handle.\n", (strlen(argv[1]) - MAX_HANDLE_LEN));
 		exit(1);
 	}
 }
