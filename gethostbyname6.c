@@ -69,6 +69,5 @@ uint8_t * getIPAddress6(const char * hostName, struct sockaddr_in6 * aSockaddr6)
 		returnValue = ipAddress;
 		freeaddrinfo(hostInfo);
 	}
-   printf("ip is: %s  (this is for testing take it out)\n", getIPAddressString(ipAddress));	
   return returnValue;    // Either Null or IP address
 }
