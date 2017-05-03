@@ -13,6 +13,7 @@ ifeq ("$(ARCH)", "i686")
 endif
 
 all:  $(FILE) chat_client$(FILE) chat_server$(FILE)
+	  $echo $(FILE)
 
 32: 
 	# to make life easier - automatically deletes .o's that were most likely created on a 64 bit machine
