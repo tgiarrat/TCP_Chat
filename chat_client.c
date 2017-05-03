@@ -78,6 +78,7 @@ int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 	int recieved, packetLength;
 	uint8_t byteFlag;
 	struct chat_header cheader;
+	uint8_t blocked = 0; //ok this is a really lazy way but cut me some slack
 
 	recievePacket(socketNum, buf);
 	
@@ -89,7 +90,7 @@ int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 	//printf("Packet length recieved from server activity is %d and byte flag is: %d\n", packetLength, byteFlag);
 
 	if (byteFlag == 5) {
-		messageRecieved(buf + sizeof(struct chat_header), cheader, blockedHandles);
+		blocked = messageRecieved(buf + sizeof(struct chat_header), cheader, blockedHandles);
 	}
 	else if (byteFlag == 7) {
 		//error: destination handle does not exist
@@ -104,8 +105,10 @@ int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 		exitACK(blockedHandles);
 		return 0;
 	}
-	printf("$:");
-	fflush(stdout);
+	if(blocked == 0) {
+		printf("$:");
+		fflush(stdout);
+	}
 	return 1;
 }
 
@@ -293,13 +296,14 @@ int unblock(char *textBuffer, struct blockedHandles **blockedHandles) {
 	struct blockedHandles *curHandle;
 	struct blockedHandles *temp;
 
+	printf("\n");
 	blockedHandle = strtok(textBuffer, " ");
 	if (blockedHandle == NULL) { //no handle provieded check
-		printf("Ublock failed, no handle provided\n");
+		printf("Ublock failed, no handle provided\n\n");
 		return 1;
 	}
 	if ((checkBlocked(blockedHandle, *blockedHandles) == 0) || (*blockedHandles == NULL)) {
-		printf("Unblock failed, handle %s is not blocked.\n", blockedHandle);
+		printf("Unblock failed, handle %s is not blocked.\n\n", blockedHandle);
 		return 1;
 	}
 	curHandle = *blockedHandles;
@@ -307,7 +311,7 @@ int unblock(char *textBuffer, struct blockedHandles **blockedHandles) {
 		temp = curHandle;
 		*blockedHandles = curHandle->next;
 		free(temp);
-		printf("Handle %s unblocked\n", blockedHandle);
+		printf("Handle %s unblocked\n\n", blockedHandle);
 		return 0;
 	}
 	while (curHandle->next != NULL) {
@@ -315,6 +319,7 @@ int unblock(char *textBuffer, struct blockedHandles **blockedHandles) {
 			//printf("Got here\n");
 			temp = curHandle->next;
 			curHandle->next = curHandle->next->next;
+			printf("Handle %s unblocked\n\n", blockedHandle);
 			free(temp);
 			return 0;
 		}
@@ -339,7 +344,6 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 		printf("Block failed, handle %s is already blocked.\n", invalidHandle);
 		return 1;
 	}
-	printf("\nstrlen of the new handle is %lu\n", strlen(invalidHandle));
 	memcpy(newBlock->handle, invalidHandle, strlen(invalidHandle));
 	newBlock->handle[strlen(invalidHandle)] = '\0'; 
 	newBlock->next = NULL;
