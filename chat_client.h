@@ -5,7 +5,7 @@
 #define MAX_HANDLE_LEN 251
 #define STD_IN 0
 #define MAXBUF 1024
-#define DEBUG_FLAG 1
+#define DEBUG_FLAG 0
 #define xstr(a) str(a)
 #define str(a) #a
 

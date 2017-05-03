@@ -61,13 +61,10 @@ int tcpServerSetup(int portNumber)
 		exit(-1);
 	}
 	
-	printf("Server Port Number %d \n", ntohs(server.sin6_port));
+	printf("Server is using port %d \n", ntohs(server.sin6_port));
 	
 	return server_socket;
 }
-
-// This function waits for a client to ask for services.  It returns
-// the client socket number.   
 
 int tcpAccept(int server_socket, int debugFlag)
 {
@@ -98,18 +95,6 @@ int tcpClientSetup(char * serverName, char * port, int debugFlag)
 	int socket_num;
 	uint8_t * ipAddress = NULL;
 	struct sockaddr_in6 server;      
-	
-	/*
-	struct sockaddr_in6 {
-               sa_family_t     sin6_family;   //AF_INET6 
-               in_port_t       sin6_port;     // port number 
-               uint32_t        sin6_flowinfo; // IPv6 flow information 
-               struct in6_addr sin6_addr;     //IPv6 address 
-               uint32_t        sin6_scope_id; //Scope ID (new in 2.4)
-           }
-
-	*/
-
 
 	// create the socket
 	if ((socket_num = socket(AF_INET6, SOCK_STREAM, 0)) < 0)
@@ -117,7 +102,6 @@ int tcpClientSetup(char * serverName, char * port, int debugFlag)
 		perror("socket call");
 		exit(-1);
 	}
-	printf("port number %s\n", port);
 	// setup the server structure
 	server.sin6_family = AF_INET6;
 	server.sin6_port = htons(atoi(port));

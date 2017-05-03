@@ -21,19 +21,12 @@
 #include "networks.h"
 #include "chat_client.h"
 
-//char handle[MAX_HANDLE_LEN];
-
-
-
-
 int main(int argc, char * argv[])
 {
-	int socketNum = 0;         //socket descriptor, will be the socket of the server i believe
+	int socketNum = 0; 
 	char srcHandle[MAX_HANDLE_LEN];
 	checkArgs(argc, argv);
-	/* set up the TCP Client socket  */
 	socketNum = tcpClientSetup(argv[2], argv[3], DEBUG_FLAG);
-	//strcpy(handle, argv[1]);
 	strcpy(srcHandle, argv[1]);
 	chatSession(socketNum, srcHandle);
 	close(socketNum);

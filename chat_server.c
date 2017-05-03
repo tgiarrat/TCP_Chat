@@ -87,9 +87,7 @@ int clientActivity(int clientSocket, struct clientNode **head) {
 	int recieved, packetLength;
 	uint8_t byteFlag;
 	struct chat_header cheader;
-	//printf("Socket with activity is %d\n", clientSocket);
 	if (recievePacket(clientSocket, buf) == 1){
-		printf("client with socket %d exited \n", clientSocket);
 		removeClientNode(head, clientSocket);
 		close(clientSocket);
 		return 1;
@@ -186,7 +184,6 @@ int listHandles(struct clientNode *head, int socket) {
 		handleLength = strlen(curNode->handle);
 		packetSize = sizeof(struct chat_header) + handleLength + sizeof(uint8_t);
 		cheader.packetLen = htons(packetSize);
-		//printf("Sending handle, handle length is %d and handle is %s\n", handleLength, curNode->handle);
 		memcpy(packet, &cheader, sizeof(struct chat_header));
 		memcpy(packet + sizeof(struct chat_header), &handleLength, sizeof(uint8_t)); 
 		memcpy(packet + sizeof(struct chat_header)+sizeof(uint8_t), curNode->handle, handleLength);
@@ -234,7 +231,6 @@ int sendInvalidDest(int destSocket ,int sendingSocket, char *destHandle, uint8_t
 	struct chat_header cheader;
 	int offset = 0;
 
-	printf("Sending invalid dest packet, invalid dest handle is: %s", destHandle);
 	cheader.byteFlag = 7;
 	cheader.packetLen = htons(sizeof(struct chat_header) + destHandleLength + 1);
 
