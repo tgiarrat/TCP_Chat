@@ -68,7 +68,7 @@ void chatSession(int socketNum, char *srcHandle) {
 
 int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 	char buf[MAX_PACKET_SIZE];
-	int recieved, packetLength;
+	int recieved;
 	uint8_t byteFlag;
 	struct chat_header cheader;
 	uint8_t blocked = 0; //ok this is a really lazy way but cut me some slack
@@ -78,9 +78,7 @@ int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 
 	memcpy(&cheader, buf, sizeof(struct chat_header)); //gets the header from the recieved packet  
 	byteFlag = cheader.byteFlag; 
-	packetLength = ntohs(cheader.packetLen);
 
-	//printf("Packet length recieved from server activity is %d and byte flag is: %d\n", packetLength, byteFlag);
 
 	if (byteFlag == 5) {
 		blocked = messageRecieved(buf + sizeof(struct chat_header), cheader, blockedHandles);
@@ -139,7 +137,7 @@ int listRecieved(char *buf,struct chat_header cheader, int socketNum) {
 		memcpy(&curHandleLen, packet + sizeof(struct chat_header), sizeof(uint8_t));
 		memcpy(curHandle, packet + sizeof(struct chat_header) + sizeof(uint8_t), curHandleLen);
 		curHandle[curHandleLen] = '\0';
-		printf("   %s\n", curHandle, curHandleLen);
+		printf("   %s\n", curHandle);
 		recievePacket(socketNum, packet);
 		memcpy(&cheader, packet, sizeof(struct chat_header));
 	}
@@ -361,7 +359,7 @@ int block(char *textBuffer, struct blockedHandles **blockedHandles) {
 int sendInitialPacket(int socketNum, char *srcHandle){
 	char packet[MAX_PACKET_SIZE];
 	char *packetPtr;
-	int packetLength, handleLen, sent, recieved;
+	int packetLength, handleLen;
 	struct chat_header cheader;
 	char incomingBuffer[MAXBUF];
 	uint8_t flag;
@@ -378,7 +376,7 @@ int sendInitialPacket(int socketNum, char *srcHandle){
 	packetPtr+= sizeof(uint8_t);
 	memcpy(packetPtr, srcHandle, handleLen); //copy handle
 
-	sent = sendPacket(packet, socketNum, packetLength);
+	sendPacket(packet, socketNum, packetLength);
 	recievePacket(socketNum,incomingBuffer);
 
 	memcpy(&flag, incomingBuffer + sizeof(uint16_t), sizeof(uint8_t)); //gets the flag from the incoming buffer
@@ -539,7 +537,7 @@ void checkArgs(int argc, char * argv[])
 		exit(1);
 	}
 	if (strlen(argv[1]) >= MAX_HANDLE_LEN) {
-		printf("Desired handle is %d characters greater than the maximum handle size.\n", ((strlen(argv[1]) - MAX_HANDLE_LEN) + 1));
+		printf("Desired handle is %lu characters greater than the maximum handle size.\n", (unsigned long)((strlen(argv[1]) - MAX_HANDLE_LEN) + 1));
 		exit(1);
 	}
 }
