@@ -68,7 +68,6 @@ void chatSession(int socketNum, char *srcHandle) {
 
 int serverActivity(int socketNum, struct blockedHandles *blockedHandles) {
 	char buf[MAX_PACKET_SIZE];
-	int recieved;
 	uint8_t byteFlag;
 	struct chat_header cheader;
 	uint8_t blocked = 0; //ok this is a really lazy way but cut me some slack
@@ -129,7 +128,7 @@ int listRecieved(char *buf,struct chat_header cheader, int socketNum) {
 
 	memcpy(&handleCount, buf, sizeof(uint32_t));
 	handleCount = ntohl(handleCount);
-	printf("\nNumber of clients: %zu\n", handleCount);
+	printf("\nNumber of clients: %lu\n", (unsigned long)handleCount);
 	
 	recievePacket(socketNum,packet);
 	memcpy(&cheader, packet, sizeof(struct chat_header));
@@ -188,7 +187,7 @@ int checkBlocked(char *srcHandle, struct blockedHandles *blockedHandles){
 
 int printMessageText(char *packet) {
 	int offset = 0; 
-	int messageLen, i;
+	int i;
 	uint8_t numDest;
 	uint8_t curHandleLen;
 	numDest = *(packet + offset++);
@@ -202,7 +201,6 @@ int printMessageText(char *packet) {
 
 int localInput(int socketNum, struct blockedHandles **blockedHandles, char *srcHandle) {
 	char textBuffer[MAXBUF];
-	int textLength;
 	char commandType;
 	
 	fgets(textBuffer, MAXBUF, stdin);
@@ -416,7 +414,7 @@ int message(char *textBuffer, int socketNum, char *srcHandle) {
 	char *curDest;
 	struct chat_header cheader;
 	uint8_t srcLength, numDestinations ;
-	int messageLength, i, destLen, sent;
+	int messageLength, i, destLen;
 	int destHandleTotal = 0;
 	int textSize;
 
@@ -507,7 +505,7 @@ int message(char *textBuffer, int socketNum, char *srcHandle) {
 		packetPtr += textSize;
 		//packetComplete
 
-		sent = sendPacket(packet, socketNum, ntohs(cheader.packetLen));
+		sendPacket(packet, socketNum, ntohs(cheader.packetLen));
 
 
 		messageLength -= (textSize - 1);
