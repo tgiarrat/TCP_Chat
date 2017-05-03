@@ -24,9 +24,7 @@
 
 int main(int argc, char *argv[]){
 	int serverSocket = 0;   //socket descriptor for the server socket
-	int clientSocket = 0;   //socket descriptor for the client socket
 	int portNumber = 0;
-	
 	portNumber = checkArgs(argc, argv);
 	
 	//create the server socket
@@ -39,7 +37,6 @@ int chatSession(int serverSocket, int portNumber) {
 	fd_set rfds;
 	struct clientNode *curNode= NULL;
 	struct clientNode *headClientNode = curNode;
-	int clientSocket;
 	int maxSocket = serverSocket; //need this because we are going to loop throug hte set of sockets used and we need to know where to stop looking 
 	int ret;
 
@@ -84,7 +81,6 @@ int chatSession(int serverSocket, int portNumber) {
 
 int clientActivity(int clientSocket, struct clientNode **head) {
 	char buf[MAX_PACKET_SIZE];
-	int recieved, packetLength;
 	uint8_t byteFlag;
 	struct chat_header cheader;
 	if (recievePacket(clientSocket, buf) == 1){
@@ -95,7 +91,6 @@ int clientActivity(int clientSocket, struct clientNode **head) {
 
 	memcpy(&cheader, buf, sizeof(struct chat_header)); //gets the header from the recieved packet
 	byteFlag = cheader.byteFlag; 
-	packetLength = ntohs(cheader.packetLen);
 	if (byteFlag == 5 ) { //message flag
 		messageRecieved(buf, cheader, *head, clientSocket);
 	}
@@ -117,7 +112,6 @@ int clientActivity(int clientSocket, struct clientNode **head) {
 int clientExit(struct clientNode **head ,int clientSocket) {
 	char packet[MAX_PACKET_SIZE];
 	struct chat_header cheader;
-	struct clientNode *curNode;
 	removeClientNode(head,clientSocket);
 	cheader.byteFlag = 9;
 	cheader.packetLen = htons(sizeof(struct chat_header));
@@ -199,7 +193,6 @@ int listHandles(struct clientNode *head, int socket) {
 }
 
 int messageRecieved(char *recieved, struct chat_header cheader, struct clientNode *head, int sendingSocket) {
-	char packet[MAX_PACKET_SIZE];
 	char curHandle[MAX_HANDLE_LEN];
 	uint8_t srcHandleLength, numDestinations, curHandleLen;
 	int offset = sizeof(struct chat_header);
@@ -275,12 +268,10 @@ int getSocket(char *handle, struct clientNode *head) {
 }
 
 int newClientConnection(int serverSocket,struct clientNode **head ){
-	int clientSocket, messageLen;
+	int clientSocket;
 	char handle[MAX_HANDLE_LEN];
 	uint8_t handleLength;
 	char buf[MAX_PACKET_SIZE];
-	struct chat_header cheader;
-	int mesageLen;
 
 	if ((clientSocket = accept(serverSocket,(struct sockaddr*) 0, (socklen_t *) 0)) < 0) {
 		perror("accept call error");
