@@ -146,7 +146,7 @@ int listRecieved(char *buf,struct chat_header cheader, int socketNum) {
 		memcpy(&curHandleLen, packet + sizeof(struct chat_header), sizeof(uint8_t));
 		memcpy(curHandle, packet + sizeof(struct chat_header) + sizeof(uint8_t), curHandleLen);
 		curHandle[curHandleLen] = '\0';
-		printf("\t%s\n", curHandle, curHandleLen);
+		printf("   %s\n", curHandle, curHandleLen);
 		recievePacket(socketNum, packet);
 		memcpy(&cheader, packet, sizeof(struct chat_header));
 	}
