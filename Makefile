@@ -12,7 +12,7 @@ ifeq ("$(ARCH)", "i686")
 	FILE = 32
 endif
 
-all:  $(FILE) chat_client$(FILE) chat_server$(FILE)
+all:  $(FILE) myClient$(FILE) myServer$(FILE)
 	  $echo $(FILE)
 
 32: 
