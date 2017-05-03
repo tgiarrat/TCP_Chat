@@ -253,7 +253,6 @@ int exitServer(int socketNum) {
 	cheader.packetLen = htons(sizeof(struct chat_header));
 	memcpy(packet, &cheader, sizeof(struct chat_header));
 	sendPacket(packet, socketNum, sizeof(struct chat_header));
-	printf("sent exit packet\n");
 
 	return 0;
 }
