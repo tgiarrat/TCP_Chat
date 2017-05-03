@@ -1,2 +1,1 @@
-# TCP_Chat
-Tacp chat client
+Author: Thomas Giarratana   Lab Time: 3pm
