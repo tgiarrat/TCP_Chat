@@ -21,10 +21,10 @@ all:  $(FILE) myClient$(FILE) myServer$(FILE)
 	rm -f *.o
 	
 myClient$(FILE): chat_client.c networks.o gethostbyname6.o
-	$(CC) $(CFLAGS) -o chat_client$(FILE) chat_client.c networks.o gethostbyname6.o $(LIBS)
+	$(CC) $(CFLAGS) -o cclient$(FILE) chat_client.c networks.o gethostbyname6.o $(LIBS)
 
 myServer$(FILE): chat_server.c networks.o gethostbyname6.o
-	$(CC) $(CFLAGS) -o chat_server$(FILE) chat_server.c networks.o gethostbyname6.o $(LIBS)
+	$(CC) $(CFLAGS) -o server$(FILE) chat_server.c networks.o gethostbyname6.o $(LIBS)
 
 .c.o:
 	gcc -c $(CFLAGS) $< -o $@ $(LIBS)
